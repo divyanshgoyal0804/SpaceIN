@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import PropertyCard from '@/components/properties/PropertyCard';
 import PropertyFilters from '@/components/properties/PropertyFilters';
 import { ActiveFilterChips } from '@/components/properties/PropertyFilters';
+import { prisma } from '@/lib/prisma';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -24,18 +25,42 @@ interface PropertyData {
 }
 
 async function getProperties(searchParams: Record<string, string>) {
-  const params = new URLSearchParams();
-  for (const [key, value] of Object.entries(searchParams)) {
-    if (value) params.set(key, value);
+  const where: any = { isActive: true };
+
+  // Apply filters same as the API route
+  const type = searchParams.type;
+  if (type) {
+    const typeValues = type.split(',');
+    where.type = typeValues.length === 1 ? typeValues[0] : { in: typeValues };
   }
 
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-  const res = await fetch(`${baseUrl}/api/properties?${params.toString()}`, {
-    cache: 'no-store',
-  });
+  const listing = searchParams.listing;
+  if (listing) {
+    const listingValues = listing.split(',');
+    where.listingType = listingValues.length === 1 ? listingValues[0] : { in: listingValues };
+  }
 
-  if (!res.ok) return { properties: [], total: 0, page: 1, totalPages: 0 };
-  return res.json();
+  const page = parseInt(searchParams.page || '1');
+  const limit = 12;
+  const skip = (page - 1) * limit;
+
+  const [properties, total] = await Promise.all([
+    prisma.property.findMany({
+      where,
+      include: { images: { take: 1, orderBy: { order: 'asc' } } },
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take: limit,
+    }),
+    prisma.property.count({ where }),
+  ]);
+
+  return {
+    properties: JSON.parse(JSON.stringify(properties)),
+    total,
+    page,
+    totalPages: Math.ceil(total / limit),
+  };
 }
 
 function PropertyListingContent({

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
+import { prisma } from '@/lib/prisma';
 
 export const metadata: Metadata = {
   title: 'Blog',
@@ -19,12 +20,17 @@ interface BlogData {
 }
 
 async function getBlogs(tag?: string) {
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-  const params = new URLSearchParams({ published: 'true' });
-  if (tag) params.set('tag', tag);
-  const res = await fetch(`${baseUrl}/api/blogs?${params.toString()}`, { cache: 'no-store' });
-  if (!res.ok) return { blogs: [] };
-  return res.json();
+  const where: any = { isPublished: true };
+  if (tag) {
+    where.tags = { has: tag };
+  }
+
+  const blogs = await prisma.blog.findMany({
+    where,
+    orderBy: { publishedAt: 'desc' },
+  });
+
+  return { blogs };
 }
 
 export default async function BlogPage({

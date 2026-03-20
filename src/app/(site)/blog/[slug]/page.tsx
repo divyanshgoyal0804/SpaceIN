@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Clock, User } from 'lucide-react';
 import { calculateReadTime } from '@/lib/utils';
+import { prisma } from '@/lib/prisma';
 import type { Metadata } from 'next';
 
 interface BlogData {
@@ -18,10 +19,12 @@ interface BlogData {
 }
 
 async function getBlog(slug: string): Promise<BlogData | null> {
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-  const res = await fetch(`${baseUrl}/api/blogs/${slug}`, { cache: 'no-store' });
-  if (!res.ok) return null;
-  return res.json();
+  const blog = await prisma.blog.findUnique({
+    where: { slug },
+  });
+
+  if (!blog) return null;
+  return JSON.parse(JSON.stringify(blog));
 }
 
 export async function generateMetadata({

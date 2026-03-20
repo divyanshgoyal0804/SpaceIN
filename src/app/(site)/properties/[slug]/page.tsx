@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { MapPin, Maximize2, Building2, Car, Bath, Compass, Calendar, CheckCircle2 } from 'lucide-react';
 import { formatPrice, propertyTypeLabels, furnishedTypeLabels, listingTypeLabels } from '@/lib/utils';
 import PropertyCard from '@/components/properties/PropertyCard';
+import { prisma } from '@/lib/prisma';
 import type { Metadata } from 'next';
 
 interface PropertyData {
@@ -34,18 +35,27 @@ interface PropertyData {
 }
 
 async function getProperty(slug: string): Promise<PropertyData | null> {
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-  const res = await fetch(`${baseUrl}/api/properties/${slug}`, { cache: 'no-store' });
-  if (!res.ok) return null;
-  return res.json();
+  const property = await prisma.property.findUnique({
+    where: { slug },
+    include: { images: { orderBy: { order: 'asc' } } },
+  });
+
+  if (!property) return null;
+  return JSON.parse(JSON.stringify(property));
 }
 
 async function getSimilarProperties(type: string, excludeId: string) {
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-  const res = await fetch(`${baseUrl}/api/properties?type=${type}&limit=4`, { cache: 'no-store' });
-  if (!res.ok) return [];
-  const data = await res.json();
-  return (data.properties || []).filter((p: { id: string }) => p.id !== excludeId).slice(0, 4);
+  const properties = await prisma.property.findMany({
+    where: {
+      type: type as any,
+      id: { not: excludeId },
+      isActive: true,
+    },
+    take: 4,
+    orderBy: { createdAt: 'desc' },
+  });
+
+  return JSON.parse(JSON.stringify(properties));
 }
 
 export async function generateMetadata({
