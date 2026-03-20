@@ -1,0 +1,925 @@
+/* ---- Custom Properties for Theme ---- */
+.chatContainer {
+  --text-primary: var(--text-primary, #111827);
+  --text-secondary: var(--text-secondary, #4b5563);
+  --text-muted: var(--text-muted, #9ca3af);
+  --accent: #f59e0b;
+  --border: var(--border, #e5e7eb);
+  --bg-primary: var(--bg-primary, #ffffff);
+  --bg-secondary: var(--bg-secondary, #f9fafb);
+  --bg-card: var(--bg-card, #ffffff);
+  --card-border: var(--border, #e5e7eb);
+  --input-bg: var(--bg-card, #ffffff);
+  --input-border: var(--border, #e5e7eb);
+  --input-text: var(--text-primary, #111827);
+  
+  height: calc(100vh - 64px); /* assuming header is 64px */
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+:global([data-theme="dark"]) .chatContainer,
+:global(.dark) .chatContainer {
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
+  --border: #374151;
+  --bg-primary: #111827;
+  --bg-secondary: #030712;
+  --bg-card: #1f2937;
+  --card-border: #374151;
+  --input-bg: #1f2937;
+  --input-border: #374151;
+  --input-text: #f9fafb;
+}
+
+/* Base resets inside chat */
+.chatContainer * {
+  box-sizing: border-box;
+}
+
+/* -- DESKTOP LAYOUT -- */
+.leftPanel {
+  width: 40%;
+  height: calc(100vh - 64px);
+  position: sticky;
+  top: 64px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+  background: var(--bg-primary);
+}
+
+.rightPanel {
+  width: 60%;
+  height: calc(100vh - 64px);
+  position: sticky;
+  top: 64px;
+  overflow-y: auto;
+  background: var(--bg-secondary);
+  padding: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.messagesArea {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* -- MOBILE LAYOUT overrides -- */
+@media (max-width: 1023px) {
+  .leftPanel {
+    width: 100%;
+    border-right: none;
+    height: calc(100vh - 64px);
+    position: relative;
+    top: 0;
+  }
+  
+  .rightPanel {
+    display: none;
+  }
+  
+  .messagesArea {
+    padding: 20px 16px 16px;
+    padding-bottom: 80px; /* space for fixed input */
+  }
+  
+  .mobileInputContainer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+  }
+}
+
+/* -- CHAT INPUT -- */
+.chatInputWrapper {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-primary);
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.textarea {
+  flex: 1;
+  min-height: 44px;
+  max-height: 160px;
+  resize: none;
+  padding: 10px 14px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 22px;
+  color: var(--input-text);
+  font-size: 14px;
+  line-height: 1.5;
+  outline: none;
+  overflow-y: auto;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  scrollbar-width: none;
+}
+
+.textarea:focus {
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.08);
+}
+
+.sendBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.sendBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.historyBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  margin-bottom: 4px; /* align roughly with bottom of input */
+}
+
+/* -- CHAT MESSAGES -- */
+.msgUser {
+  align-self: flex-end;
+  max-width: 80%;
+  padding: 10px 16px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 18px 18px 4px 18px;
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.msgAi {
+  align-self: flex-start;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.aiBubble {
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--card-border);
+  border-radius: 4px 18px 18px 18px;
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* Typing indicator */
+.typingIndicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 0;
+}
+.typingIndicator span {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  animation: bounce 1.2s infinite;
+}
+.typingIndicator span:nth-child(2) { animation-delay: 0.2s; }
+.typingIndicator span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-6px); }
+}
+
+/* -- RESULTS PANEL HEADER -- */
+.resultsHeader {
+  padding: 16px 20px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.resultsHeaderEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.headerTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerSubtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.loadedIndicator {
+  animation: slideDown 300ms ease-out forwards;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.loadingBar {
+  position: absolute;
+  top: 0; left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+  animation: loadBar 1.5s ease-in-out infinite;
+  z-index: 11;
+}
+
+@keyframes loadBar {
+  0% { width: 0%; opacity: 1; }
+  70% { width: 90%; opacity: 1; }
+  100% { width: 100%; opacity: 0; }
+}
+
+/* -- EMPTY STATE -- */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 120px); /* rough header+padding */
+  text-align: center;
+  padding: 20px;
+}
+
+.emptyIcon {
+  margin-bottom: 24px;
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+.emptyTitle {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.emptySubtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.showAllBtn {
+  padding: 8px 16px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  background: transparent;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.showAllBtn:hover {
+  background: var(--accent);
+  color: white;
+}
+
+/* -- GRID & CARDS -- */
+.resultsGrid {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (min-width: 1600px) {
+  .resultsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.propertyCard {
+  background: var(--bg-card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.propertyCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.cardImageContainer {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.propertyCard:hover .cardImage {
+  transform: scale(1.04);
+}
+
+.typeBadge {
+  position: absolute;
+  top: 10px; left: 10px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: rgba(0,0,0,0.4);
+  color: white;
+  backdrop-filter: blur(8px);
+}
+
+.cardBody {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardMeta {
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cardPrice {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-top: 2px;
+}
+
+.viewBtn {
+  margin-top: auto;
+  padding: 7px 0;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  text-align: center;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  display: block;
+}
+
+.propertyCard:hover .viewBtn {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(245, 158, 11, 0.06);
+}
+
+/* -- MOBILE CARD STRIP -- */
+.mobileCardStrip {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+  margin-top: 12px;
+}
+
+.mobileCardStrip::-webkit-scrollbar {
+  display: none;
+}
+
+.mobileCardWrapper {
+  width: 220px;
+  flex-shrink: 0;
+}
+
+/* -- MOBILE HISTORY DRAWER -- */
+.drawerWrapper {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 200;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  max-width: 320px;
+}
+
+.drawerOpen {
+  transform: translateX(0);
+}
+
+.drawerBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 199;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.drawerBackdropOpen {
+  opacity: 1;
+  visibility: visible;
+}
+
+.drawerHeader {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.drawerTitle {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.closeDrawerBtn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.newChatBtn {
+  margin: 16px;
+  padding: 10px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  background: transparent;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.newChatBtn:hover {
+  background: rgba(245, 158, 11, 0.06);
+}
+
+.sessionList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sessionItem {
+  padding: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.sessionItem:hover {
+  border-color: var(--accent);
+}
+
+.sessionItemTitle {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sessionItemDate {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+
+@media (max-width: 1023px) {
+  .mobileChatWrapper {
+    position: fixed;
+    inset: 0;
+    top: 64px;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-primary);
+    overflow: hidden;
+  }
+  .mobileChatHeader {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-primary);
+    flex-shrink: 0;
+    z-index: 10;
+  }
+  .mobileHeaderHistoryBtn {
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+  .mobileHeaderTitle {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .mobileHeaderNewBtn {
+    font-size: 13px;
+    color: var(--accent);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  .mobileMessagesArea {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 16px 16px 90px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .mobileMessagesArea::-webkit-scrollbar {
+    display: none;
+  }
+  .mobileEmptyState {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 12px;
+    padding: 32px 24px;
+  }
+  .mobileEmptyIcon {
+    margin-bottom: 12px;
+    color: var(--accent);
+  }
+  .mobileEmptyTitle {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0;
+  }
+  .mobileEmptySubtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .mobileSuggestionChip {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--glass-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+  .mobileSuggestionChip:active {
+    background: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: var(--text-primary);
+  }
+  .mobilePropertyStrip {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 4px 2px 12px 2px;
+    margin-top: 8px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    margin-left: -4px;
+    margin-right: -4px;
+  }
+  .mobilePropertyStrip::-webkit-scrollbar {
+    display: none;
+  }
+  .mobilePropertyCard {
+    flex-shrink: 0;
+    width: 200px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .mobilePropertyCard:active {
+    transform: scale(0.97);
+    border-color: rgba(245, 158, 11, 0.4);
+  }
+  .mobilePropertyCardImageCont {
+    width: 100%;
+    aspect-ratio: 16/9;
+    position: relative;
+    overflow: hidden;
+  }
+  .mobilePropertyCardImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .mobilePropertyCardBody {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+  .mobilePropertyCardBadge {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: white;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .mobilePropertyCardTitle {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+  }
+  .mobilePropertyCardLocation {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mobilePropertyCardPrice {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-top: 2px;
+  }
+  .mobilePropertyCardLink {
+    display: block;
+    margin-top: 8px;
+    padding: 6px 0;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .mobilePropertyCardLink:active {
+    color: var(--accent);
+  }
+  .mobileChatInputWrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border);
+    padding: 10px 12px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+  }
+  .mobileChatTextarea {
+    flex: 1;
+    min-height: 40px;
+    max-height: 120px;
+    resize: none;
+    padding: 10px 14px;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 20px;
+    color: var(--input-text);
+    font-size: 15px;
+    line-height: 1.4;
+    outline: none;
+    overflow-y: auto;
+    -webkit-appearance: none;
+    transition: border-color 0.2s;
+  }
+  .mobileChatTextarea:focus {
+    border-color: rgba(245, 158, 11, 0.4);
+  }
+  .mobileSendButton {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background: var(--accent);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mobileSendButton:disabled {
+    opacity: 0.4;
+  }
+  .mobileSendButton:active:not(:disabled) {
+    transform: scale(0.92);
+  }
+  .historyBackdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 199;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .historyBackdrop.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .historyDrawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 200;
+    width: min(80vw, 300px);
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+  .historyDrawer.open {
+    transform: translateX(0);
+  }
+  .historyDrawerHeader {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .historyNewChatBtn {
+    width: calc(100% - 32px);
+    margin: 12px 16px;
+    padding: 10px;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .historyNewChatBtn:active {
+    background: rgba(245, 158, 11, 0.08);
+  }
+  .historySessionsList {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 0;
+    scrollbar-width: none;
+  }
+  .historySessionsList::-webkit-scrollbar {
+    display: none;
+  }
+  .historySessionItem {
+    padding: 12px 16px;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: background 0.15s, border-color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .historySessionItem:active {
+    background: var(--glass-bg);
+  }
+  .historySessionItem.active {
+    background: var(--glass-bg);
+    border-left-color: var(--accent);
+  }
+  .historySessionTitle {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 3px;
+  }
+  .historySessionMeta {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+}

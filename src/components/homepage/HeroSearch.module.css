@@ -1,0 +1,116 @@
+.wrapper {
+  width: 100%;
+  max-width: 680px;
+  margin: 32px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.searchContainer {
+  position: relative;
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  height: 60px;
+  padding: 0 56px 0 52px;
+  border-radius: 30px;
+  color: var(--text-primary);
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+:global([data-theme="light"]) .input {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+@media (prefers-color-scheme: light) {
+  :global(.light) .input,
+  :global(body:not(.dark)) .input {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+  }
+}
+
+.input:focus {
+  border-color: rgba(1, 114, 150, 0.5);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 4px rgba(1, 114, 150, 0.08);
+}
+
+:global(body:not(.dark)) .input:focus {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.input::placeholder {
+  color: var(--input-placeholder, #9ca3af);
+}
+
+.searchIcon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted, #9ca3af);
+  pointer-events: none;
+}
+
+.sendButton {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: #017296;
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.sendButton.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.promptChips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border, #374151);
+  background: var(--glass-bg, rgba(255, 255, 255, 0.03));
+  color: var(--text-secondary, #9ca3af);
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  gap: 6px;
+}
+
+.chip:hover {
+  border-color: rgba(1, 114, 150, 0.4);
+  color: var(--accent);
+  background: rgba(1, 114, 150, 0.06);
+}
