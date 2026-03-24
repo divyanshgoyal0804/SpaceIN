@@ -221,6 +221,7 @@ export async function POST(request: NextRequest) {
         parking: body.parking || null,
         washrooms: body.washrooms || null,
         mainImageUrl: body.mainImageUrl,
+        videoUrl: body.videoUrl || null,
         isFeatured: body.isFeatured || false,
         isActive: body.isActive !== undefined ? body.isActive : true,
         images: body.images?.length

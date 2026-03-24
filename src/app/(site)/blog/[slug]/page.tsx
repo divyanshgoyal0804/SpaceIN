@@ -18,6 +18,20 @@ interface BlogData {
   publishedAt: string;
 }
 
+function normalizeContent(content: string): string {
+  return content
+    .replace(/<\s*br\s*\/?>/gi, '\n')
+    .replace(/<\/(p|div|h1|h2|h3|h4|h5|h6|li|blockquote)>/gi, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/\r\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 async function getBlog(slug: string): Promise<BlogData | null> {
   const blog = await prisma.blog.findUnique({
     where: { slug },
@@ -55,7 +69,8 @@ export default async function BlogPostPage({
   const blog = await getBlog(slug);
   if (!blog) notFound();
 
-  const readTime = calculateReadTime(blog.content);
+  const plainContent = normalizeContent(blog.content);
+  const readTime = calculateReadTime(plainContent);
   const shareText = encodeURIComponent(blog.title);
   const shareUrl = encodeURIComponent(`${process.env.NEXTAUTH_URL || 'https://spacein.in'}/blog/${blog.slug}`);
 
@@ -91,10 +106,7 @@ export default async function BlogPostPage({
           <span><Clock size={14} /> {readTime} min read</span>
         </div>
 
-        <div
-          className="post-content"
-          dangerouslySetInnerHTML={{ __html: blog.content }}
-        />
+        <div className="post-content">{plainContent}</div>
 
         {/* Share buttons */}
         <div className="post-share">
@@ -125,17 +137,11 @@ export default async function BlogPostPage({
         }
         .post-meta span { display: flex; align-items: center; gap: 0.35rem; }
 
-        .post-content { line-height: 1.9; }
-        .post-content :global(h2) { font-size: 1.5rem; margin: 2rem 0 1rem; }
-        .post-content :global(h3) { font-size: 1.25rem; margin: 1.5rem 0 0.75rem; }
-        .post-content :global(p) { margin-bottom: 1rem; }
-        .post-content :global(ul), .post-content :global(ol) { padding-left: 1.5rem; margin-bottom: 1rem; }
-        .post-content :global(li) { margin-bottom: 0.4rem; }
-        .post-content :global(blockquote) {
-          border-left: 3px solid var(--accent); padding-left: 1rem; margin: 1.5rem 0;
-          color: var(--text-secondary); font-style: italic;
+        .post-content {
+          line-height: 1.9;
+          white-space: pre-wrap;
+          color: var(--text-secondary);
         }
-        .post-content :global(strong) { color: var(--text-primary); }
 
         .post-share {
           display: flex; align-items: center; gap: 1rem;

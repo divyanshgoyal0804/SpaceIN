@@ -16,7 +16,7 @@ interface BlogData {
   coverImage: string | null;
   tags: string[];
   author: string;
-  publishedAt: string;
+  publishedAt: Date | null;
 }
 
 async function getBlogs(tag?: string) {
@@ -79,7 +79,15 @@ export default async function BlogPage({
                 <p className="blog-card__excerpt">{blog.excerpt}</p>
                 <div className="blog-card__meta">
                   <span>{blog.author}</span>
-                  <span>{new Date(blog.publishedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                  <span>
+                    {blog.publishedAt
+                      ? new Date(blog.publishedAt).toLocaleDateString('en-IN', {
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric',
+                        })
+                      : 'Draft'}
+                  </span>
                 </div>
               </div>
             </Link>

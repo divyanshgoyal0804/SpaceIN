@@ -1,9 +1,3 @@
-'use client';
-
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
 const propertyTypes = [
   {
     name: 'Office',
@@ -32,78 +26,13 @@ const propertyTypes = [
 ];
 
 export default function Scene3Transformation() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top top',
-        end: '+=200%',
-        pin: true,
-        pinSpacing: true,
-      });
-
-      const totalTypes = propertyTypes.length;
-
-      propertyTypes.forEach((_, i) => {
-        const startPct = (i / totalTypes) * 100;
-        const endPct = ((i + 1) / totalTypes) * 100;
-
-        // Show building shape
-        gsap.fromTo(
-          `.building-type-${i}`,
-          { opacity: 0, scale: 0.8, rotateY: -15 },
-          {
-            opacity: 1,
-            scale: 1,
-            rotateY: 0,
-            duration: 0.4,
-            ease: 'power2.inOut',
-            scrollTrigger: {
-              trigger: section,
-              start: `top+=${startPct}% top`,
-              end: `top+=${endPct}% top`,
-              toggleActions: 'play reverse play reverse',
-            },
-          }
-        );
-
-        // Show text from alternating sides
-        const fromLeft = i % 2 === 0;
-        gsap.fromTo(
-          `.type-info-${i}`,
-          { opacity: 0, x: fromLeft ? -80 : 80 },
-          {
-            opacity: 1,
-            x: 0,
-            duration: 0.5,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: section,
-              start: `top+=${startPct + 5}% top`,
-              end: `top+=${endPct}% top`,
-              toggleActions: 'play reverse play reverse',
-            },
-          }
-        );
-      });
-    }, section);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section ref={sectionRef} className="transform-scene" data-scene="transform">
+    <section className="transform-scene" data-scene="transform">
       <div className="transform-content">
         {/* Central building display */}
         <div className="building-display">
           {propertyTypes.map((type, i) => (
-            <div key={i} className={`building-type building-type-${i}`} style={{ opacity: i === 0 ? 1 : 0 }}>
+            <div key={i} className={`building-type building-type-${i}`}>
               <svg viewBox="0 0 300 400" className="building-svg">
                 <defs>
                   <linearGradient id={`buildGrad${i}`} x1="0%" y1="0%" x2="0%" y2="100%">
@@ -133,7 +62,7 @@ export default function Scene3Transformation() {
                       height={12}
                       rx={1}
                       fill={type.color}
-                      fillOpacity={Math.random() > 0.4 ? 0.4 : 0.1}
+                      fillOpacity={(ri + ci + i) % 2 === 0 ? 0.4 : 0.1}
                     />
                   ))
                 )}
@@ -148,7 +77,6 @@ export default function Scene3Transformation() {
             key={i}
             className={`type-info type-info-${i}`}
             style={{
-              opacity: 0,
               [i % 2 === 0 ? 'left' : 'right']: '5%',
               [i % 2 === 0 ? 'right' : 'left']: 'auto',
             }}
@@ -167,104 +95,6 @@ export default function Scene3Transformation() {
           </div>
         ))}
       </div>
-
-      <style jsx>{`
-        .transform-scene {
-          position: relative;
-          height: 300vh;
-          background: #050505;
-          overflow: hidden;
-        }
-
-        .transform-content {
-          position: relative;
-          width: 100%;
-          height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .building-display {
-          position: relative;
-          width: 300px;
-          height: 400px;
-        }
-
-        .building-type {
-          position: absolute;
-          inset: 0;
-          will-change: transform, opacity;
-        }
-
-        .building-svg {
-          width: 100%;
-          height: 100%;
-        }
-
-        .type-info {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          max-width: 320px;
-          will-change: transform, opacity;
-        }
-
-        .type-name {
-          font-size: 3.5rem;
-          font-weight: 800;
-          margin-bottom: 1rem;
-          letter-spacing: -0.02em;
-        }
-
-        .type-features {
-          display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
-
-        .feature-item {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          font-size: 0.95rem;
-          color: var(--text-secondary);
-        }
-
-        .feature-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          flex-shrink: 0;
-        }
-
-        @media (max-width: 768px) {
-          .type-info {
-            position: relative;
-            top: auto;
-            transform: none;
-            left: auto !important;
-            right: auto !important;
-            text-align: center;
-            max-width: 100%;
-            padding: 0 1rem;
-          }
-
-          .transform-content {
-            flex-direction: column;
-            gap: 2rem;
-          }
-
-          .type-name {
-            font-size: 2.5rem;
-          }
-
-          .building-display {
-            width: 200px;
-            height: 280px;
-          }
-        }
-      `}</style>
     </section>
   );
 }

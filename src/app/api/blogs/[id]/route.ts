@@ -3,6 +3,22 @@ import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import authOptions from '@/lib/auth';
 
+function toPlainTextContent(value: unknown): string {
+  if (typeof value !== 'string') return '';
+
+  return value
+    .replace(/<\s*br\s*\/?>/gi, '\n')
+    .replace(/<\/(p|div|h1|h2|h3|h4|h5|h6|li|blockquote)>/gi, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/\r\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -38,6 +54,10 @@ export async function PATCH(
 
     const { id } = await params;
     const body = await request.json();
+
+    if (body.content !== undefined) {
+      body.content = toPlainTextContent(body.content);
+    }
 
     // Set publishedAt when publishing
     if (body.isPublished && !body.publishedAt) {

@@ -3,6 +3,22 @@ import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import authOptions from '@/lib/auth';
 
+function toPlainTextContent(value: unknown): string {
+  if (typeof value !== 'string') return '';
+
+  return value
+    .replace(/<\s*br\s*\/?>/gi, '\n')
+    .replace(/<\/(p|div|h1|h2|h3|h4|h5|h6|li|blockquote)>/gi, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/\r\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -57,7 +73,7 @@ export async function POST(request: NextRequest) {
         title: body.title,
         slug: body.slug,
         excerpt: body.excerpt,
-        content: body.content,
+        content: toPlainTextContent(body.content),
         coverImage: body.coverImage || null,
         tags: body.tags || [],
         author: body.author || 'SpaceIn Team',

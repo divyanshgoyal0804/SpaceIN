@@ -18,9 +18,43 @@ export default function NewBlogPage() {
     isPublished: false,
   });
   const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   function handleChange(key: string, value: string | boolean) {
     setForm(prev => ({ ...prev, [key]: value }));
+  }
+
+  async function handleCoverImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    try {
+      const data = new FormData();
+      data.append('file', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: data,
+      });
+
+      if (!res.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const payload = await res.json();
+      if (payload?.url) {
+        setForm(prev => ({ ...prev, coverImage: payload.url }));
+        toast.success('Cover image uploaded');
+      } else {
+        throw new Error('No URL returned');
+      }
+    } catch {
+      toast.error('Failed to upload cover image');
+    } finally {
+      setUploadingImage(false);
+      e.target.value = '';
+    }
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -69,13 +103,23 @@ export default function NewBlogPage() {
           <textarea className="input-field" rows={2} value={form.excerpt} onChange={e => handleChange('excerpt', e.target.value)} required style={{ resize: 'vertical' }} />
         </div>
         <div className="form-group">
-          <label style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '0.35rem', display: 'block' }}>Content (HTML) *</label>
-          <textarea className="input-field" rows={12} value={form.content} onChange={e => handleChange('content', e.target.value)} required style={{ resize: 'vertical', fontFamily: 'monospace', fontSize: '0.85rem' }} placeholder="<h2>Section Title</h2><p>Your content here...</p>" />
+          <label style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '0.35rem', display: 'block' }}>Content (Plain Text) *</label>
+          <textarea className="input-field" rows={12} value={form.content} onChange={e => handleChange('content', e.target.value)} required style={{ resize: 'vertical' }} placeholder="Write your blog content in plain text..." />
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
           <div className="form-group">
-            <label style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '0.35rem', display: 'block' }}>Cover Image URL</label>
-            <input className="input-field" value={form.coverImage} onChange={e => handleChange('coverImage', e.target.value)} placeholder="https://..." />
+            <label style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '0.35rem', display: 'block' }}>Cover Image Upload</label>
+            <input className="input-field" type="file" accept="image/*" onChange={handleCoverImageUpload} />
+            {uploadingImage && (
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>
+                Uploading image...
+              </span>
+            )}
+            {form.coverImage && (
+              <div style={{ marginTop: '0.6rem', border: '1px solid var(--border)', borderRadius: '10px', overflow: 'hidden', width: '100%', maxWidth: '260px' }}>
+                <img src={form.coverImage} alt="Cover preview" style={{ width: '100%', height: '140px', objectFit: 'cover', display: 'block' }} />
+              </div>
+            )}
           </div>
           <div className="form-group">
             <label style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '0.35rem', display: 'block' }}>Tags (comma separated)</label>
@@ -88,7 +132,7 @@ export default function NewBlogPage() {
             Publish immediately
           </label>
         </div>
-        <button type="submit" className="btn-primary" disabled={loading} style={{ padding: '0.9rem 2rem', fontSize: '1rem', width: 'fit-content' }}>
+        <button type="submit" className="btn-primary" disabled={loading || uploadingImage} style={{ padding: '0.9rem 2rem', fontSize: '1rem', width: 'fit-content' }}>
           {loading ? 'Creating...' : 'Create Blog Post'}
         </button>
       </form>

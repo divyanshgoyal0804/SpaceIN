@@ -6,6 +6,8 @@ export async function fetchOpenRouter(messages: { role: string; content: string 
     throw new Error('OPENROUTER_API_KEY is not defined');
   }
 
+  const model = env.OPENROUTER_MODEL || 'openrouter/auto';
+
   const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -15,7 +17,7 @@ export async function fetchOpenRouter(messages: { role: string; content: string 
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'mistralai/mistral-7b-instruct:free',
+      model,
       messages,
       max_tokens: maxTokens,
     }),

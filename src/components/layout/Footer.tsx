@@ -1,6 +1,5 @@
-'use client';
-
 import Link from 'next/link';
+import styles from './Footer.module.css';
 
 const quickLinks = [
   { href: '/properties', label: 'Properties' },
@@ -20,12 +19,12 @@ const propertyTypes = [
 
 export default function Footer() {
   return (
-    <footer className="footer">
-      <div className="footer__inner">
-        <div className="footer__grid">
+    <footer className={styles.footer}>
+      <div className={styles.footerInner}>
+        <div className={styles.footerGrid}>
           {/* Brand Column */}
-          <div className="footer__brand">
-            <div className="footer__logo">
+          <div className={styles.footerBrand}>
+            <div className={styles.footerLogo}>
               <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
                 <rect width="32" height="32" rx="8" fill="var(--accent)" />
                 <path
@@ -36,14 +35,14 @@ export default function Footer() {
                 />
                 <path d="M16 7V27" stroke="#271902" strokeWidth="1.5" />
               </svg>
-              <span className="footer__brand-name">SpaceIn</span>
+              <span className={styles.footerBrandName}>SpaceIn</span>
             </div>
-            <p className="footer__tagline">
+            <p className={styles.footerTagline}>
               India&apos;s premium platform for commercial real estate.
               Handpicked spaces, verified listings, expert guidance.
             </p>
             {/* Social Links */}
-            <div className="footer__social">
+            <div className={styles.footerSocial}>
               <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
@@ -68,12 +67,12 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div className="footer__col">
-            <h4 className="footer__heading">Quick Links</h4>
-            <ul className="footer__list">
+          <div>
+            <h4 className={styles.footerHeading}>Quick Links</h4>
+            <ul className={styles.footerList}>
               {quickLinks.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="footer__link">
+                  <Link href={link.href} className={styles.footerLink}>
                     {link.label}
                   </Link>
                 </li>
@@ -82,12 +81,12 @@ export default function Footer() {
           </div>
 
           {/* Property Types */}
-          <div className="footer__col">
-            <h4 className="footer__heading">Property Types</h4>
-            <ul className="footer__list">
+          <div>
+            <h4 className={styles.footerHeading}>Property Types</h4>
+            <ul className={styles.footerList}>
               {propertyTypes.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="footer__link">
+                  <Link href={link.href} className={styles.footerLink}>
                     {link.label}
                   </Link>
                 </li>
@@ -96,23 +95,23 @@ export default function Footer() {
           </div>
 
           {/* Contact Info */}
-          <div className="footer__col">
-            <h4 className="footer__heading">Contact Us</h4>
-            <ul className="footer__list">
-              <li className="footer__contact-item">
+          <div>
+            <h4 className={styles.footerHeading}>Contact Us</h4>
+            <ul className={styles.footerList}>
+              <li className={styles.footerContactItem}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
                 </svg>
                 +91 9XXXXXXXXX
               </li>
-              <li className="footer__contact-item">
+              <li className={styles.footerContactItem}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="4" width="20" height="16" rx="2"/>
                   <path d="M22 7l-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
                 </svg>
                 hello@spacein.in
               </li>
-              <li className="footer__contact-item">
+              <li className={styles.footerContactItem}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                   <circle cx="12" cy="10" r="3"/>
@@ -124,157 +123,11 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="footer__bottom">
+        <div className={styles.footerBottom}>
           <p>© {new Date().getFullYear()} SpaceIn. All rights reserved.</p>
-          <p className="footer__built">Built for commercial real estate in India</p>
+          <p className={styles.footerBuilt}>Built for commercial real estate in India</p>
         </div>
       </div>
-
-      <style jsx>{`
-        .footer {
-          background: var(--bg-secondary);
-          border-top: 1px solid var(--border);
-          padding: 4rem 1.5rem 2rem;
-        }
-
-        .footer__inner {
-          max-width: 1280px;
-          margin: 0 auto;
-        }
-
-        .footer__grid {
-          display: grid;
-          grid-template-columns: 1.5fr 1fr 1fr 1fr;
-          gap: 3rem;
-        }
-
-        .footer__brand {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
-
-        .footer__logo {
-          display: flex;
-          align-items: center;
-          gap: 0.6rem;
-        }
-
-        .footer__brand-name {
-          font-size: 1.2rem;
-          font-weight: 800;
-          color: var(--text-primary);
-        }
-
-        .footer__tagline {
-          color: var(--text-secondary);
-          font-size: 0.9rem;
-          line-height: 1.6;
-          max-width: 280px;
-        }
-
-        .footer__social {
-          display: flex;
-          gap: 1rem;
-          margin-top: 0.5rem;
-        }
-
-        .footer__social a {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 36px;
-          height: 36px;
-          border-radius: 8px;
-          background: var(--glass-bg);
-          border: 1px solid var(--border);
-          color: var(--text-secondary);
-          transition: all 0.2s ease;
-        }
-
-        .footer__social a:hover {
-          color: var(--accent);
-          border-color: rgba(163, 145, 113, 0.3);
-          background: rgba(163, 145, 113, 0.08);
-        }
-
-        .footer__heading {
-          color: var(--text-primary);
-          font-size: 0.85rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-          margin-bottom: 1.25rem;
-        }
-
-        .footer__list {
-          list-style: none;
-          display: flex;
-          flex-direction: column;
-          gap: 0.6rem;
-        }
-
-        .footer__link {
-          color: var(--text-muted);
-          font-size: 0.9rem;
-          text-decoration: none;
-          transition: color 0.2s ease;
-        }
-
-        .footer__link:hover {
-          color: var(--accent);
-        }
-
-        .footer__contact-item {
-          display: flex;
-          align-items: center;
-          gap: 0.6rem;
-          color: var(--text-muted);
-          font-size: 0.9rem;
-        }
-
-        .footer__bottom {
-          margin-top: 3rem;
-          padding-top: 1.5rem;
-          border-top: 1px solid var(--border);
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .footer__bottom p {
-          color: var(--text-muted);
-          font-size: 0.8rem;
-        }
-
-        .footer__built {
-          color: var(--text-muted);
-          font-size: 0.8rem;
-        }
-
-        @media (max-width: 768px) {
-          .footer__grid {
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-          }
-
-          .footer__brand {
-            grid-column: 1 / -1;
-          }
-
-          .footer__bottom {
-            flex-direction: column;
-            gap: 0.5rem;
-            text-align: center;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .footer__grid {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
     </footer>
   );
 }

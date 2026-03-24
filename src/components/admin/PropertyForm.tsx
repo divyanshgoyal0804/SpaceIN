@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { generateSlug, allAmenities, facingDirections } from '@/lib/utils';
@@ -28,6 +28,8 @@ interface PropertyFormData {
   parking: string;
   washrooms: string;
   mainImageUrl: string;
+  images: string[];
+  videoUrl: string;
   isFeatured: boolean;
   isActive: boolean;
 }
@@ -38,7 +40,7 @@ const defaultForm: PropertyFormData = {
   floor: '', totalFloors: '', location: '', city: 'Noida',
   latitude: '', longitude: '', amenities: [], furnished: 'FURNISHED',
   possession: 'Ready to Move', facing: '', parking: '', washrooms: '',
-  mainImageUrl: '', isFeatured: false, isActive: true,
+  mainImageUrl: '', images: [], videoUrl: '', isFeatured: false, isActive: true,
 };
 
 export default function PropertyFormComponent({
@@ -53,6 +55,15 @@ export default function PropertyFormComponent({
   const router = useRouter();
   const [form, setForm] = useState<PropertyFormData>({ ...defaultForm, ...initialData });
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
+
+  const imagePreviews = useMemo(() => {
+    if (form.images.length > 0) {
+      return form.images;
+    }
+    return form.mainImageUrl ? [form.mainImageUrl] : [];
+  }, [form.images, form.mainImageUrl]);
 
   function handleChange(key: keyof PropertyFormData, value: string | boolean | string[]) {
     setForm(prev => ({ ...prev, [key]: value }));
@@ -62,6 +73,94 @@ export default function PropertyFormComponent({
     if (!isEdit && !form.slug) {
       handleChange('slug', generateSlug(form.title));
     }
+  }
+
+  async function handleImagesUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    setUploading(true);
+    try {
+      const uploadedUrls: string[] = [];
+
+      for (const file of files) {
+        const data = new FormData();
+        data.append('file', file);
+
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          body: data,
+        });
+
+        if (!res.ok) {
+          throw new Error(`Failed to upload ${file.name}`);
+        }
+
+        const payload = await res.json();
+        if (payload?.url) {
+          uploadedUrls.push(payload.url);
+        }
+      }
+
+      if (uploadedUrls.length > 0) {
+        setForm(prev => {
+          const nextImages = [...prev.images, ...uploadedUrls];
+          return {
+            ...prev,
+            images: nextImages,
+            mainImageUrl: nextImages[0] || prev.mainImageUrl,
+          };
+        });
+        toast.success(`${uploadedUrls.length} image${uploadedUrls.length > 1 ? 's' : ''} uploaded`);
+      }
+    } catch {
+      toast.error('Failed to upload image(s)');
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  }
+
+  async function handleVideoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingVideo(true);
+    try {
+      const data = new FormData();
+      data.append('file', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: data,
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to upload video');
+      }
+
+      const payload = await res.json();
+      if (payload?.url) {
+        handleChange('videoUrl', payload.url);
+        toast.success('Video uploaded');
+      }
+    } catch {
+      toast.error('Failed to upload video');
+    } finally {
+      setUploadingVideo(false);
+      e.target.value = '';
+    }
+  }
+
+  function removeImage(index: number) {
+    setForm(prev => {
+      const nextImages = prev.images.filter((_, idx) => idx !== index);
+      return {
+        ...prev,
+        images: nextImages,
+        mainImageUrl: nextImages[0] || '',
+      };
+    });
   }
 
   function toggleAmenity(amenity: string) {
@@ -89,6 +188,9 @@ export default function PropertyFormComponent({
       longitude: form.longitude ? parseFloat(form.longitude) : null,
       parking: form.parking ? parseInt(form.parking) : null,
       washrooms: form.washrooms ? parseInt(form.washrooms) : null,
+      images: form.images.map((url, index) => ({ url, order: index })),
+      mainImageUrl: form.images[0] || form.mainImageUrl,
+      videoUrl: form.videoUrl || null,
     };
 
     try {
@@ -248,24 +350,150 @@ export default function PropertyFormComponent({
       <div className="form-section">
         <h3>Images</h3>
         <div className="form-group">
-          <label>Main Image URL *</label>
-          <input className="input-field" value={form.mainImageUrl} onChange={e => handleChange('mainImageUrl', e.target.value)} required placeholder="https://..." />
+          <label>Upload Image Files *</label>
+          <input
+            className="input-field"
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleImagesUpload}
+          />
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+            You can select multiple images at once. First image is used as cover.
+          </span>
+        </div>
+
+        {imagePreviews.length > 0 && (
+          <div className="image-grid">
+            {imagePreviews.map((url, index) => (
+              <div key={`${url}-${index}`} className="image-tile">
+                <img src={url} alt={`Property image ${index + 1}`} className="image-preview" />
+                <button
+                  type="button"
+                  className="remove-image-btn"
+                  onClick={() => removeImage(index)}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {!imagePreviews.length && (
+          <div style={{ fontSize: '0.85rem', color: 'var(--error)' }}>
+            Please upload at least one image.
+          </div>
+        )}
+
+        {uploading && (
+          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+            Uploading images...
+          </div>
+        )}
+
+        <div className="form-group" style={{ marginTop: '0.9rem' }}>
+          <label>Fallback Cover Image URL</label>
+          <input
+            className="input-field"
+            value={form.mainImageUrl}
+            onChange={e => handleChange('mainImageUrl', e.target.value)}
+            placeholder="Used if no uploaded images exist"
+          />
         </div>
       </div>
 
-      <button type="submit" className="btn-primary" disabled={loading} style={{ padding: '0.9rem 2rem', fontSize: '1rem' }}>
+      <div className="form-section">
+        <h3>Video (Optional)</h3>
+        <div className="form-group">
+          <label>Upload Property Video</label>
+          <input
+            className="input-field"
+            type="file"
+            accept="video/*"
+            onChange={handleVideoUpload}
+          />
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+            This is optional. Add a short walkthrough video if available.
+          </span>
+        </div>
+
+        {uploadingVideo && (
+          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+            Uploading video...
+          </div>
+        )}
+
+        {form.videoUrl && (
+          <div className="form-group" style={{ marginTop: '0.9rem' }}>
+            <label>Uploaded Video Preview</label>
+            <video controls className="video-preview" src={form.videoUrl} />
+            <button
+              type="button"
+              className="remove-image-btn"
+              onClick={() => handleChange('videoUrl', '')}
+              style={{ maxWidth: '180px', border: '1px solid var(--border)' }}
+            >
+              Remove Video
+            </button>
+          </div>
+        )}
+      </div>
+
+      <button
+        type="submit"
+        className="btn-primary"
+        disabled={loading || uploading || uploadingVideo || (!form.images.length && !form.mainImageUrl)}
+        style={{ padding: '0.9rem 2rem', fontSize: '1rem' }}
+      >
         {loading ? 'Saving...' : isEdit ? 'Update Property' : 'Create Property'}
       </button>
 
       <style jsx>{`
-        .property-form { display: flex; flex-direction: column; gap: 2rem; max-width: 800px; }
-        .form-section { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; }
-        .form-section h3 { font-size: 1rem; margin-bottom: 1.25rem; color: var(--text-primary); }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+        .property-form {
+          display: flex;
+          flex-direction: column;
+          gap: 1.25rem;
+          max-width: 980px;
+          margin: 0 auto;
+          padding-bottom: 2rem;
+        }
+        .form-section {
+          background:
+            radial-gradient(circle at top right, rgba(var(--accent-rgb), 0.08), transparent 40%),
+            var(--bg-secondary);
+          border: 1px solid var(--border);
+          border-radius: 18px;
+          padding: 1.35rem;
+          box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+        }
+        .form-section h3 {
+          font-size: 1rem;
+          margin-bottom: 1rem;
+          color: var(--text-primary);
+          letter-spacing: 0.01em;
+        }
+        .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.95rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
         .form-group.full { grid-column: 1 / -1; }
-        .form-group label { font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); }
-        @media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
+        .form-group label { font-size: 0.82rem; font-weight: 600; color: var(--text-secondary); }
+        .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.75rem; margin-top: 0.75rem; }
+        .image-tile { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--bg-primary); }
+        .image-preview { width: 100%; height: 105px; object-fit: cover; display: block; }
+        .remove-image-btn {
+          width: 100%; border: none; border-top: 1px solid var(--border); padding: 0.45rem;
+          background: transparent; color: var(--text-secondary); font-size: 0.8rem; cursor: pointer;
+        }
+        .remove-image-btn:hover { background: rgba(239, 68, 68, 0.08); color: #ef4444; }
+        .video-preview {
+          width: 100%; max-width: 360px; border: 1px solid var(--border); border-radius: 10px;
+          background: #000;
+        }
+        @media (max-width: 640px) {
+          .property-form { gap: 1rem; }
+          .form-section { padding: 1rem; border-radius: 14px; }
+          .form-grid { grid-template-columns: 1fr; }
+        }
       `}</style>
     </form>
   );

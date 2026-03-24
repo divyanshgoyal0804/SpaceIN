@@ -1,9 +1,3 @@
-'use client';
-
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
 const categories = [
   { label: 'Office Spaces', x: '20%', y: '35%', color: '#60a5fa' },
   { label: 'Retail Outlets', x: '70%', y: '40%', color: '#fbbf24' },
@@ -13,78 +7,8 @@ const categories = [
 ];
 
 export default function Scene2CityExploration() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const ctx = gsap.context(() => {
-      // Pin the scene
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top top',
-        end: '+=100%',
-        pin: true,
-        pinSpacing: true,
-      });
-
-      // City zoom
-      gsap.to('.city-grid', {
-        scale: 1.4,
-        ease: 'power2.inOut',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: '+=100%',
-          scrub: 1,
-        },
-      });
-
-      // Pins and labels appear sequentially
-      categories.forEach((_, i) => {
-        const progress = (i + 1) / categories.length;
-
-        gsap.fromTo(
-          `.map-pin-${i}`,
-          { scale: 0, opacity: 0 },
-          {
-            scale: 1,
-            opacity: 1,
-            duration: 0.4,
-            ease: 'back.out(1.7)',
-            scrollTrigger: {
-              trigger: section,
-              start: `top+=${progress * 60}% top`,
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
-
-        gsap.fromTo(
-          `.category-label-${i}`,
-          { opacity: 0, x: -20 },
-          {
-            opacity: 1,
-            x: 0,
-            duration: 0.5,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: section,
-              start: `top+=${progress * 60 + 5}% top`,
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
-      });
-    }, section);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section ref={sectionRef} className="city-scene" data-scene="city">
+    <section className="city-scene" data-scene="city">
       <div className="city-grid">
         {/* Isometric city grid SVG */}
         <svg viewBox="0 0 800 600" className="city-svg" aria-hidden="true">
@@ -148,7 +72,7 @@ export default function Scene2CityExploration() {
                   width={3}
                   height={3}
                   rx={0.5}
-                  fill={Math.random() > 0.6 ? 'rgba(1,114,150,0.3)' : 'rgba(255,255,255,0.08)'}
+                      fill={(bi + ri + ci) % 3 === 0 ? 'rgba(1,114,150,0.3)' : 'rgba(255,255,255,0.08)'}
                 />
               ))
             )
@@ -171,74 +95,6 @@ export default function Scene2CityExploration() {
           </div>
         ))}
       </div>
-
-      <style jsx>{`
-        .city-scene {
-          position: relative;
-          height: 200vh;
-          background: #050505;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
-        }
-
-        .city-grid {
-          position: relative;
-          width: 100%;
-          max-width: 1000px;
-          height: 70vh;
-          will-change: transform;
-        }
-
-        .city-svg {
-          width: 100%;
-          height: 100%;
-        }
-
-        .map-pin {
-          position: absolute;
-          transform: translate(-50%, -50%);
-          display: flex;
-          align-items: center;
-          gap: 0.6rem;
-          z-index: 5;
-          opacity: 0;
-        }
-
-        .pin-marker {
-          width: 16px;
-          height: 16px;
-          border-radius: 50%;
-          position: relative;
-          box-shadow: 0 0 12px currentColor;
-        }
-
-        .pin-pulse {
-          position: absolute;
-          inset: -4px;
-          border-radius: 50%;
-          opacity: 0.4;
-          animation: pulse-ring 2s ease-out infinite;
-        }
-
-        .category-label {
-          padding: 0.4rem 0.9rem;
-          font-size: 0.8rem;
-          white-space: nowrap;
-          opacity: 0;
-        }
-
-        @media (max-width: 768px) {
-          .category-label {
-            display: none;
-          }
-
-          .city-grid {
-            height: 50vh;
-          }
-        }
-      `}</style>
     </section>
   );
 }

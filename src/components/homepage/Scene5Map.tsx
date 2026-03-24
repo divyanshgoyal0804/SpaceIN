@@ -1,8 +1,3 @@
-'use client';
-
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Link from 'next/link';
 
 const pins = [
@@ -38,96 +33,8 @@ const propertyCards = [
 ];
 
 export default function Scene5Map() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top top',
-        end: '+=150%',
-        pin: true,
-        pinSpacing: true,
-      });
-
-      // Map reveal
-      gsap.fromTo(
-        '.map-container',
-        { opacity: 0, scale: 0.95 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.8,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
-
-      // Pins drop in
-      gsap.fromTo(
-        '.map-pin-drop',
-        { y: -20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.2,
-          duration: 0.5,
-          ease: 'bounce.out',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top+=20% top',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
-
-      // Heatmap overlay
-      gsap.fromTo(
-        '.heatmap-overlay',
-        { opacity: 0 },
-        {
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: section,
-            start: 'top+=40% top',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
-
-      // Property cards slide in
-      gsap.fromTo(
-        '.map-property-card',
-        { x: 60, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          stagger: 0.15,
-          duration: 0.6,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top+=50% top',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
-    }, section);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section ref={sectionRef} className="map-scene" data-scene="map">
+    <section className="map-scene" data-scene="map">
       <div className="map-layout">
         {/* Map Area */}
         <div className="map-container">
@@ -163,7 +70,7 @@ export default function Scene5Map() {
           </svg>
 
           {/* Heatmap */}
-          <div className="heatmap-overlay" style={{ opacity: 0 }}>
+          <div className="heatmap-overlay">
             <div className="heatmap-zone" style={{ left: '40%', top: '25%' }} />
             <div className="heatmap-zone heatmap-zone--sm" style={{ left: '50%', top: '30%' }} />
           </div>
@@ -173,7 +80,7 @@ export default function Scene5Map() {
             <div
               key={i}
               className="map-pin-drop"
-              style={{ left: pin.x, top: pin.y, opacity: 0 }}
+              style={{ left: pin.x, top: pin.y }}
             >
               <div className="pin-icon">
                 <svg width="24" height="32" viewBox="0 0 24 32" fill="var(--accent)">
@@ -193,7 +100,6 @@ export default function Scene5Map() {
               key={i}
               href={`/properties/${card.slug}`}
               className="map-property-card glass-card"
-              style={{ opacity: 0 }}
             >
               <div className="map-property-card__badge">{card.type}</div>
               <h4 className="map-property-card__title">{card.title}</h4>
@@ -205,146 +111,6 @@ export default function Scene5Map() {
           ))}
         </div>
       </div>
-
-      <style jsx>{`
-        .map-scene {
-          position: relative;
-          height: 200vh;
-          background: #050505;
-          overflow: hidden;
-        }
-
-        .map-layout {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 2rem;
-          height: 100vh;
-          padding: 2rem;
-          max-width: 1200px;
-          margin: 0 auto;
-        }
-
-        .map-container {
-          position: relative;
-          flex: 1;
-          max-width: 600px;
-          opacity: 0;
-        }
-
-        .noida-map {
-          width: 100%;
-          height: auto;
-          border-radius: 12px;
-          border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .heatmap-overlay {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-        }
-
-        .heatmap-zone {
-          position: absolute;
-          width: 120px;
-          height: 120px;
-          border-radius: 50%;
-          background: radial-gradient(circle, rgba(var(--accent-rgb), 0.2) 0%, transparent 70%);
-          transform: translate(-50%, -50%);
-        }
-
-        .heatmap-zone--sm {
-          width: 80px;
-          height: 80px;
-        }
-
-        .map-pin-drop {
-          position: absolute;
-          transform: translate(-50%, -100%);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 0.25rem;
-          z-index: 5;
-        }
-
-        .pin-icon {
-          filter: drop-shadow(0 2px 8px rgba(var(--accent-rgb), 0.4));
-        }
-
-        .pin-label {
-          font-size: 0.7rem;
-          font-weight: 600;
-          color: var(--text-secondary);
-          background: rgba(0, 0, 0, 0.7);
-          padding: 0.15rem 0.5rem;
-          border-radius: 4px;
-          white-space: nowrap;
-        }
-
-        .map-cards {
-          width: 320px;
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
-
-        .map-cards__title {
-          font-size: 1rem;
-          color: var(--text-secondary);
-          margin-bottom: 0.5rem;
-        }
-
-        .map-property-card {
-          display: block;
-          text-decoration: none;
-          padding: 1.25rem;
-        }
-
-        .map-property-card__badge {
-          display: inline-block;
-          font-size: 0.7rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          color: var(--accent);
-          background: rgba(var(--accent-rgb), 0.1);
-          padding: 0.2rem 0.6rem;
-          border-radius: 6px;
-          margin-bottom: 0.5rem;
-        }
-
-        .map-property-card__title {
-          font-size: 0.95rem;
-          font-weight: 600;
-          color: var(--text-primary);
-          margin-bottom: 0.5rem;
-        }
-
-        .map-property-card__details {
-          display: flex;
-          justify-content: space-between;
-          font-size: 0.8rem;
-          color: var(--text-muted);
-        }
-
-        .map-property-card__price {
-          color: var(--accent);
-          font-weight: 600;
-        }
-
-        @media (max-width: 768px) {
-          .map-layout {
-            flex-direction: column;
-            padding: 1rem;
-          }
-
-          .map-cards {
-            width: 100%;
-          }
-        }
-      `}</style>
     </section>
   );
 }
