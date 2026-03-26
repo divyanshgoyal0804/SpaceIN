@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
 
     if (!token) {
       const loginUrl = new URL('/admin/login', request.url);
-      loginUrl.searchParams.set('callbackUrl', pathname);
+      loginUrl.searchParams.set('callbackUrl', pathname === '/admin' ? '/admin/dashboard' : pathname);
       return NextResponse.redirect(loginUrl);
     }
   }

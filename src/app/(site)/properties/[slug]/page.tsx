@@ -30,13 +30,42 @@ interface PropertyData {
   parking: number | null;
   washrooms: number | null;
   mainImageUrl: string;
+  videoUrl: string | null;
   images: { id: string; url: string; caption: string | null; order: number }[];
   isFeatured: boolean;
 }
 
+function getEmbedVideoUrl(url: string): string | null {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace('www.', '');
+
+    if (host === 'youtube.com' || host === 'youtu.be') {
+      const id = host === 'youtu.be'
+        ? parsed.pathname.slice(1)
+        : parsed.searchParams.get('v');
+      if (!id) return null;
+      return `https://www.youtube.com/embed/${id}`;
+    }
+
+    if (host === 'vimeo.com') {
+      const id = parsed.pathname.split('/').filter(Boolean)[0];
+      if (!id) return null;
+      return `https://player.vimeo.com/video/${id}`;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
 async function getProperty(slug: string): Promise<PropertyData | null> {
-  const property = await prisma.property.findUnique({
-    where: { slug },
+  const property = await prisma.property.findFirst({
+    where: {
+      OR: [{ slug }, { id: slug }],
+      isActive: true,
+    },
     include: { images: { orderBy: { order: 'asc' } } },
   });
 
@@ -223,6 +252,38 @@ export default async function PropertyDetailPage({
           )}
 
           {/* Description */}
+          {property.videoUrl && (
+            <div className="video-section">
+              <h3>Property Walkthrough</h3>
+              {getEmbedVideoUrl(property.videoUrl) ? (
+                <iframe
+                  src={getEmbedVideoUrl(property.videoUrl)!}
+                  title={`${property.title} walkthrough`}
+                  className="detail-video detail-video-embed"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                />
+              ) : (
+                <video
+                  controls
+                  preload="metadata"
+                  className="detail-video"
+                  src={property.videoUrl}
+                />
+              )}
+              <a
+                href={property.videoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="detail-video-link"
+              >
+                Open video in new tab
+              </a>
+            </div>
+          )}
+
+          {/* Description */}
           <div className="description-section">
             <h3>Description</h3>
             <p>{property.description}</p>
@@ -383,6 +444,36 @@ export default async function PropertyDetailPage({
           margin-bottom: 0.75rem;
         }
 
+        .video-section {
+          margin-bottom: 2rem;
+        }
+
+        .video-section h3 {
+          font-size: 1.1rem;
+          margin-bottom: 0.75rem;
+        }
+
+        .detail-video {
+          width: 100%;
+          max-width: 860px;
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          background: #000;
+        }
+
+        .detail-video-embed {
+          min-height: 360px;
+        }
+
+        .detail-video-link {
+          display: inline-block;
+          margin-top: 0.6rem;
+          font-size: 0.85rem;
+          color: var(--accent);
+          text-decoration: underline;
+          text-underline-offset: 2px;
+        }
+
         .description-section p {
           line-height: 1.8;
         }
@@ -444,9 +535,6 @@ function InquiryForm({ propertyId, propertyTitle }: { propertyId: string; proper
         <form
           action={`/api/inquiries`}
           method="POST"
-          onSubmit={async (e) => {
-            e.preventDefault();
-          }}
           style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
         >
           <input type="hidden" name="propertyId" value={propertyId} />

@@ -29,8 +29,35 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deploy on Railway
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project is ready to deploy on Railway with PostgreSQL provided as a separate Railway service.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Required environment variables:
+
+- `DATABASE_URL`
+- `NEXTAUTH_SECRET`
+- `NEXTAUTH_URL`
+- `NEXT_PUBLIC_APP_URL`
+- `OPENROUTER_API_KEY`
+- `OPENROUTER_MODEL` (optional)
+- `NEXT_PUBLIC_WHATSAPP_NUMBER` (optional)
+- `UPLOAD_STORAGE_DIR` (optional, recommended on Railway)
+
+Suggested Railway commands:
+
+- Build: `npm run build`
+- Start: `npm run start`
+
+The start command runs `prisma db push` first so the deployed PostgreSQL schema stays in sync with `prisma/schema.prisma`.
+
+For file uploads on Railway, set `UPLOAD_STORAGE_DIR` to a mounted volume path such as `/app/data/uploads`. The app will still serve files from the same `/uploads/...` URLs.
+
+One-time database seeding, if needed for a fresh database:
+
+- `npm run db:seed`
+
+The admin account is created by the seed script with:
+
+- Email: `admin@spacein.in`
+- Password: `Admin@123`

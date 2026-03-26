@@ -1,12 +1,36 @@
-.header {
+.headerShell {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
+}
+
+.headerHoverZone {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 14px;
+  z-index: 1001;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1002;
   padding: 0 1.5rem;
   background: var(--bg-primary);
   border-bottom: 1px solid var(--border);
+  transform: translateY(calc(-100% + 8px));
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.headerShell:hover .header,
+.header:focus-within {
+  transform: translateY(0);
 }
 
 .headerScrolled {
@@ -150,6 +174,14 @@
 }
 
 @media (max-width: 768px) {
+  .header {
+    transform: translateY(0);
+  }
+
+  .headerHoverZone {
+    display: none;
+  }
+
   .headerNav {
     display: none;
   }
@@ -160,5 +192,15 @@
 
   .mobileOverlay {
     display: block;
+  }
+}
+
+@media (hover: none) {
+  .header {
+    transform: translateY(0);
+  }
+
+  .headerHoverZone {
+    display: none;
   }
 }

@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import authOptions from '@/lib/auth';
+import { revalidatePath } from 'next/cache';
+
+function hasUnknownVideoArgError(error: unknown): boolean {
+  return error instanceof Error && error.message.includes('Unknown argument `videoUrl`');
+}
 
 export async function GET(
   request: NextRequest,
@@ -48,11 +53,26 @@ export async function PATCH(
     // Handle images update separately
     const { images, ...propertyData } = body;
 
-    const property = await prisma.property.update({
-      where: { id },
-      data: propertyData,
-      include: { images: true },
-    });
+    let property;
+    try {
+      property = await prisma.property.update({
+        where: { id },
+        data: propertyData,
+        include: { images: true },
+      });
+    } catch (error) {
+      // Backward compatibility for databases/clients that don't yet have videoUrl.
+      if (!hasUnknownVideoArgError(error)) {
+        throw error;
+      }
+
+      const { videoUrl: _ignored, ...propertyDataWithoutVideo } = propertyData as Record<string, unknown>;
+      property = await prisma.property.update({
+        where: { id },
+        data: propertyDataWithoutVideo,
+        include: { images: true },
+      });
+    }
 
     // Update images if provided
     if (images) {
@@ -75,6 +95,12 @@ export async function PATCH(
       where: { id },
       include: { images: { orderBy: { order: 'asc' } } },
     });
+
+    if (updated) {
+      revalidatePath('/properties');
+      revalidatePath(`/properties/${updated.slug}`);
+      revalidatePath('/chat');
+    }
 
     return NextResponse.json(updated);
   } catch (error) {
@@ -100,6 +126,9 @@ export async function DELETE(
       where: { id },
       data: { isActive: false },
     });
+
+    revalidatePath('/properties');
+    revalidatePath('/chat');
 
     return NextResponse.json({ success: true });
   } catch (error) {

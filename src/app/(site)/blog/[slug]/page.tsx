@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Calendar, Clock, User } from 'lucide-react';
 import { calculateReadTime } from '@/lib/utils';
 import { prisma } from '@/lib/prisma';
+import { getAppUrl } from '@/lib/app-url';
 import type { Metadata } from 'next';
 
 interface BlogData {
@@ -72,7 +73,7 @@ export default async function BlogPostPage({
   const plainContent = normalizeContent(blog.content);
   const readTime = calculateReadTime(plainContent);
   const shareText = encodeURIComponent(blog.title);
-  const shareUrl = encodeURIComponent(`${process.env.NEXTAUTH_URL || 'https://spacein.in'}/blog/${blog.slug}`);
+  const shareUrl = encodeURIComponent(`${getAppUrl()}/blog/${blog.slug}`);
 
   return (
     <div className="blog-post-page">

@@ -1,15 +1,20 @@
+'use client';
+
 import AdminSidebar from '@/components/admin/AdminSidebar';
+import { usePathname } from 'next/navigation';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isLoginPage = pathname === '/admin/login';
+
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      <AdminSidebar />
+    <div style={{ minHeight: '100vh' }}>
+      {!isLoginPage && <AdminSidebar />}
       <main
         style={{
-          flex: 1,
-          padding: '2rem',
+          minHeight: '100vh',
+          padding: isLoginPage ? '0' : '2rem',
           background: 'var(--bg-primary)',
-          marginLeft: '240px',
         }}
       >
         {children}

@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { Property } from '@/store/chatStore';
 import styles from './chat.module.css';
 
@@ -8,6 +9,7 @@ interface Props {
 
 export default function PropertyResultCard({ property }: Props) {
   const imageUrl = property.mainImageUrl || '/images/card-fallback.jpg'; // Adjust fallback
+  const detailHref = `/properties/${property.slug || property.id}`;
   const area = property.carpetArea ? `${property.carpetArea} sq ft` : '';
   const price = property.rentPerMonth 
     ? `₹${property.rentPerMonth.toLocaleString('en-IN')}/month` 
@@ -46,7 +48,7 @@ export default function PropertyResultCard({ property }: Props) {
           )}
         </div>
         <div className={styles.cardPrice}>{price}</div>
-        <button className={styles.viewBtn}>View Details →</button>
+        <Link href={detailHref} className={styles.viewBtn}>View Details →</Link>
       </div>
     </div>
   );

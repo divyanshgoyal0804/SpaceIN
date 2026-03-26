@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import authOptions from '@/lib/auth';
+import { mkdir, writeFile } from 'fs/promises';
+import path from 'path';
+import { getUploadPublicUrl, getUploadStorageDir } from '@/lib/upload-storage';
+
+function sanitizeFilename(name: string): string {
+  return name.replace(/[^a-zA-Z0-9._-]/g, '_');
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,25 +23,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    // For now, convert to base64 data URL as a fallback
-    // In production, this should upload to Supabase Storage or Cloudinary
+    const uploadDir = getUploadStorageDir();
+    await mkdir(uploadDir, { recursive: true });
+
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const base64 = buffer.toString('base64');
-    const mimeType = file.type;
-    const dataUrl = `data:${mimeType};base64,${base64}`;
+    const extension = path.extname(file.name) || '';
+    const baseName = sanitizeFilename(path.basename(file.name, extension));
+    const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${baseName}${extension}`;
+    const filePath = path.join(uploadDir, uniqueName);
 
-    // TODO: Replace with actual cloud storage upload
-    // Example Supabase upload:
-    // const { data, error } = await supabase.storage
-    //   .from('property-images')
-    //   .upload(`${Date.now()}-${file.name}`, buffer, { contentType: mimeType });
-    // const url = supabase.storage.from('property-images').getPublicUrl(data.path).data.publicUrl;
+    await writeFile(filePath, buffer);
+
+    const publicUrl = getUploadPublicUrl(uniqueName);
 
     return NextResponse.json({
-      url: dataUrl,
-      filename: file.name,
+      url: publicUrl,
+      filename: uniqueName,
       size: file.size,
+      mimeType: file.type,
     });
   } catch (error) {
     console.error('Error uploading file:', error);

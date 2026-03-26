@@ -1,18 +1,19 @@
-import { env } from 'process';
+import { getAppUrl } from './app-url';
 
 export async function fetchOpenRouter(messages: { role: string; content: string }[], maxTokens = 1000) {
-  const apiKey = env.OPENROUTER_API_KEY;
+  const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
     throw new Error('OPENROUTER_API_KEY is not defined');
   }
 
-  const model = env.OPENROUTER_MODEL || 'openrouter/auto';
+  const model = process.env.OPENROUTER_MODEL || 'openrouter/auto';
+  const appUrl = getAppUrl();
 
   const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${apiKey}`,
-      'HTTP-Referer': 'http://localhost:3000',
+      'HTTP-Referer': appUrl,
       'X-Title': 'Property AI App',
       'Content-Type': 'application/json',
     },

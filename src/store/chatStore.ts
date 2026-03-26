@@ -13,6 +13,7 @@ export interface Property {
   furnished?: boolean | null;
   amenities?: string[];
   mainImageUrl?: string | null;
+  videoUrl?: string | null;
   description?: string | null;
 }
 

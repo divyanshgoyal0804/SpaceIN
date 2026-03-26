@@ -13,7 +13,8 @@ const navLinks = [
 
 export default function Header() {
   return (
-    <>
+    <div className={styles.headerShell}>
+      <div className={styles.headerHoverZone} aria-hidden="true" />
       <header className={styles.header}>
         <div className={styles.headerInner}>
           {/* Logo */}
@@ -50,6 +51,6 @@ export default function Header() {
           </div>
         </div>
       </header>
-    </>
+    </div>
   );
 }

@@ -1,26 +1,17 @@
-import { Building2, FileText, MessageSquare, Star } from 'lucide-react';
 import Link from 'next/link';
+import { Building2, FileText, MessageSquare, Star } from 'lucide-react';
+import { prisma } from '@/lib/prisma';
 
 async function getDashboardStats() {
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
   try {
-    const [propsRes, blogsRes, inqRes] = await Promise.all([
-      fetch(`${baseUrl}/api/properties?limit=100`, { cache: 'no-store' }),
-      fetch(`${baseUrl}/api/blogs?limit=100`, { cache: 'no-store' }),
-      fetch(`${baseUrl}/api/inquiries`, { cache: 'no-store', headers: { cookie: '' } }),
+    const [totalProperties, totalBlogs, totalInquiries, featuredProperties] = await Promise.all([
+      prisma.property.count({ where: { isActive: true } }),
+      prisma.blog.count(),
+      prisma.inquiry.count(),
+      prisma.property.count({ where: { isActive: true, isFeatured: true } }),
     ]);
 
-    const propsData = propsRes.ok ? await propsRes.json() : { total: 0, properties: [] };
-    const blogsData = blogsRes.ok ? await blogsRes.json() : { total: 0 };
-
-    const featuredCount = (propsData.properties || []).filter((p: { isFeatured: boolean }) => p.isFeatured).length;
-
-    return {
-      totalProperties: propsData.total || 0,
-      totalBlogs: blogsData.total || 0,
-      totalInquiries: 0, // Will show 0 if not authed for this request
-      featuredProperties: featuredCount,
-    };
+    return { totalProperties, totalBlogs, totalInquiries, featuredProperties };
   } catch {
     return { totalProperties: 0, totalBlogs: 0, totalInquiries: 0, featuredProperties: 0 };
   }

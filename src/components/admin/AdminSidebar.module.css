@@ -1,7 +1,27 @@
+.sidebarShell {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 240px;
+  z-index: 120;
+  pointer-events: none;
+}
+
+.sidebarHoverZone {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 14px;
+  z-index: 121;
+  pointer-events: auto;
+}
+
 .adminSidebar {
   width: 240px;
   height: 100vh;
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   background: var(--bg-secondary);
@@ -9,7 +29,16 @@
   display: flex;
   flex-direction: column;
   padding: 1.5rem 0;
-  z-index: 100;
+  z-index: 122;
+  transform: translateX(calc(-100% + 10px));
+  transition: transform 0.25s ease;
+  pointer-events: none;
+}
+
+.sidebarShell:hover .adminSidebar,
+.adminSidebar:focus-within {
+  transform: translateX(0);
+  pointer-events: auto;
 }
 
 .sidebarLogo {
@@ -72,4 +101,25 @@
   color: #ef4444;
   background: rgba(239, 68, 68, 0.08);
   border-color: rgba(239, 68, 68, 0.15);
+}
+
+@media (max-width: 1024px) {
+  .sidebarShell {
+    width: 220px;
+  }
+
+  .adminSidebar {
+    width: 220px;
+  }
+}
+
+@media (hover: none) {
+  .sidebarHoverZone {
+    display: none;
+  }
+
+  .adminSidebar {
+    transform: translateX(0);
+    pointer-events: auto;
+  }
 }

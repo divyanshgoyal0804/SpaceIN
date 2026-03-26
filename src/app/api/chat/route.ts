@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getAppUrl } from '@/lib/app-url';
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,6 +22,7 @@ export async function POST(request: NextRequest) {
         furnished: true,
         amenities: true,
         mainImageUrl: true,
+        videoUrl: true,
         description: true,
       },
     });
@@ -49,13 +51,14 @@ AVAILABLE PROPERTIES DATABASE:
 ${JSON.stringify(properties, null, 2)}`;
 
     const model = process.env.OPENROUTER_MODEL || 'openrouter/auto';
+    const appUrl = getAppUrl();
 
     const openRouterResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
-        'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+        'HTTP-Referer': appUrl,
         'X-Title': 'SpaceIn',
       },
       body: JSON.stringify({

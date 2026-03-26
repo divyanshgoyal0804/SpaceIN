@@ -2,12 +2,18 @@
 
 import { useState, FormEvent } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const requestedCallbackUrl = searchParams.get('callbackUrl');
+  const callbackUrl = requestedCallbackUrl?.startsWith('/admin')
+    ? requestedCallbackUrl
+    : '/admin/dashboard';
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -15,20 +21,28 @@ export default function AdminLoginPage() {
     setError('');
 
     const formData = new FormData(e.currentTarget);
-    const email = formData.get('email') as string;
+    const email = (formData.get('email') as string).trim().toLowerCase();
     const password = formData.get('password') as string;
 
-    const result = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    });
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        callbackUrl,
+        redirect: false,
+      });
 
-    if (result?.error) {
-      setError('Invalid email or password');
+      if (!result || result.error) {
+        setError('Invalid email or password');
+        return;
+      }
+
+      router.push(result.url || callbackUrl);
+      router.refresh();
+    } catch {
+      setError('Unable to sign in. Please try again.');
+    } finally {
       setLoading(false);
-    } else {
-      router.push('/admin/dashboard');
     }
   }
 
@@ -54,11 +68,11 @@ export default function AdminLoginPage() {
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
             <label>Email</label>
-            <input type="email" name="email" className="input-field" placeholder="admin@spacein.in" required />
+            <input type="email" name="email" className="input-field" placeholder="admin@spacein.in" autoComplete="email" required />
           </div>
           <div className="form-group">
             <label>Password</label>
-            <input type="password" name="password" className="input-field" placeholder="••••••••" required />
+            <input type="password" name="password" className="input-field" placeholder="••••••••" autoComplete="current-password" required />
           </div>
           <button type="submit" className="btn-primary" disabled={loading} style={{ width: '100%', marginTop: '0.5rem' }}>
             {loading ? 'Signing in...' : 'Sign In'}
