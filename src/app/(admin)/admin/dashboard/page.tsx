@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { Building2, FileText, MessageSquare, Star } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 async function getDashboardStats() {
   try {
     const [totalProperties, totalBlogs, totalInquiries, featuredProperties] = await Promise.all([
