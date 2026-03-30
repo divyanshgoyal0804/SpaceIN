@@ -2,18 +2,16 @@
 
 import { useState, FormEvent } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
-export default function AdminLoginForm() {
+type AdminLoginFormProps = {
+  callbackUrl: string;
+};
+
+export default function AdminLoginForm({ callbackUrl }: AdminLoginFormProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const requestedCallbackUrl = searchParams.get('callbackUrl');
-  const callbackUrl = requestedCallbackUrl?.startsWith('/admin')
-    ? requestedCallbackUrl
-    : '/admin/dashboard';
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

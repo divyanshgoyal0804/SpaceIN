@@ -1,16 +1,23 @@
-import { Suspense } from 'react';
 import AdminLoginForm from './AdminLoginForm';
 
-export default function AdminLoginPage() {
+type AdminLoginPageProps = {
+  searchParams: Promise<{
+    callbackUrl?: string | string[];
+  }>;
+};
+
+function getSafeAdminCallbackUrl(rawCallbackUrl: string | string[] | undefined): string {
+  const callbackUrl = Array.isArray(rawCallbackUrl) ? rawCallbackUrl[0] : rawCallbackUrl;
+  return callbackUrl?.startsWith('/admin') ? callbackUrl : '/admin/dashboard';
+}
+
+export default async function AdminLoginPage({
+  searchParams,
+}: AdminLoginPageProps) {
+  const resolvedSearchParams = await searchParams;
+  const callbackUrl = getSafeAdminCallbackUrl(resolvedSearchParams.callbackUrl);
+
   return (
-    <Suspense
-      fallback={
-        <div className="login-page">
-          <div className="login-card glass-card">Loading...</div>
-        </div>
-      }
-    >
-      <AdminLoginForm />
-    </Suspense>
+    <AdminLoginForm callbackUrl={callbackUrl} />
   );
 }
