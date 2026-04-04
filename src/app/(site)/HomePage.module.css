@@ -7,7 +7,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(170deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  background:
+    linear-gradient(170deg, rgba(6, 11, 20, 0.66) 0%, rgba(9, 19, 34, 0.82) 54%, rgba(5, 11, 20, 0.92) 100%),
+    url('/office-space-bg.svg') center/cover no-repeat;
   position: relative;
   overflow: hidden;
 }

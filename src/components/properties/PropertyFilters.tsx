@@ -1476,7 +1476,7 @@ export default function PropertyFilters() {
           position: fixed;
           inset: 0;
           z-index: 999;
-          background: rgba(0, 0, 0, 0.6);
+          background: rgba(5, 11, 20, 0.62);
           animation: pfFadeIn 0.2s ease;
         }
         .pf-drawer {

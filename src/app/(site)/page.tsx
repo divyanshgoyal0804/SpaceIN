@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Building2, ShieldCheck, MapPin } from 'lucide-react';
+import { Building2, ShieldCheck, MapPin, Wallet, Settings, Wrench } from 'lucide-react';
 import HeroSearch from '@/components/homepage/HeroSearch';
 import styles from './HomePage.module.css';
 
@@ -22,6 +22,24 @@ const features = [
     description:
       'Strategic locations across Noida with excellent connectivity and infrastructure.',
   },
+  {
+    icon: Wallet,
+    title: 'Budget Friendly',
+    description:
+      'Flexible pricing options to suit every budget. Find the right space without compromising on quality or location.',
+  },
+  {
+    icon: Settings,
+    title: 'Managed Services',
+    description:
+      'End-to-end property management including maintenance, security, and support — so you can focus on your business.',
+  },
+  {
+    icon: Wrench,
+    title: 'Built to Suit',
+    description:
+      'Customizable spaces designed to meet your exact business needs, from layout to infrastructure.',
+  },
 ];
 
 export default function HomePage() {
@@ -30,10 +48,11 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.heroContainer}>
-          <p className={styles.heroEyebrow}>Premium Commercial Real Estate</p>
-          <h1 className={styles.heroHeadline}>
-            Your City. Your <span className={styles.heroAccent}>Space.</span> Your
-            Business.
+          <p className={styles.heroEyebrow}>Premium Commercials for leasing</p>
+            <h1 className={styles.heroHeadline}>
+            One Platform. Every <span className={styles.heroAccent}>Office Space </span>
+            in Noida.
+            <div>Handpick your next</div>
           </h1>
           <p className={styles.heroSub}>
             Discover handpicked commercial spaces in Noida — verified, ready, and
@@ -56,7 +75,7 @@ export default function HomePage() {
         <div className={styles.featuresContainer}>
           <h2 className={styles.featuresTitle}>Why SpaceIn?</h2>
           <p className={styles.featuresSubtitle}>
-            We take the complexity out of finding your next commercial space.
+            Because finding the right office shouldn't feel like a full-time job.
           </p>
           <div className={styles.featuresGrid}>
             {features.map((feature) => (

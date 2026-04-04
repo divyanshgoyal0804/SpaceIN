@@ -6,9 +6,9 @@ import styles from './HeroSearch.module.css';
 
 const SUGGESTIONS = [
   'Furnished office under ₹50K/month',
-  'Warehouse with loading bay, 3000+ sq ft',
+  'Unfurnished space in Sector 63',
   'Coworking space near Sector 62',
-  'Retail space for sale under ₹1 Cr',
+  'Managed office space in Sector 62',
 ];
 
 export default function HeroSearch() {
@@ -41,6 +41,9 @@ export default function HeroSearch() {
         </svg>
         <input
           className={styles.input}
+          type="search"
+          aria-label="Search commercial spaces"
+          autoComplete="off"
           placeholder="Ask anything... e.g. furnished office under ₹50,000/month in Sector 62"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
