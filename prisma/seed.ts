@@ -1,9 +1,14 @@
 import 'dotenv/config';
+import { execSync } from 'node:child_process';
 import { prisma } from '../src/lib/prisma';
 import bcrypt from 'bcryptjs';
 
 async function main() {
   console.log('🌱 Seeding database...');
+
+  execSync('npx prisma db push --skip-generate', {
+    stdio: 'inherit',
+  });
 
   // Create default admin
   const hashedPassword = await bcrypt.hash('Admin@123', 12);
