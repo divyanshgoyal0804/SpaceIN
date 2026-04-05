@@ -5,6 +5,8 @@ import PropertyCard from '@/components/properties/PropertyCard';
 import { prisma } from '@/lib/prisma';
 import styles from './HomePage.module.css';
 
+export const dynamic = 'force-dynamic';
+
 const features = [
   {
     icon: ShieldCheck,

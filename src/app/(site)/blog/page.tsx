@@ -3,6 +3,8 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Blog',
   description: 'Insights, guides, and news about commercial real estate in Noida.',

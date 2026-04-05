@@ -6,6 +6,8 @@ import PropertyCard from '@/components/properties/PropertyCard';
 import { prisma } from '@/lib/prisma';
 import type { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 interface PropertyData {
   id: string;
   title: string;

@@ -7,6 +7,8 @@ import { prisma } from '@/lib/prisma';
 import { getAppUrl } from '@/lib/app-url';
 import type { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 interface BlogData {
   id: string;
   title: string;

@@ -5,6 +5,8 @@ import { ActiveFilterChips } from '@/components/properties/PropertyFilters';
 import { prisma } from '@/lib/prisma';
 import type { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Properties',
   description: 'Browse premium commercial spaces in Noida — offices, coworking, retail, warehouses, showrooms, and plots.',

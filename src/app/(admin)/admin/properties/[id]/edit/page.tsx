@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import PropertyForm from '@/components/admin/PropertyForm';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 async function getProperty(id: string) {
   return prisma.property.findUnique({
     where: { id },
