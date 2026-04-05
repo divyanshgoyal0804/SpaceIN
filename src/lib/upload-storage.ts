@@ -7,5 +7,14 @@ export function getUploadStorageDir(): string {
 }
 
 export function getUploadPublicUrl(filename: string): string {
-  return `/uploads/${filename}`;
+  const safeFilename = filename
+    .split('/')
+    .filter(Boolean)
+    .map((segment) => encodeURIComponent(segment))
+    .join('/');
+
+  const configuredBaseUrl = (process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || '').replace(/\/$/, '');
+  const relativeUrl = `/api/uploads/${safeFilename}`;
+
+  return configuredBaseUrl ? `${configuredBaseUrl}${relativeUrl}` : relativeUrl;
 }

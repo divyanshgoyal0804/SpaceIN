@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Plus, Pencil, Trash2, Search } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { propertyTypeLabels } from '@/lib/utils';
+import { resolvePropertyImageUrl } from '@/lib/image-url';
 
 interface Property {
   id: string;
@@ -95,7 +96,7 @@ export default function AdminPropertiesPage() {
               {filtered.map((p) => (
                 <tr key={p.id}>
                   <td>
-                    <Image src={p.mainImageUrl} alt={p.title} width={60} height={45} style={{ objectFit: 'cover', borderRadius: '6px' }} />
+                    <Image src={resolvePropertyImageUrl(p.mainImageUrl)} alt={p.title} width={60} height={45} style={{ objectFit: 'cover', borderRadius: '6px' }} />
                   </td>
                   <td style={{ fontWeight: 600 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>

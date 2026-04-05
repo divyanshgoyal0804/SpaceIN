@@ -6,6 +6,5 @@ export async function GET(
   { params }: { params: Promise<{ path: string[] }> }
 ) {
   const { path: segments } = await params;
-
   return serveUploadPath(segments);
 }

@@ -4,6 +4,7 @@ import { Property } from '@/store/chatStore';
 import styles from './chat.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
+import { resolvePropertyImageUrl } from '@/lib/image-url';
 
 export default function MobilePropertyStrip({ propertyIds }: { propertyIds: string[] }) {
   const [properties, setProperties] = useState<Property[]>([]);
@@ -23,7 +24,7 @@ export default function MobilePropertyStrip({ propertyIds }: { propertyIds: stri
         <Link key={p.id} href={`/properties/${p.slug}`} className={styles.mobilePropertyCard}>
           <div className={styles.mobilePropertyCardImageCont}>
             <Image 
-              src={p.mainImageUrl || '/images/card-fallback.jpg'} 
+              src={resolvePropertyImageUrl(p.mainImageUrl)} 
               alt={p.title} 
               fill
               className={styles.mobilePropertyCardImage}

@@ -2,13 +2,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Property } from '@/store/chatStore';
 import styles from './chat.module.css';
+import { resolvePropertyImageUrl } from '@/lib/image-url';
 
 interface Props {
   property: Property;
 }
 
 export default function PropertyResultCard({ property }: Props) {
-  const imageUrl = property.mainImageUrl || '/images/card-fallback.jpg'; // Adjust fallback
+  const imageUrl = resolvePropertyImageUrl(property.mainImageUrl);
   const detailHref = `/properties/${property.slug || property.id}`;
   const area = property.carpetArea ? `${property.carpetArea} sq ft` : '';
   const price = property.rentPerMonth 

@@ -1,7 +1,11 @@
+"use client";
+
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect, useMemo, useState } from 'react';
 import { MapPin, Maximize2 } from 'lucide-react';
 import { formatPrice, propertyTypeLabels } from '@/lib/utils';
+import { getFallbackPropertyImageUrl, resolvePropertyImageUrl } from '@/lib/image-url';
 
 interface PropertyCardProps {
   property: {
@@ -33,17 +37,45 @@ export default function PropertyCard({ property }: PropertyCardProps) {
   const displayPrice = isRent
     ? formatPrice(property.rentPerMonth, true)
     : formatPrice(property.price);
+  const resolvedImage = useMemo(
+    () => resolvePropertyImageUrl(property.mainImageUrl),
+    [property.mainImageUrl]
+  );
+  const [imageSrc, setImageSrc] = useState(resolvedImage);
+
+  useEffect(() => {
+    setImageSrc(resolvedImage);
+  }, [resolvedImage]);
+
+  useEffect(() => {
+    if (!property.mainImageUrl || !/^https?:\/\//i.test(property.mainImageUrl)) {
+      console.info('[PropertyCard:image-src]', {
+        slug: property.slug,
+        original: property.mainImageUrl,
+        resolved: resolvedImage,
+      });
+    }
+  }, [property.mainImageUrl, property.slug, resolvedImage]);
 
   return (
     <Link href={`/properties/${property.slug}`} className="property-card card">
       <div className="property-card__image-wrap">
         <Image
-          src={property.mainImageUrl}
+          src={imageSrc}
           alt={property.title}
           width={400}
           height={300}
           className="property-card__image"
           style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+          onError={() => {
+            const fallback = getFallbackPropertyImageUrl();
+            console.error('[PropertyCard:image-error]', {
+              slug: property.slug,
+              attempted: imageSrc,
+              fallback,
+            });
+            setImageSrc(fallback);
+          }}
         />
         <span className={`property-card__badge badge ${badgeColorMap[property.type] || ''}`}>
           {propertyTypeLabels[property.type] || property.type}

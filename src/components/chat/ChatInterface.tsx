@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, FormEvent } from 'react';
 import { Send, Bot, User, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { resolvePropertyImageUrl } from '@/lib/image-url';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -208,7 +209,7 @@ export default function ChatInterface() {
                             >
                               <div className="psc-image">
                                 <Image
-                                  src={prop.mainImageUrl}
+                                  src={resolvePropertyImageUrl(prop.mainImageUrl)}
                                   alt={prop.title}
                                   width={80}
                                   height={60}

@@ -5,6 +5,7 @@ import { formatPrice, propertyTypeLabels, furnishedTypeLabels, listingTypeLabels
 import PropertyCard from '@/components/properties/PropertyCard';
 import { prisma } from '@/lib/prisma';
 import type { Metadata } from 'next';
+import { resolvePropertyImageUrl } from '@/lib/image-url';
 
 export const dynamic = 'force-dynamic';
 
@@ -104,7 +105,7 @@ export async function generateMetadata({
     openGraph: {
       title: property.title,
       description: `${propertyTypeLabels[property.type]} in ${property.location}`,
-      images: [{ url: property.mainImageUrl }],
+      images: [{ url: resolvePropertyImageUrl(property.mainImageUrl) }],
     },
   };
 }
@@ -119,9 +120,13 @@ export default async function PropertyDetailPage({
   if (!property) notFound();
 
   const similar = await getSimilarProperties(property.type, property.id);
+  const mainImageUrl = resolvePropertyImageUrl(property.mainImageUrl);
   const allImages = [
-    { url: property.mainImageUrl, caption: 'Main Image' },
-    ...property.images,
+    { url: mainImageUrl, caption: 'Main Image' },
+    ...property.images.map((img) => ({
+      ...img,
+      url: resolvePropertyImageUrl(img.url),
+    })),
   ];
 
   return (
@@ -130,7 +135,7 @@ export default async function PropertyDetailPage({
       <div className="gallery">
         <div className="gallery-main">
           <Image
-            src={property.mainImageUrl}
+            src={mainImageUrl}
             alt={property.title}
             width={800}
             height={500}
