@@ -3,6 +3,7 @@ import { readFile, stat } from 'fs/promises';
 import { getUploadStorageDir } from '@/lib/upload-storage';
 
 const FALLBACK_IMAGE_CANDIDATES = [
+  path.join(process.cwd(), 'public', 'images', 'property-fallback.png'),
   path.join(process.cwd(), 'public', 'images', 'property-fallback.svg'),
   path.join(process.cwd(), 'public', 'file.svg'),
 ];

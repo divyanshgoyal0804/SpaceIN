@@ -1,4 +1,4 @@
-const FALLBACK_IMAGE_PATH = '/images/property-fallback.svg';
+const FALLBACK_IMAGE_PATH = '/images/property-fallback.png';
 
 function getRuntimeBaseUrl(): string {
   if (typeof window !== 'undefined' && window.location?.origin) {
