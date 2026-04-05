@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 async function main() {
   console.log('🌱 Seeding database...');
 
-  execSync('npx prisma db push --skip-generate', {
+  execSync('npx prisma db push', {
     stdio: 'inherit',
   });
 
