@@ -41,7 +41,7 @@ export default function MobileChatLayout() {
           </svg>
           History
         </button>
-        <div className={styles.mobileHeaderTitle}>SpaceIn AI</div>
+        <div className={styles.mobileHeaderTitle}>Sharkspace AI</div>
         <button className={styles.mobileHeaderNewBtn} onClick={() => startNewSession()}>
           + New
         </button>

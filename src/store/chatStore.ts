@@ -45,7 +45,7 @@ interface ChatStore {
   initSessions: () => void;
 }
 
-const STORAGE_KEY = 'spacein_chat_sessions';
+const STORAGE_KEY = 'sharkspace_chat_sessions';
 
 export const useChatStore = create<ChatStore>((set, get) => ({
   messages: [],

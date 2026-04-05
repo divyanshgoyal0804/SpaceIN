@@ -14,7 +14,7 @@ export default function NewBlogPage() {
     content: '',
     coverImage: '',
     tags: '',
-    author: 'SpaceIn Team',
+    author: 'Sharkspace Team',
     isPublished: false,
   });
   const [loading, setLoading] = useState(false);

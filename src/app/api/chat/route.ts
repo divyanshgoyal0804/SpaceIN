@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const systemPrompt = `You are SpaceIn's commercial real estate assistant for Noida, India.
+    const systemPrompt = `You are Sharkspace's commercial real estate assistant for Noida, India.
 
 When suggesting properties, always include this exact block at the END of your response:
 [PROPERTIES:{"ids":["id1","id2","id3"]}]
@@ -59,7 +59,7 @@ ${JSON.stringify(properties, null, 2)}`;
         Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': appUrl,
-        'X-Title': 'SpaceIn',
+        'X-Title': 'Sharkspace',
       },
       body: JSON.stringify({
         model,

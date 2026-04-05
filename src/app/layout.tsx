@@ -12,8 +12,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "SpaceIn — Premium Commercial Real Estate in Noida",
-    template: "%s | SpaceIn",
+    default: "Sharkspace — Premium Commercial Real Estate in Noida",
+    template: "%s | Sharkspace",
   },
   description:
     "Discover premium commercial spaces in Noida. Office spaces, coworking hubs, retail outlets, warehouses, and showrooms — handpicked, verified, and ready for your business.",
@@ -27,12 +27,12 @@ export const metadata: Metadata = {
     "commercial property",
   ],
   openGraph: {
-    title: "SpaceIn — Premium Commercial Real Estate in Noida",
+    title: "Sharkspace — Premium Commercial Real Estate in Noida",
     description:
       "Discover premium commercial spaces in Noida. Handpicked, verified, and ready.",
     type: "website",
     locale: "en_IN",
-    siteName: "SpaceIn",
+    siteName: "Sharkspace",
   },
 };
 

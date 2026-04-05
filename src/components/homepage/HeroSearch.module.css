@@ -1,7 +1,7 @@
 .wrapper {
   width: 100%;
-  max-width: 680px;
-  margin: 32px auto 0;
+  max-width: 42rem;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -110,29 +110,9 @@
     0 0 0 1px rgba(var(--accent-rgb), 0.06);
 }
 
-@media (prefers-color-scheme: light) {
-  :global(.light) .input,
-  :global(body:not(.dark)) .input {
-    background: transparent;
-  }
-
-  :global(.light) .searchContainer,
-  :global(body:not(.dark)) .searchContainer {
-    border-color: rgba(var(--accent-rgb), 0.22);
-    background: rgba(255, 255, 255, 0.94);
-    box-shadow:
-      0 10px 24px rgba(15, 23, 42, 0.11),
-      0 0 0 1px rgba(var(--accent-rgb), 0.06);
-  }
-}
-
 .input:focus {
   background: transparent;
   box-shadow: none;
-}
-
-:global(body:not(.dark)) .input:focus {
-  background: transparent;
 }
 
 .input::placeholder {

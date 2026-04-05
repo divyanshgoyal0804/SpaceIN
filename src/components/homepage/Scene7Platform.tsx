@@ -20,7 +20,7 @@ export default function Scene7Platform() {
         <div className="mock-frame">
           {/* Nav bar */}
           <div className="mock-nav">
-            <div className="mock-logo">SpaceIn</div>
+            <div className="mock-logo">Sharkspace</div>
             <div className="mock-nav-links">
               <span>Properties</span>
               <span>Blog</span>

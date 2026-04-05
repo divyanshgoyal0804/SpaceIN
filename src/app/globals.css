@@ -25,10 +25,18 @@
   --input-placeholder: #7f8aa3;
   --card-bg: #162033;
   --card-border: rgba(148, 163, 184, 0.1);
+  --page-background: radial-gradient(circle at top left, rgba(1, 114, 150, 0.16), transparent 32%), radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 28%), linear-gradient(180deg, #08111f 0%, #091322 52%, #060b14 100%);
+  --home-section-surface: rgba(8, 17, 31, 0.62);
+  --home-section-surface-alt: rgba(16, 25, 44, 0.68);
+  --home-section-border: rgba(148, 163, 184, 0.14);
+  --home-hero-background: linear-gradient(170deg, rgba(6, 11, 20, 0.66) 0%, rgba(9, 19, 34, 0.82) 54%, rgba(5, 11, 20, 0.92) 100%), url('/office-space-bg.svg') center/cover no-repeat;
+  --home-page-overlay: radial-gradient(circle at top left, rgba(1, 114, 150, 0.08), transparent 28%), radial-gradient(circle at top right, rgba(59, 130, 246, 0.06), transparent 24%), linear-gradient(180deg, rgba(8, 17, 31, 0.12) 0%, rgba(8, 17, 31, 0.26) 54%, rgba(8, 17, 31, 0.4) 100%);
+  --footer-bg: rgba(8, 17, 31, 0.82);
+  --footer-border: rgba(148, 163, 184, 0.16);
 }
 
 /* ============================================
-   SpaceIn — Design Token System
+  Sharkspace — Design Token System
    ============================================ */
 
 @theme inline {
@@ -81,6 +89,14 @@
   --error: #ef4444;
   --error-text: #f87171;
   --warning: #f59e0b;
+  --page-background: radial-gradient(circle at top left, rgba(1, 114, 150, 0.16), transparent 32%), radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 28%), linear-gradient(180deg, #08111f 0%, #091322 52%, #060b14 100%);
+  --home-section-surface: rgba(8, 17, 31, 0.62);
+  --home-section-surface-alt: rgba(16, 25, 44, 0.68);
+  --home-section-border: rgba(148, 163, 184, 0.14);
+  --home-hero-background: linear-gradient(170deg, rgba(6, 11, 20, 0.66) 0%, rgba(9, 19, 34, 0.82) 54%, rgba(5, 11, 20, 0.92) 100%), url('/office-space-bg.svg') center/cover no-repeat;
+  --home-page-overlay: radial-gradient(circle at top left, rgba(1, 114, 150, 0.08), transparent 28%), radial-gradient(circle at top right, rgba(59, 130, 246, 0.06), transparent 24%), linear-gradient(180deg, rgba(8, 17, 31, 0.12) 0%, rgba(8, 17, 31, 0.26) 54%, rgba(8, 17, 31, 0.4) 100%);
+  --footer-bg: rgba(8, 17, 31, 0.82);
+  --footer-border: rgba(148, 163, 184, 0.16);
 }
 
 /* ============================================
@@ -118,6 +134,14 @@
   --error: #dc2626;
   --error-text: #dc2626;
   --warning: #d97706;
+  --page-background: radial-gradient(circle at top left, rgba(1, 114, 150, 0.12), transparent 28%), radial-gradient(circle at top right, rgba(59, 130, 246, 0.08), transparent 26%), linear-gradient(180deg, #ffffff 0%, #f7fafc 52%, #eef2f7 100%);
+  --home-section-surface: rgba(255, 255, 255, 0.56);
+  --home-section-surface-alt: rgba(249, 250, 251, 0.64);
+  --home-section-border: rgba(0, 0, 0, 0.08);
+  --home-hero-background: linear-gradient(170deg, rgba(255, 255, 255, 0.86) 0%, rgba(248, 250, 252, 0.9) 54%, rgba(241, 245, 249, 0.95) 100%), url('/office-space-bg.svg') center/cover no-repeat;
+  --home-page-overlay: radial-gradient(circle at top left, rgba(1, 114, 150, 0.04), transparent 28%), radial-gradient(circle at top right, rgba(59, 130, 246, 0.03), transparent 24%), linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.18) 54%, rgba(255, 255, 255, 0.28) 100%);
+  --footer-bg: #ffffff;
+  --footer-border: rgba(0, 0, 0, 0.08);
 }
 
 /* ============================================
@@ -137,10 +161,10 @@ html {
 body {
   min-height: 100%;
   background-color: var(--bg-primary);
-  background-image:
-    radial-gradient(circle at top left, rgba(1, 114, 150, 0.16), transparent 32%),
-    radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 28%),
-    linear-gradient(180deg, var(--bg-primary) 0%, #091322 52%, #060b14 100%);
+  background-image: var(--page-background);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   background-attachment: fixed;
   color: var(--text-primary);
   font-family: var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif;

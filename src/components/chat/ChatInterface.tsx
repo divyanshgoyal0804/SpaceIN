@@ -163,7 +163,7 @@ export default function ChatInterface() {
               <div className="chat-empty__icon">
                 <Bot size={40} />
               </div>
-              <h2>SpaceIn AI Assistant</h2>
+              <h2>Sharkspace AI Assistant</h2>
               <p>Ask me anything about commercial spaces in Noida</p>
               <div className="suggested-grid">
                 {suggestedPrompts.map((prompt, i) => (

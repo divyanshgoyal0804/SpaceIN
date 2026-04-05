@@ -10,7 +10,7 @@ export default function SiteLayout({
   return (
     <>
       <Header />
-      <main style={{ minHeight: "100vh", background: "var(--bg-primary)" }}>{children}</main>
+      <main style={{ minHeight: "100vh", background: "transparent" }}>{children}</main>
       <Footer />
       <WhatsAppButton />
     </>

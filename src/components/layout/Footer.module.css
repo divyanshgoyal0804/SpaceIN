@@ -1,7 +1,16 @@
 .footer {
-  background: var(--bg-secondary);
-  border-top: 1px solid var(--border);
+  background: var(--footer-bg);
+  border-top: 1px solid var(--footer-border);
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  position: relative;
+  z-index: 3;
   padding: 4rem 1.5rem 2rem;
+}
+
+:global([data-theme="light"]) .footer {
+  background: #ffffff;
+  box-shadow: 0 -12px 32px rgba(15, 23, 42, 0.06);
 }
 
 .footerInner {
@@ -103,7 +112,7 @@
 .footerBottom {
   margin-top: 3rem;
   padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--footer-border);
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
         content: toPlainTextContent(body.content),
         coverImage: body.coverImage || null,
         tags: body.tags || [],
-        author: body.author || 'SpaceIn Team',
+        author: body.author || 'Sharkspace Team',
         isPublished: body.isPublished || false,
         publishedAt: body.isPublished ? new Date() : null,
       },

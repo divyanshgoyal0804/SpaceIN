@@ -12,7 +12,7 @@ export const anthropic =
     baseURL: 'https://openrouter.ai/api/v1',
     defaultHeaders: {
       'HTTP-Referer': getAppUrl(),
-      'X-Title': 'SpaceIn',
+      'X-Title': 'Sharkspace',
     }
   });
 

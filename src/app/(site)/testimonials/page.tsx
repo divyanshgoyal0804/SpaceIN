@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 
 export const metadata: Metadata = {
   title: 'Client Testimonials',
-  description: 'What clients say about SpaceIn.',
+  description: 'What clients say about Sharkspace.',
 };
 
 export default async function TestimonialsPage() {
@@ -53,7 +53,7 @@ export default async function TestimonialsPage() {
     <div className="testimonials-page">
       <section className="testimonials-hero">
         <h1>Client Testimonials</h1>
-        <p>Real experiences from teams who found their workspace with SpaceIn.</p>
+        <p>Real experiences from teams who found their workspace with Sharkspace.</p>
       </section>
 
       <div className="testimonials-grid page-container">

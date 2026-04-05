@@ -4,7 +4,7 @@ import { Shield, Bot, CheckCircle, Eye } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'About',
-  description: 'Learn about SpaceIn — India\'s premium platform for commercial real estate in Noida.',
+  description: 'Learn about Sharkspace — India\'s premium platform for commercial real estate in Noida.',
 };
 
 const features = [
@@ -25,7 +25,7 @@ export default function AboutPage() {
     <div className="about-page">
       {/* Hero */}
       <section className="about-hero">
-        <h1>About <span className="text-gradient">SpaceIn</span></h1>
+        <h1>About <span className="text-gradient">Sharkspace</span></h1>
         <p>We&apos;re building India&apos;s most trusted platform for commercial real estate.</p>
       </section>
 
@@ -34,7 +34,7 @@ export default function AboutPage() {
         <div className="mission-content">
           <h2>Our Mission</h2>
           <p>
-            SpaceIn was born from a simple idea: finding commercial space in India shouldn&apos;t be complicated.
+            Sharkspace was born from a simple idea: finding commercial space in India shouldn&apos;t be complicated.
             We aggregate the best commercial properties in Noida — from modern office spaces to large warehouses —
             and make them discoverable through cutting-edge technology, including AI-powered search.
           </p>
@@ -47,7 +47,7 @@ export default function AboutPage() {
 
       {/* Features */}
       <section className="about-features page-container section-padding">
-        <h2 style={{ textAlign: 'center', marginBottom: '3rem' }}>Why SpaceIn</h2>
+        <h2 style={{ textAlign: 'center', marginBottom: '3rem' }}>Why Sharkspace</h2>
         <div className="features-grid">
           {features.map((f, i) => (
             <div key={i} className="feature-card glass-card">

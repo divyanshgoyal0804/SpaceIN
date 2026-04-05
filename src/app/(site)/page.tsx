@@ -109,10 +109,12 @@ export default async function HomePage() {
       <section className={styles.hero}>
         <div className={styles.heroContainer}>
           <p className={styles.heroEyebrow}>Premium Commercials for leasing</p>
-            <h1 className={styles.heroHeadline}>
-            One Platform. Every <span className={styles.heroAccent}>Office Space </span>
-            in Noida.
-            <div>Handpick your next</div>
+          <h1 className={styles.heroHeadline}>
+            <span className={styles.heroHeadlineLine}>
+              One Platform. Every <span className={styles.heroAccent}>Office Space</span>
+            </span>
+            <span className={styles.heroHeadlineLine}>in Noida.</span>
+            <span className={styles.heroHeadlineLine}>Handpick your next</span>
           </h1>
           <p className={styles.heroSub}>
             Discover handpicked commercial spaces in Noida — verified, ready, and
@@ -133,7 +135,7 @@ export default async function HomePage() {
       {/* Features Section */}
       <section className={styles.features}>
         <div className={styles.featuresContainer}>
-          <h2 className={styles.featuresTitle}>Why SpaceIn?</h2>
+          <h2 className={styles.featuresTitle}>Why Sharkspace?</h2>
           <p className={styles.featuresSubtitle}>
             Because finding the right office shouldn't feel like a full-time job.
           </p>
@@ -212,7 +214,7 @@ export default async function HomePage() {
             <div className={styles.featuresContainer}>
               <h2 className={styles.featuresTitle}>Exclusive Properties</h2>
               <p className={styles.featuresSubtitle}>
-                Handpicked listings available exclusively on SpaceIn.
+                Handpicked listings available exclusively on Sharkspace.
               </p>
               <div className={styles.featuresGrid}>
                 {exclusiveProperties.map((property) => (

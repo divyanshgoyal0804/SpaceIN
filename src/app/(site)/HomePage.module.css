@@ -1,5 +1,30 @@
 .home {
   padding-top: 72px;
+  min-height: 100vh;
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+}
+
+.home::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(2, 6, 23, 0.18) 100%),
+    url('/office-space-bg.svg') center/cover no-repeat;
+  filter: saturate(1.1) brightness(1.04) contrast(1.03);
+  pointer-events: none;
+  z-index: -2;
+}
+
+.home::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: var(--home-page-overlay);
+  pointer-events: none;
+  z-index: -1;
 }
 
 .hero {
@@ -7,9 +32,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background:
-    linear-gradient(170deg, rgba(6, 11, 20, 0.66) 0%, rgba(9, 19, 34, 0.82) 54%, rgba(5, 11, 20, 0.92) 100%),
-    url('/office-space-bg.svg') center/cover no-repeat;
+  padding: clamp(5rem, 8vw, 9rem) 1rem clamp(4rem, 6vw, 6rem);
+  background: var(--home-hero-background);
   position: relative;
   overflow: hidden;
 }
@@ -27,11 +51,15 @@
 
 .heroContainer {
   max-width: 800px;
+  width: 100%;
   margin: 0 auto;
-  padding: 4rem 1.5rem;
   text-align: center;
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 1.5rem);
   animation: heroFadeIn 0.8s ease forwards;
 }
 
@@ -42,7 +70,7 @@
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: var(--accent);
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
   padding: 0.4rem 1rem;
   border: 1px solid rgba(var(--accent-rgb), 0.25);
   border-radius: 9999px;
@@ -50,12 +78,20 @@
 }
 
 .heroHeadline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15em;
   font-size: clamp(2.5rem, 5.5vw, 4rem);
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.03em;
   color: var(--text-primary);
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
+}
+
+.heroHeadlineLine {
+  display: block;
 }
 
 .heroAccent {
@@ -66,7 +102,7 @@
   font-size: clamp(1rem, 2vw, 1.2rem);
   color: var(--text-secondary);
   max-width: 560px;
-  margin: 0 auto 2.5rem;
+  margin: 0;
   line-height: 1.7;
 }
 
@@ -75,7 +111,7 @@
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 32px;
+  margin-top: 0;
 }
 
 .heroBtn {
@@ -85,7 +121,11 @@
 
 .features {
   padding: 6rem 1.5rem;
-  background: var(--bg-primary);
+  background: var(--home-section-surface);
+  border-top: 1px solid var(--home-section-border);
+  border-bottom: 1px solid var(--home-section-border);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
 }
 
 .featuresContainer {
@@ -222,7 +262,23 @@
 
 .ctaBanner {
   padding: 5rem 1.5rem;
-  background: var(--bg-secondary);
+  background: var(--home-section-surface-alt);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+}
+
+:global([data-theme="light"]) .ctaBanner {
+  background: rgba(255, 255, 255, 0.88);
+  border-top: 1px solid rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+:global([data-theme="light"]) .ctaBannerContainer {
+  background: rgba(255, 255, 255, 0.24);
+  border: 1px solid rgba(226, 232, 240, 0.72);
+  border-radius: 28px;
+  padding: 2.75rem 2rem;
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
 }
 
 .ctaBannerContainer {
@@ -266,10 +322,11 @@
 @media (max-width: 768px) {
   .hero {
     min-height: 70vh;
+    padding: 4.5rem 1rem 3.5rem;
   }
 
   .heroContainer {
-    padding: 3rem 1rem;
+    gap: 0.95rem;
   }
 
   .features {

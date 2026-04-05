@@ -20,7 +20,7 @@ export default function AdminSidebar() {
             <rect width="32" height="32" rx="8" fill="var(--accent)" />
             <path d="M8 22V12L16 7L24 12V22L16 27L8 22Z" stroke="#000" strokeWidth="2" fill="none" />
           </svg>
-          <span>SpaceIn</span>
+          <span>Sharkspace</span>
         </div>
 
         <nav className={styles.sidebarNav}>

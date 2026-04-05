@@ -53,7 +53,7 @@ export default function AdminLoginForm({ callbackUrl }: AdminLoginFormProps) {
             <path d="M8 22V12L16 7L24 12V22L16 27L8 22Z" stroke="#000" strokeWidth="2" fill="none" />
             <path d="M16 7V27" stroke="#000" strokeWidth="1.5" />
           </svg>
-          <h1>SpaceIn Admin</h1>
+          <h1>Sharkspace Admin</h1>
         </div>
         <p style={{ color: 'var(--text-muted)', textAlign: 'center', marginBottom: '2rem' }}>
           Sign in to manage your platform
@@ -66,7 +66,7 @@ export default function AdminLoginForm({ callbackUrl }: AdminLoginFormProps) {
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
             <label>Email</label>
-            <input type="email" name="email" className="input-field" placeholder="admin@spacein.in" autoComplete="email" required />
+            <input type="email" name="email" className="input-field" placeholder="admin@sharkspace.in" autoComplete="email" required />
           </div>
           <div className="form-group">
             <label>Password</label>

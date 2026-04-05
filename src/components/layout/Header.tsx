@@ -32,7 +32,7 @@ export default function Header() {
               <path d="M8 12L24 22" stroke="#271902" strokeWidth="1.5" />
               <path d="M24 12L8 22" stroke="#271902" strokeWidth="1.5" />
             </svg>
-            <span className={styles.headerLogoText}>SpaceIn</span>
+            <span className={styles.headerLogoText}>Sharkspace</span>
           </Link>
 
           <nav className={styles.headerNav}>

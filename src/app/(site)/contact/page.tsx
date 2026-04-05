@@ -7,7 +7,7 @@ import type { Metadata } from 'next';
 
 const contactInfo = [
   { icon: Phone, label: '+91 9XXXXXXXXX', href: 'tel:+919XXXXXXXXX' },
-  { icon: Mail, label: 'hello@spacein.in', href: 'mailto:hello@spacein.in' },
+  { icon: Mail, label: 'hello@sharkspace.in', href: 'mailto:hello@sharkspace.in' },
   { icon: MessageCircle, label: 'WhatsApp', href: 'https://wa.me/919XXXXXXXXX' },
   { icon: MapPin, label: 'Noida, Uttar Pradesh, India', href: '#' },
 ];
@@ -105,7 +105,7 @@ export default function ContactPage() {
               style={{ border: 'none', borderRadius: '12px', opacity: 0.8 }}
               allowFullScreen
               loading="lazy"
-              title="SpaceIn Location"
+              title="Sharkspace Location"
             />
           </div>
         </div>
