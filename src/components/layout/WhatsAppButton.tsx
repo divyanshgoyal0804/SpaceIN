@@ -3,7 +3,7 @@
 import styles from './WhatsAppButton.module.css';
 
 export default function WhatsAppButton() {
-  const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '919XXXXXXXXX';
+  const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '91880879701';
   const message = encodeURIComponent("Hi, I'm interested in a commercial space");
 
   return (

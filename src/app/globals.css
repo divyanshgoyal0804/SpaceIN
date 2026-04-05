@@ -139,7 +139,7 @@
   --home-section-surface-alt: rgba(249, 250, 251, 0.64);
   --home-section-border: rgba(0, 0, 0, 0.08);
   --home-hero-background: linear-gradient(170deg, rgba(255, 255, 255, 0.86) 0%, rgba(248, 250, 252, 0.9) 54%, rgba(241, 245, 249, 0.95) 100%), url('/office-space-bg.svg') center/cover no-repeat;
-  --home-page-overlay: radial-gradient(circle at top left, rgba(1, 114, 150, 0.04), transparent 28%), radial-gradient(circle at top right, rgba(59, 130, 246, 0.03), transparent 24%), linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.18) 54%, rgba(255, 255, 255, 0.28) 100%);
+  --home-page-overlay: radial-gradient(circle at top left, rgba(1, 114, 150, 0.07), transparent 30%), radial-gradient(circle at top right, rgba(59, 130, 246, 0.05), transparent 28%), linear-gradient(180deg, rgba(255, 255, 255, 0.82) 0%, rgba(248, 250, 252, 0.88) 54%, rgba(241, 245, 249, 0.92) 100%);
   --footer-bg: #ffffff;
   --footer-border: rgba(0, 0, 0, 0.08);
 }

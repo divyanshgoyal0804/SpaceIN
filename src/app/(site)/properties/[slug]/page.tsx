@@ -258,7 +258,7 @@ export default async function PropertyDetailPage({
             </div>
           )}
 
-          {/* Description */}
+          {/* Property Video */}
           {property.videoUrl && (
             <div className="video-section">
               <h3>Property Walkthrough</h3>
@@ -275,9 +275,13 @@ export default async function PropertyDetailPage({
                 <video
                   controls
                   preload="metadata"
+                  playsInline
+                  crossOrigin="anonymous"
                   className="detail-video"
-                  src={property.videoUrl}
-                />
+                >
+                  <source src={property.videoUrl} />
+                  Your browser does not support the video tag.
+                </video>
               )}
               <a
                 href={property.videoUrl}
@@ -285,7 +289,7 @@ export default async function PropertyDetailPage({
                 rel="noopener noreferrer"
                 className="detail-video-link"
               >
-                Open video in new tab
+                Open video in new tab ↗
               </a>
             </div>
           )}
@@ -463,13 +467,15 @@ export default async function PropertyDetailPage({
         .detail-video {
           width: 100%;
           max-width: 860px;
+          aspect-ratio: 16 / 9;
           border: 1px solid var(--border);
           border-radius: 12px;
           background: #000;
+          display: block;
         }
 
         .detail-video-embed {
-          min-height: 360px;
+          border: none;
         }
 
         .detail-video-link {

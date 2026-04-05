@@ -34,10 +34,17 @@ function getCloudinaryConfig(): CloudinaryConfig | null {
   };
 }
 
-function getCloudinarySignature(timestamp: number, apiSecret: string, folder?: string): string {
-  const signatureBase = folder
-    ? `folder=${folder}&timestamp=${timestamp}${apiSecret}`
-    : `timestamp=${timestamp}${apiSecret}`;
+function getCloudinarySignature(timestamp: number, apiSecret: string, folder?: string, resourceType?: string): string {
+  const params: Record<string, string> = {};
+  if (folder) params.folder = folder;
+  if (resourceType) params.resource_type = resourceType;
+  params.timestamp = String(timestamp);
+
+  // Sort params alphabetically and build signature string
+  const signatureBase = Object.keys(params)
+    .sort()
+    .map(k => `${k}=${params[k]}`)
+    .join('&') + apiSecret;
 
   return createHash('sha1').update(signatureBase).digest('hex');
 }
@@ -70,6 +77,11 @@ export async function POST(request: NextRequest) {
     if (cloudinaryConfig) {
       try {
         const timestamp = Math.floor(Date.now() / 1000);
+
+        // Determine resource type from MIME for proper Cloudinary handling
+        const isVideo = file.type.startsWith('video/');
+        const resourceType = isVideo ? 'video' : 'image';
+
         const signature = getCloudinarySignature(
           timestamp,
           cloudinaryConfig.apiSecret,
@@ -91,8 +103,11 @@ export async function POST(request: NextRequest) {
           cloudinaryForm.append('folder', cloudinaryConfig.folder);
         }
 
+        // Use the specific resource type endpoint for reliable uploads
+        const uploadEndpoint = `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/${resourceType}/upload`;
+
         const cloudinaryResponse = await fetch(
-          `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/auto/upload`,
+          uploadEndpoint,
           {
             method: 'POST',
             body: cloudinaryForm,

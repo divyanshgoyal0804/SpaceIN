@@ -14,11 +14,7 @@ const features = [
   { icon: Eye, title: 'Transparent Pricing', desc: 'No hidden charges. Clear pricing with complete cost breakdowns for every property.' },
 ];
 
-const team = [
-  { name: 'Rajesh Kumar', role: 'Founder & CEO', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face' },
-  { name: 'Priya Sharma', role: 'Head of Operations', image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop&crop=face' },
-  { name: 'Amit Patel', role: 'Lead Developer', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face' },
-];
+
 
 export default function AboutPage() {
   return (
@@ -61,22 +57,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team */}
-      <section className="about-team page-container section-padding">
-        <h2 style={{ textAlign: 'center', marginBottom: '3rem' }}>Our Team</h2>
-        <div className="team-grid">
-          {team.map((t, i) => (
-            <div key={i} className="team-card">
-              <div className="team-image">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={t.image} alt={t.name} />
-              </div>
-              <h4>{t.name}</h4>
-              <p>{t.role}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+
 
       {/* CTA */}
       <section className="about-cta section-padding">
@@ -158,43 +139,6 @@ export default function AboutPage() {
           line-height: 1.5;
         }
 
-        .team-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 2rem;
-          max-width: 800px;
-          margin: 0 auto;
-        }
-
-        .team-card {
-          text-align: center;
-        }
-
-        .team-image {
-          width: 120px;
-          height: 120px;
-          border-radius: 50%;
-          overflow: hidden;
-          margin: 0 auto 1rem;
-          border: 3px solid var(--border);
-        }
-
-        .team-image img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        .team-card h4 {
-          font-size: 1rem;
-          margin-bottom: 0.25rem;
-        }
-
-        .team-card p {
-          font-size: 0.85rem;
-          color: var(--text-muted);
-        }
-
         .about-cta {
           background: var(--bg-secondary);
           border-top: 1px solid var(--border);
@@ -203,10 +147,6 @@ export default function AboutPage() {
         @media (max-width: 768px) {
           .features-grid {
             grid-template-columns: repeat(2, 1fr);
-          }
-
-          .team-grid {
-            grid-template-columns: 1fr;
           }
         }
       `}</style>

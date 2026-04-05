@@ -6,9 +6,9 @@ import toast from 'react-hot-toast';
 import type { Metadata } from 'next';
 
 const contactInfo = [
-  { icon: Phone, label: '+91 9XXXXXXXXX', href: 'tel:+919XXXXXXXXX' },
-  { icon: Mail, label: 'hello@sharkspace.in', href: 'mailto:hello@sharkspace.in' },
-  { icon: MessageCircle, label: 'WhatsApp', href: 'https://wa.me/919XXXXXXXXX' },
+  { icon: Phone, label: '+91 880879701', href: 'tel:+91880879701' },
+  { icon: Mail, label: 'Sales@sharkspace.in', href: 'mailto:sales@sharkspace.in' },
+  { icon: MessageCircle, label: 'WhatsApp', href: 'https://wa.me/91880879701' },
   { icon: MapPin, label: 'Noida, Uttar Pradesh, India', href: '#' },
 ];
 

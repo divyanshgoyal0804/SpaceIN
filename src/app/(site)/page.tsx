@@ -1,7 +1,10 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Building2, ShieldCheck, MapPin, Wallet, Settings, Wrench } from 'lucide-react';
 import HeroSearch from '@/components/homepage/HeroSearch';
+import HowItWorks from '@/components/homepage/HowItWorks';
 import PropertyCard from '@/components/properties/PropertyCard';
+import WhatsAppButton from '@/components/layout/WhatsAppButton';
 import { prisma } from '@/lib/prisma';
 import styles from './HomePage.module.css';
 
@@ -74,13 +77,7 @@ const offerings = [
   },
 ];
 
-const howItWorksSteps = [
-  'Tell us your requirements',
-  'Receive instant options',
-  'Shortlist and schedule visits',
-  'We negotiate for you',
-  'Close and move in',
-];
+
 
 export default async function HomePage() {
   const exclusiveProperties = await prisma.property.findMany({
@@ -104,6 +101,26 @@ export default async function HomePage() {
       furnished: true,
     },
   });
+
+  // Fetch published testimonials
+  let testimonials: Array<{
+    id: string;
+    name: string;
+    role: string | null;
+    company: string | null;
+    quote: string;
+    avatarUrl: string | null;
+  }> = [];
+
+  try {
+    testimonials = await prisma.testimonial.findMany({
+      where: { isPublished: true },
+      orderBy: { createdAt: 'desc' },
+      take: 6,
+    });
+  } catch (error) {
+    console.error('Error fetching testimonials:', error);
+  }
 
   return (
     <div className={styles.home}>
@@ -198,14 +215,7 @@ export default async function HomePage() {
           <p className={styles.featuresSubtitle}>
             A simple, guided flow from requirements to move-in.
           </p>
-          <ol className={styles.flowList}>
-            {howItWorksSteps.map((step, index) => (
-              <li key={step} className={styles.flowItem}>
-                <div className={styles.flowStep}>{index + 1}</div>
-                <div className={styles.flowLabel}>{step}</div>
-              </li>
-            ))}
-          </ol>
+          <HowItWorks />
         </div>
       </section>
 
@@ -222,6 +232,72 @@ export default async function HomePage() {
                 {exclusiveProperties.map((property) => (
                   <PropertyCard key={property.id} property={property} />
                 ))}
+              </div>
+            </div>
+          </section>
+        </>
+      )}
+
+      {/* Testimonials Section */}
+      {testimonials.length > 0 && (
+        <>
+          <div className={styles.sectionDivider} />
+          <section className={styles.features}>
+            <div className={styles.featuresContainer}>
+              <h2 className={styles.featuresTitle}>What Our Clients Say</h2>
+              <p className={styles.featuresSubtitle}>
+                Real experiences from teams who found their workspace with Sharkspace.
+              </p>
+              <div className={styles.testimonialsGrid}>
+                {testimonials.map((t) => {
+                  const initials = t.name.slice(0, 1).toUpperCase();
+                  const trimmedAvatar = t.avatarUrl?.trim() || '';
+                  const isValidAvatar = (() => {
+                    if (!trimmedAvatar) return false;
+                    if (trimmedAvatar.startsWith('/')) return true;
+                    try {
+                      const url = new URL(trimmedAvatar);
+                      return url.protocol === 'http:' || url.protocol === 'https:';
+                    } catch {
+                      return false;
+                    }
+                  })();
+                  return (
+                    <div key={t.id} className={`${styles.testimonialCard} glass-card`}>
+                      <div className={styles.testimonialHeader}>
+                        {isValidAvatar ? (
+                          <div className={styles.testimonialAvatar}>
+                            <Image
+                              src={trimmedAvatar}
+                              alt={t.name}
+                              width={52}
+                              height={52}
+                              style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                            />
+                          </div>
+                        ) : (
+                          <div className={styles.testimonialAvatarFallback}>
+                            {initials}
+                          </div>
+                        )}
+                        <div>
+                          <div className={styles.testimonialName}>{t.name}</div>
+                          {(t.role || t.company) && (
+                            <div className={styles.testimonialRole}>
+                              {[t.role, t.company].filter(Boolean).join(' · ')}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <p className={styles.testimonialQuote}>&ldquo;{t.quote}&rdquo;</p>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className={styles.testimonialsViewAll}>
+                <Link href="/testimonials" className="btn-secondary">
+                  View All Testimonials
+                </Link>
               </div>
             </div>
           </section>
@@ -249,6 +325,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <WhatsAppButton />
     </div>
   );
 }
