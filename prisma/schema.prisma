@@ -33,6 +33,7 @@ model Property {
   videoUrl      String?
   images        PropertyImage[]
   isFeatured    Boolean        @default(false)
+  isExclusive   Boolean        @default(false)
   isActive      Boolean        @default(true)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
@@ -78,6 +79,17 @@ model Inquiry {
   message    String
   propertyId String?
   createdAt  DateTime @default(now())
+}
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  name        String
+  role        String?
+  company     String?
+  quote       String   @db.Text
+  avatarUrl   String?
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
 }
 
 enum PropertyType {

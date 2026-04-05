@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Building2, ShieldCheck, MapPin, Wallet, Settings, Wrench } from 'lucide-react';
 import HeroSearch from '@/components/homepage/HeroSearch';
+import PropertyCard from '@/components/properties/PropertyCard';
+import { prisma } from '@/lib/prisma';
 import styles from './HomePage.module.css';
 
 const features = [
@@ -42,7 +44,65 @@ const features = [
   },
 ];
 
-export default function HomePage() {
+const offerings = [
+  {
+    icon: Building2,
+    title: 'Coworking Desks',
+    description: 'Flexible desk options for solo founders and growing teams.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Private Cabins',
+    description: 'Dedicated cabins for focused work and team privacy.',
+  },
+  {
+    icon: Settings,
+    title: 'Manage Operations',
+    description: 'Operational support to keep your workspace running smoothly.',
+  },
+  {
+    icon: Wallet,
+    title: 'Lease Spaces',
+    description: 'Ready-to-move commercial spaces with transparent terms.',
+  },
+  {
+    icon: MapPin,
+    title: 'Virtual Offices',
+    description: 'Business-ready addresses with essential office services.',
+  },
+];
+
+const howItWorksSteps = [
+  'Tell us your requirements',
+  'Receive instant options',
+  'Shortlist and schedule visits',
+  'We negotiate for you',
+  'Close and move in',
+];
+
+export default async function HomePage() {
+  const exclusiveProperties = await prisma.property.findMany({
+    where: {
+      isActive: true,
+      isExclusive: true,
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 6,
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      type: true,
+      listingType: true,
+      price: true,
+      rentPerMonth: true,
+      carpetArea: true,
+      location: true,
+      mainImageUrl: true,
+      furnished: true,
+    },
+  });
+
   return (
     <div className={styles.home}>
       {/* Hero Section */}
@@ -90,6 +150,79 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <div className={styles.sectionDivider} />
+
+      {/* Sharkspace Offerings Section */}
+      <section className={styles.features}>
+        <div className={styles.featuresContainer}>
+          <h2 className={styles.featuresTitle}>Sharkspace Offerings</h2>
+          <p className={styles.featuresSubtitle}>
+            Workspace solutions tailored for every stage of growth.
+          </p>
+          <div className={styles.featuresGrid}>
+            {offerings.slice(0, 3).map((offering) => (
+              <div key={offering.title} className={`${styles.featureCard} glass-card`}>
+                <div className={styles.featureCardIcon}>
+                  <offering.icon size={28} strokeWidth={1.5} />
+                </div>
+                <h3 className={styles.featureCardTitle}>{offering.title}</h3>
+                <p className={styles.featureCardDesc}>{offering.description}</p>
+              </div>
+            ))}
+          </div>
+          <div className={styles.offeringsRow}>
+            {offerings.slice(3).map((offering) => (
+              <div key={offering.title} className={`${styles.featureCard} glass-card`}>
+                <div className={styles.featureCardIcon}>
+                  <offering.icon size={28} strokeWidth={1.5} />
+                </div>
+                <h3 className={styles.featureCardTitle}>{offering.title}</h3>
+                <p className={styles.featureCardDesc}>{offering.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className={styles.sectionDivider} />
+
+      {/* How It Works Section */}
+      <section className={styles.features}>
+        <div className={styles.featuresContainer}>
+          <h2 className={styles.featuresTitle}>How It Works</h2>
+          <p className={styles.featuresSubtitle}>
+            A simple, guided flow from requirements to move-in.
+          </p>
+          <ol className={styles.flowList}>
+            {howItWorksSteps.map((step, index) => (
+              <li key={step} className={styles.flowItem}>
+                <div className={styles.flowStep}>{index + 1}</div>
+                <div className={styles.flowLabel}>{step}</div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {exclusiveProperties.length > 0 && (
+        <>
+          <div className={styles.sectionDivider} />
+          <section className={styles.features}>
+            <div className={styles.featuresContainer}>
+              <h2 className={styles.featuresTitle}>Exclusive Properties</h2>
+              <p className={styles.featuresSubtitle}>
+                Handpicked listings available exclusively on SpaceIn.
+              </p>
+              <div className={styles.featuresGrid}>
+                {exclusiveProperties.map((property) => (
+                  <PropertyCard key={property.id} property={property} />
+                ))}
+              </div>
+            </div>
+          </section>
+        </>
+      )}
 
       {/* CTA Banner */}
       <section className={styles.ctaBanner}>

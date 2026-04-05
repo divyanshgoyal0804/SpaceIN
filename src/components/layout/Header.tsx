@@ -6,6 +6,7 @@ import styles from './Header.module.css';
 
 const navLinks = [
   { href: '/chat', label: 'AI Chat' },
+  { href: '/testimonials', label: 'Client Testimonials' },
   { href: '/blog', label: 'Blog' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },

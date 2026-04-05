@@ -50,6 +50,10 @@ export async function PATCH(
     const { id } = await params;
     const body = await request.json();
 
+    if (typeof body.isExclusive === 'string') {
+      body.isExclusive = body.isExclusive === 'true';
+    }
+
     // Handle images update separately
     const { images, ...propertyData } = body;
 
@@ -100,6 +104,7 @@ export async function PATCH(
       revalidatePath('/properties');
       revalidatePath(`/properties/${updated.slug}`);
       revalidatePath('/chat');
+      revalidatePath('/');
     }
 
     return NextResponse.json(updated);
@@ -129,6 +134,7 @@ export async function DELETE(
 
     revalidatePath('/properties');
     revalidatePath('/chat');
+    revalidatePath('/');
 
     return NextResponse.json({ success: true });
   } catch (error) {

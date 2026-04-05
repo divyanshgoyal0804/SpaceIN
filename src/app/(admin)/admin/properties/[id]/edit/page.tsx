@@ -53,6 +53,7 @@ export default async function EditPropertyPage({
           images: property.images.map((img) => img.url),
           videoUrl: property.videoUrl ?? '',
           isFeatured: property.isFeatured,
+          isExclusive: property.isExclusive,
           isActive: property.isActive,
         }}
       />

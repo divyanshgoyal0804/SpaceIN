@@ -158,6 +158,11 @@ export async function GET(request: NextRequest) {
     // Featured
     if (searchParams.get('featured') === 'true') where.isFeatured = true;
 
+    // Exclusive
+    const isExclusive = searchParams.get('isExclusive');
+    if (isExclusive === 'true') where.isExclusive = true;
+    if (isExclusive === 'false') where.isExclusive = false;
+
     // Text search
     const search = searchParams.get('search');
     if (search) where.title = { contains: search, mode: 'insensitive' };
@@ -224,6 +229,7 @@ export async function POST(request: NextRequest) {
         mainImageUrl: body.mainImageUrl,
         videoUrl: body.videoUrl || null,
         isFeatured: body.isFeatured || false,
+        isExclusive: body.isExclusive ?? false,
         isActive: body.isActive !== undefined ? body.isActive : true,
         images: body.images?.length
           ? {
@@ -243,6 +249,7 @@ export async function POST(request: NextRequest) {
     revalidatePath('/properties');
     revalidatePath(`/properties/${property.slug}`);
     revalidatePath('/chat');
+    revalidatePath('/');
 
     return NextResponse.json(property, { status: 201 });
   } catch (error) {

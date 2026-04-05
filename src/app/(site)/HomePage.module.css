@@ -113,6 +113,14 @@
   gap: 1.5rem;
 }
 
+.offeringsRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  max-width: 720px;
+  margin: 1.5rem auto 0;
+}
+
 .featureCard {
   text-align: left;
   padding: 2rem;
@@ -141,6 +149,75 @@
   font-size: 0.9rem;
   color: var(--text-secondary);
   line-height: 1.6;
+}
+
+.sectionDivider {
+  height: 1px;
+  width: min(1080px, 90%);
+  margin: 0 auto;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--accent-rgb), 0.25),
+    transparent
+  );
+  opacity: 0.7;
+}
+
+.flowList {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.flowList::before {
+  content: '';
+  position: absolute;
+  top: 22px;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--accent-rgb), 0.7),
+    transparent
+  );
+  box-shadow: 0 0 0 1px rgba(var(--accent-rgb), 0.2);
+}
+
+.flowItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+  padding: 0.5rem 0.5rem 0;
+}
+
+.flowStep {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--accent-rgb), 0.15);
+  color: var(--accent);
+  font-weight: 700;
+  border: 1px solid rgba(var(--accent-rgb), 0.35);
+  position: relative;
+  z-index: 1;
+}
+
+.flowLabel {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
 }
 
 .ctaBanner {
@@ -202,6 +279,21 @@
   .featuresGrid {
     grid-template-columns: 1fr;
     gap: 1.25rem;
+  }
+
+  .offeringsRow {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    margin-top: 1.25rem;
+  }
+
+  .flowList {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .flowList::before {
+    display: none;
   }
 
   .ctaBanner {

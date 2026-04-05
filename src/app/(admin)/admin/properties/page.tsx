@@ -18,6 +18,7 @@ interface Property {
   mainImageUrl: string;
   isActive: boolean;
   isFeatured: boolean;
+  isExclusive: boolean;
 }
 
 export default function AdminPropertiesPage() {
@@ -96,7 +97,23 @@ export default function AdminPropertiesPage() {
                   <td>
                     <Image src={p.mainImageUrl} alt={p.title} width={60} height={45} style={{ objectFit: 'cover', borderRadius: '6px' }} />
                   </td>
-                  <td style={{ fontWeight: 600 }}>{p.title}</td>
+                  <td style={{ fontWeight: 600 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <span>{p.title}</span>
+                      {p.isExclusive && (
+                        <span
+                          className="badge"
+                          style={{
+                            background: 'rgba(var(--accent-rgb), 0.12)',
+                            color: 'var(--accent)',
+                            border: '1px solid rgba(var(--accent-rgb), 0.28)',
+                          }}
+                        >
+                          Exclusive
+                        </span>
+                      )}
+                    </div>
+                  </td>
                   <td>
                     <span className={`badge badge-${p.type.toLowerCase()}`}>
                       {propertyTypeLabels[p.type]}

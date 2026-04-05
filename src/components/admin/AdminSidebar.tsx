@@ -1,11 +1,12 @@
 import Link from 'next/link';
-import { LayoutDashboard, Building2, FileText, MessageSquare, LogOut } from 'lucide-react';
+import { LayoutDashboard, Building2, FileText, MessageSquare, LogOut, Quote } from 'lucide-react';
 import styles from './AdminSidebar.module.css';
 
 const navItems = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/properties', label: 'Properties', icon: Building2 },
   { href: '/admin/blogs', label: 'Blog Posts', icon: FileText },
+  { href: '/admin/testimonials', label: 'Testimonials', icon: Quote },
   { href: '/admin/inquiries', label: 'Inquiries', icon: MessageSquare },
 ];
 

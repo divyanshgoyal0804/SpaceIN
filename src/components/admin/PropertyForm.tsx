@@ -31,6 +31,7 @@ interface PropertyFormData {
   images: string[];
   videoUrl: string;
   isFeatured: boolean;
+  isExclusive: boolean;
   isActive: boolean;
 }
 
@@ -40,7 +41,7 @@ const defaultForm: PropertyFormData = {
   floor: '', totalFloors: '', location: '', city: 'Noida',
   latitude: '', longitude: '', amenities: [], furnished: 'FURNISHED',
   possession: 'Ready to Move', facing: '', parking: '', washrooms: '',
-  mainImageUrl: '', images: [], videoUrl: '', isFeatured: false, isActive: true,
+  mainImageUrl: '', images: [], videoUrl: '', isFeatured: false, isExclusive: false, isActive: true,
 };
 
 export default function PropertyFormComponent({
@@ -324,6 +325,12 @@ export default function PropertyFormComponent({
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <input type="checkbox" checked={form.isFeatured} onChange={e => handleChange('isFeatured', e.target.checked)} />
               Featured Property
+            </label>
+          </div>
+          <div className="form-group">
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <input type="checkbox" checked={form.isExclusive} onChange={e => handleChange('isExclusive', e.target.checked)} />
+              Show on Homepage (Exclusive)
             </label>
           </div>
           <div className="form-group">
