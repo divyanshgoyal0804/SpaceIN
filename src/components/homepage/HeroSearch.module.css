@@ -27,10 +27,10 @@
   width: 100%;
   border-radius: 999px;
   border: 1px solid rgba(var(--accent-rgb), 0.24);
-  background: color-mix(in srgb, var(--input-bg, rgba(255, 255, 255, 0.06)) 88%, rgba(var(--accent-rgb), 0.08));
+  background: #ffffff;
   box-shadow:
-    0 10px 24px rgba(2, 6, 23, 0.2),
-    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 10px 24px rgba(2, 6, 23, 0.18),
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
     0 0 0 1px rgba(var(--accent-rgb), 0.06);
   transition:
     border-color 0.25s ease,
@@ -88,14 +88,14 @@
   height: 60px;
   padding: 0 56px 0 52px;
   border-radius: 30px;
-  color: var(--text-primary);
+  color: #0a0a0a;
   font-size: 15px;
   outline: none;
   transition: color 0.25s ease, background 0.25s ease;
   background: transparent;
   border: none;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 :global([data-theme="light"]) .input {
@@ -116,7 +116,7 @@
 }
 
 .input::placeholder {
-  color: var(--input-placeholder, #9ca3af);
+  color: #6b7280;
 }
 
 .searchIcon {
@@ -179,9 +179,9 @@
   align-items: center;
   padding: 7px 14px;
   border-radius: 20px;
-  border: 1px solid var(--border, #374151);
-  background: var(--glass-bg, rgba(255, 255, 255, 0.03));
-  color: var(--text-secondary, #9ca3af);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+  color: #374151;
   font-size: 13px;
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s, background 0.2s;
@@ -191,7 +191,7 @@
 .chip:hover {
   border-color: rgba(1, 114, 150, 0.4);
   color: var(--accent);
-  background: rgba(1, 114, 150, 0.06);
+  background: rgba(255, 255, 255, 0.95);
 }
 
 @keyframes searchPulseRing {

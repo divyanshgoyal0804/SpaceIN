@@ -130,14 +130,13 @@ export default async function HomePage() {
           <p className={styles.heroEyebrow}>Premium Commercials for leasing</p>
           <h1 className={styles.heroHeadline}>
             <span className={styles.heroHeadlineLine}>
-              One Platform. Every <span className={styles.heroAccent}>Office Space</span>
+              Noida's smartest way to find <span className={styles.heroAccent}>Office Space</span>
             </span>
-            <span className={styles.heroHeadlineLine}>in Noida.</span>
-            <span className={styles.heroHeadlineLine}>Handpick your next</span>
+            <span className={styles.heroHeadlineLine}></span>
+            <span className={styles.heroHeadlineLine}></span>
           </h1>
           <p className={styles.heroSub}>
-            Discover handpicked commercial spaces in Noida — verified, ready, and
-            perfect for your business.
+            Discover your next commercial spaces in Noida — verified, ready, and perfect for your business.
           </p>
           <HeroSearch />
           <div className={styles.heroCta}>
