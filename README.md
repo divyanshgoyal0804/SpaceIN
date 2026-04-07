@@ -49,11 +49,11 @@ Suggested Railway commands:
 - Build: `npm run build`
 - Start: `npm run start`
 
-The start command runs `prisma db push` first so the deployed PostgreSQL schema stays in sync with `prisma/schema.prisma`.
+The start command bootstraps the database with the existing seed script before launching the app, so a fresh PostgreSQL instance comes up with the sample admin, properties, and blog posts already loaded.
 
 For file uploads on Railway, set `UPLOAD_STORAGE_DIR` to a mounted volume path such as `/app/data/uploads`. The app will still serve files from the same `/uploads/...` URLs.
 
-One-time database seeding, if needed for a fresh database:
+If you ever need to repopulate a blank database manually:
 
 - `npm run db:seed`
 
