@@ -37,7 +37,7 @@ interface ChatStore {
   isStreaming: boolean;
   currentResultProperties: Property[];
   sessions: ChatSession[];
-  
+
   sendMessage: (content: string) => Promise<void>;
   startNewSession: () => void;
   loadSession: (sessionId: string) => void;
@@ -74,7 +74,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   startNewSession: () => {
     const { messages, sessions } = get();
     let newSessions = [...sessions];
-    
+
     // Save current session if it has messages
     if (messages.length > 0) {
       const title = messages[0].content.substring(0, 40) + '...';
@@ -91,10 +91,10 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       }
     }
 
-    set({ 
-      messages: [], 
-      currentResultProperties: [], 
-      sessions: newSessions 
+    set({
+      messages: [],
+      currentResultProperties: [],
+      sessions: newSessions
     });
   },
 
@@ -127,7 +127,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      
+
       const assistantMessageId = (Date.now() + 1).toString();
       let assistantContent = '';
 
@@ -156,15 +156,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
               const data = JSON.parse(line.slice(6));
               if (data.text) {
                 assistantContent += data.text;
-                
+
                 // Parse properties block if present at the end
                 let cleanedContent = assistantContent;
                 let propertyIds: string[] = [];
-                
+
                 const propMatch = assistantContent.match(/\[PROPERTIES:\s*(\{[\s\S]*?\})\s*\]/) || assistantContent.match(/\[PROPERTIES:([\s\S]*?)\]/);
                 if (propMatch) {
                   try {
                     const parsedProps = JSON.parse(propMatch[1]);
+                    console.log(propMatch[1]);
                     if (parsedProps && Array.isArray(parsedProps.ids)) {
                       propertyIds = parsedProps.ids;
                     }
@@ -188,19 +189,17 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           }
         }
       }
-      
+
       // After stream complete, fetch properties if any exist in the last message
       const latestMessages = get().messages;
       const lastMessage = latestMessages[latestMessages.length - 1];
       if (lastMessage && lastMessage.propertyIds && lastMessage.propertyIds.length > 0) {
         try {
-          const res = await fetch('/api/properties?limit=20');
+          const res = await fetch(`/api/properties?ids=${lastMessage.propertyIds.join(',')}`);
           const data = await res.json();
-          // The API could return {properties: Property[]} but let's assume an array or generic
           const propsArray = data.properties || data.data || data;
           if (Array.isArray(propsArray)) {
-            const matchedProps = propsArray.filter((p: any) => lastMessage.propertyIds!.includes(p.id));
-            set({ currentResultProperties: matchedProps });
+            set({ currentResultProperties: propsArray });
           }
         } catch (e) {
           console.error("Failed to fetch full properties for ids", e);

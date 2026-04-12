@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import heroBackgroundImage from '../../../pexels-kindelmedia-7688081.jpg';
 import { Building2, ShieldCheck, MapPin, Wallet, Settings, Wrench } from 'lucide-react';
 import HeroSearch from '@/components/homepage/HeroSearch';
 import HowItWorks from '@/components/homepage/HowItWorks';
@@ -126,6 +127,16 @@ export default async function HomePage() {
     <div className={styles.home}>
       {/* Hero Section */}
       <section className={styles.hero}>
+        <div className={styles.heroBackground} aria-hidden="true">
+          <Image
+            src={heroBackgroundImage}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className={styles.heroBackgroundImage}
+          />
+        </div>
         <div className={styles.heroContainer}>
           <p className={styles.heroEyebrow}>Premium Commercials for leasing</p>
           <h1 className={styles.heroHeadline}>
@@ -170,6 +181,25 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {exclusiveProperties.length > 0 && (
+        <>
+          <div className={styles.sectionDivider} />
+          <section className={styles.features}>
+            <div className={styles.featuresContainer}>
+              <h2 className={styles.featuresTitle}>Exclusive Properties</h2>
+              <p className={styles.featuresSubtitle}>
+                Handpicked listings available exclusively on Sharkspace.
+              </p>
+              <div className={styles.featuresGrid}>
+                {exclusiveProperties.map((property) => (
+                  <PropertyCard key={property.id} property={property} />
+                ))}
+              </div>
+            </div>
+          </section>
+        </>
+      )}
 
       <div className={styles.sectionDivider} />
 
@@ -218,24 +248,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {exclusiveProperties.length > 0 && (
-        <>
-          <div className={styles.sectionDivider} />
-          <section className={styles.features}>
-            <div className={styles.featuresContainer}>
-              <h2 className={styles.featuresTitle}>Exclusive Properties</h2>
-              <p className={styles.featuresSubtitle}>
-                Handpicked listings available exclusively on Sharkspace.
-              </p>
-              <div className={styles.featuresGrid}>
-                {exclusiveProperties.map((property) => (
-                  <PropertyCard key={property.id} property={property} />
-                ))}
-              </div>
-            </div>
-          </section>
-        </>
-      )}
+
 
       {/* Testimonials Section */}
       {testimonials.length > 0 && (

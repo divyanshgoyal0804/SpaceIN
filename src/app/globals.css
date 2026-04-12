@@ -1,38 +1,38 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #08111f;
-  --bg-secondary: #10192c;
-  --bg-tertiary: #172238;
-  --bg-card: #162033;
-  --text-primary: #f8fafc;
-  --text-secondary: #c2cadd;
-  --text-muted: #7f8aa3;
-  --accent: #017296;
-  --accent-rgb: 1, 114, 150;
-  --accent-hover: #025f80;
-  --accent-foreground: #ffffff;
-  --border: rgba(148, 163, 184, 0.14);
-  --border-hover: rgba(148, 163, 184, 0.24);
-  --glass-bg: rgba(15, 23, 42, 0.56);
-  --glass-border: rgba(148, 163, 184, 0.14);
-  --glass-hover: rgba(15, 23, 42, 0.7);
-  --shadow: rgba(2, 6, 23, 0.55);
-  --overlay: rgba(2, 6, 23, 0.72);
-  --input-bg: rgba(15, 23, 42, 0.72);
-  --input-border: rgba(148, 163, 184, 0.18);
-  --input-text: #f5f5f5;
-  --input-placeholder: #7f8aa3;
-  --card-bg: #162033;
-  --card-border: rgba(148, 163, 184, 0.1);
-  --page-background: radial-gradient(circle at top left, rgba(1, 114, 150, 0.16), transparent 32%), radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 28%), linear-gradient(180deg, #08111f 0%, #091322 52%, #060b14 100%);
-  --home-section-surface: rgba(8, 17, 31, 0.62);
-  --home-section-surface-alt: rgba(16, 25, 44, 0.68);
-  --home-section-border: rgba(148, 163, 184, 0.14);
-  --home-hero-background: linear-gradient(170deg, rgba(6, 11, 20, 0.66) 0%, rgba(9, 19, 34, 0.82) 54%, rgba(5, 11, 20, 0.92) 100%), url('/office-space-bg.svg') center/cover no-repeat;
-  --home-page-overlay: radial-gradient(circle at top left, rgba(1, 114, 150, 0.08), transparent 28%), radial-gradient(circle at top right, rgba(59, 130, 246, 0.06), transparent 24%), linear-gradient(180deg, rgba(8, 17, 31, 0.12) 0%, rgba(8, 17, 31, 0.26) 54%, rgba(8, 17, 31, 0.4) 100%);
-  --footer-bg: rgba(8, 17, 31, 0.82);
-  --footer-border: rgba(148, 163, 184, 0.16);
+  --bg-primary: #011C26;
+  --bg-secondary: #072731;
+  --bg-tertiary: #0D333D;
+  --bg-card: #0A2E38;
+  --text-primary: #f4f1e8;
+  --text-secondary: #c8c2b0;
+  --text-muted: #8a8474;
+  --accent: #BFB580;
+  --accent-rgb: 191, 181, 128;
+  --accent-hover: #A66249;
+  --accent-foreground: #011C26;
+  --border: rgba(191, 181, 128, 0.14);
+  --border-hover: rgba(191, 181, 128, 0.28);
+  --glass-bg: rgba(1, 28, 38, 0.56);
+  --glass-border: rgba(191, 181, 128, 0.12);
+  --glass-hover: rgba(1, 28, 38, 0.72);
+  --shadow: rgba(1, 12, 18, 0.55);
+  --overlay: rgba(1, 12, 18, 0.72);
+  --input-bg: rgba(1, 28, 38, 0.72);
+  --input-border: rgba(191, 181, 128, 0.18);
+  --input-text: #f4f1e8;
+  --input-placeholder: #8a8474;
+  --card-bg: #0A2E38;
+  --card-border: rgba(191, 181, 128, 0.1);
+  --page-background: radial-gradient(circle at top left, rgba(191, 181, 128, 0.1), transparent 32%), radial-gradient(circle at top right, rgba(191, 139, 94, 0.08), transparent 28%), linear-gradient(180deg, #011C26 0%, #031F2A 52%, #010F16 100%);
+  --home-section-surface: rgba(1, 28, 38, 0.62);
+  --home-section-surface-alt: rgba(7, 39, 49, 0.68);
+  --home-section-border: rgba(191, 181, 128, 0.14);
+  --home-hero-background: linear-gradient(170deg, rgba(1, 20, 28, 0.66) 0%, rgba(1, 28, 38, 0.82) 54%, rgba(1, 15, 22, 0.92) 100%), url('/office-space-bg.svg') center/cover no-repeat;
+  --home-page-overlay: radial-gradient(circle at top left, rgba(191, 181, 128, 0.06), transparent 28%), radial-gradient(circle at top right, rgba(191, 139, 94, 0.05), transparent 24%), linear-gradient(180deg, rgba(1, 28, 38, 0.12) 0%, rgba(1, 28, 38, 0.26) 54%, rgba(1, 28, 38, 0.4) 100%);
+  --footer-bg: rgba(1, 28, 38, 0.88);
+  --footer-border: rgba(191, 181, 128, 0.16);
 }
 
 /* ============================================
@@ -40,8 +40,8 @@
    ============================================ */
 
 @theme inline {
-  --color-accent: #017296;
-  --color-accent-hover: #025f80;
+  --color-accent: #BFB580;
+  --color-accent-hover: #A66249;
   --color-whatsapp: #25D366;
   --color-bg-primary: var(--bg-primary);
   --color-bg-secondary: var(--bg-secondary);
@@ -58,90 +58,90 @@
    Dark Theme (Default)
    ============================================ */
 [data-theme="dark"] {
-  --bg-primary: #08111f;
-  --bg-secondary: #10192c;
-  --bg-tertiary: #172238;
-  --bg-card: #162033;
-  --text-primary: #f8fafc;
-  --text-secondary: #c2cadd;
-  --text-muted: #7f8aa3;
-  --accent: #017296;
-  --accent-rgb: 1, 114, 150;
-  --accent-hover: #025f80;
-  --accent-foreground: #ffffff;
-  --border: rgba(148, 163, 184, 0.14);
-  --border-hover: rgba(148, 163, 184, 0.24);
-  --glass-bg: rgba(15, 23, 42, 0.56);
-  --glass-border: rgba(148, 163, 184, 0.14);
-  --glass-hover: rgba(15, 23, 42, 0.7);
-  --shadow: rgba(2, 6, 23, 0.55);
-  --overlay: rgba(2, 6, 23, 0.72);
-  --input-bg: rgba(15, 23, 42, 0.72);
-  --input-border: rgba(148, 163, 184, 0.18);
-  --input-text: #f5f5f5;
-  --input-placeholder: #7f8aa3;
-  --card-bg: #162033;
-  --card-border: rgba(148, 163, 184, 0.1);
-  --badge-bg: rgba(1, 114, 150, 0.15);
-  --badge-text: #017296;
+  --bg-primary: #011C26;
+  --bg-secondary: #072731;
+  --bg-tertiary: #0D333D;
+  --bg-card: #0A2E38;
+  --text-primary: #f4f1e8;
+  --text-secondary: #c8c2b0;
+  --text-muted: #8a8474;
+  --accent: #BFB580;
+  --accent-rgb: 191, 181, 128;
+  --accent-hover: #A66249;
+  --accent-foreground: #011C26;
+  --border: rgba(191, 181, 128, 0.14);
+  --border-hover: rgba(191, 181, 128, 0.28);
+  --glass-bg: rgba(1, 28, 38, 0.56);
+  --glass-border: rgba(191, 181, 128, 0.12);
+  --glass-hover: rgba(1, 28, 38, 0.72);
+  --shadow: rgba(1, 12, 18, 0.55);
+  --overlay: rgba(1, 12, 18, 0.72);
+  --input-bg: rgba(1, 28, 38, 0.72);
+  --input-border: rgba(191, 181, 128, 0.18);
+  --input-text: #f4f1e8;
+  --input-placeholder: #8a8474;
+  --card-bg: #0A2E38;
+  --card-border: rgba(191, 181, 128, 0.1);
+  --badge-bg: rgba(191, 181, 128, 0.15);
+  --badge-text: #BFB580;
   --success: #22c55e;
   --success-text: #4ade80;
   --error: #ef4444;
   --error-text: #f87171;
-  --warning: #f59e0b;
-  --page-background: radial-gradient(circle at top left, rgba(1, 114, 150, 0.16), transparent 32%), radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 28%), linear-gradient(180deg, #08111f 0%, #091322 52%, #060b14 100%);
-  --home-section-surface: rgba(8, 17, 31, 0.62);
-  --home-section-surface-alt: rgba(16, 25, 44, 0.68);
-  --home-section-border: rgba(148, 163, 184, 0.14);
-  --home-hero-background: linear-gradient(170deg, rgba(6, 11, 20, 0.66) 0%, rgba(9, 19, 34, 0.82) 54%, rgba(5, 11, 20, 0.92) 100%), url('/office-space-bg.svg') center/cover no-repeat;
-  --home-page-overlay: radial-gradient(circle at top left, rgba(1, 114, 150, 0.08), transparent 28%), radial-gradient(circle at top right, rgba(59, 130, 246, 0.06), transparent 24%), linear-gradient(180deg, rgba(8, 17, 31, 0.12) 0%, rgba(8, 17, 31, 0.26) 54%, rgba(8, 17, 31, 0.4) 100%);
-  --footer-bg: rgba(8, 17, 31, 0.82);
-  --footer-border: rgba(148, 163, 184, 0.16);
+  --warning: #BF8B5E;
+  --page-background: radial-gradient(circle at top left, rgba(191, 181, 128, 0.1), transparent 32%), radial-gradient(circle at top right, rgba(191, 139, 94, 0.08), transparent 28%), linear-gradient(180deg, #011C26 0%, #031F2A 52%, #010F16 100%);
+  --home-section-surface: rgba(1, 28, 38, 0.62);
+  --home-section-surface-alt: rgba(7, 39, 49, 0.68);
+  --home-section-border: rgba(191, 181, 128, 0.14);
+  --home-hero-background: linear-gradient(170deg, rgba(1, 20, 28, 0.66) 0%, rgba(1, 28, 38, 0.82) 54%, rgba(1, 15, 22, 0.92) 100%), url('/office-space-bg.svg') center/cover no-repeat;
+  --home-page-overlay: radial-gradient(circle at top left, rgba(191, 181, 128, 0.06), transparent 28%), radial-gradient(circle at top right, rgba(191, 139, 94, 0.05), transparent 24%), linear-gradient(180deg, rgba(1, 28, 38, 0.12) 0%, rgba(1, 28, 38, 0.26) 54%, rgba(1, 28, 38, 0.4) 100%);
+  --footer-bg: rgba(1, 28, 38, 0.88);
+  --footer-border: rgba(191, 181, 128, 0.16);
 }
 
 /* ============================================
    Light Theme
    ============================================ */
 [data-theme="light"] {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f9fafb;
-  --bg-tertiary: #f3f4f6;
+  --bg-primary: #faf8f3;
+  --bg-secondary: #f3f0e8;
+  --bg-tertiary: #ece8dd;
   --bg-card: #ffffff;
-  --text-primary: #0a0a0a;
-  --text-secondary: #4b5563;
-  --text-muted: #9ca3af;
-  --accent: #017296;
-  --accent-rgb: 1, 114, 150;
-  --accent-hover: #025f80;
+  --text-primary: #1a1410;
+  --text-secondary: #5c5040;
+  --text-muted: #9a9080;
+  --accent: #A66249;
+  --accent-rgb: 166, 98, 73;
+  --accent-hover: #73463C;
   --accent-foreground: #ffffff;
-  --border: rgba(0, 0, 0, 0.08);
-  --border-hover: rgba(0, 0, 0, 0.15);
-  --glass-bg: rgba(0, 0, 0, 0.02);
-  --glass-border: rgba(0, 0, 0, 0.08);
-  --glass-hover: rgba(0, 0, 0, 0.06);
-  --shadow: rgba(0, 0, 0, 0.1);
-  --overlay: rgba(255, 255, 255, 0.8);
+  --border: rgba(115, 70, 60, 0.12);
+  --border-hover: rgba(115, 70, 60, 0.22);
+  --glass-bg: rgba(115, 70, 60, 0.03);
+  --glass-border: rgba(115, 70, 60, 0.1);
+  --glass-hover: rgba(115, 70, 60, 0.07);
+  --shadow: rgba(115, 70, 60, 0.1);
+  --overlay: rgba(250, 248, 243, 0.85);
   --input-bg: #ffffff;
-  --input-border: rgba(0, 0, 0, 0.15);
-  --input-text: #0a0a0a;
-  --input-placeholder: #9ca3af;
+  --input-border: rgba(115, 70, 60, 0.18);
+  --input-text: #1a1410;
+  --input-placeholder: #9a9080;
   --card-bg: #ffffff;
-  --card-border: rgba(0, 0, 0, 0.08);
-  --badge-bg: rgba(1, 114, 150, 0.1);
-  --badge-text: #017296;
+  --card-border: rgba(115, 70, 60, 0.1);
+  --badge-bg: rgba(166, 98, 73, 0.1);
+  --badge-text: #A66249;
   --success: #16a34a;
   --success-text: #16a34a;
   --error: #dc2626;
   --error-text: #dc2626;
-  --warning: #d97706;
-  --page-background: radial-gradient(circle at top left, rgba(1, 114, 150, 0.12), transparent 28%), radial-gradient(circle at top right, rgba(59, 130, 246, 0.08), transparent 26%), linear-gradient(180deg, #ffffff 0%, #f7fafc 52%, #eef2f7 100%);
-  --home-section-surface: rgba(255, 255, 255, 0.56);
-  --home-section-surface-alt: rgba(249, 250, 251, 0.64);
-  --home-section-border: rgba(0, 0, 0, 0.08);
-  --home-hero-background: linear-gradient(170deg, rgba(255, 255, 255, 0.86) 0%, rgba(248, 250, 252, 0.9) 54%, rgba(241, 245, 249, 0.95) 100%), url('/office-space-bg.svg') center/cover no-repeat;
-  --home-page-overlay: radial-gradient(circle at top left, rgba(1, 114, 150, 0.07), transparent 30%), radial-gradient(circle at top right, rgba(59, 130, 246, 0.05), transparent 28%), linear-gradient(180deg, rgba(255, 255, 255, 0.82) 0%, rgba(248, 250, 252, 0.88) 54%, rgba(241, 245, 249, 0.92) 100%);
-  --footer-bg: #ffffff;
-  --footer-border: rgba(0, 0, 0, 0.08);
+  --warning: #BF8B5E;
+  --page-background: radial-gradient(circle at top left, rgba(166, 98, 73, 0.08), transparent 28%), radial-gradient(circle at top right, rgba(191, 139, 94, 0.06), transparent 26%), linear-gradient(180deg, #faf8f3 0%, #f5f2ea 52%, #efe9dd 100%);
+  --home-section-surface: rgba(250, 248, 243, 0.56);
+  --home-section-surface-alt: rgba(243, 240, 232, 0.64);
+  --home-section-border: rgba(115, 70, 60, 0.1);
+  --home-hero-background: linear-gradient(170deg, rgba(250, 248, 243, 0.86) 0%, rgba(243, 240, 232, 0.9) 54%, rgba(236, 232, 221, 0.95) 100%), url('/office-space-bg.svg') center/cover no-repeat;
+  --home-page-overlay: radial-gradient(circle at top left, rgba(166, 98, 73, 0.05), transparent 30%), radial-gradient(circle at top right, rgba(191, 139, 94, 0.04), transparent 28%), linear-gradient(180deg, rgba(250, 248, 243, 0.16) 0%, rgba(243, 240, 232, 0.24) 54%, rgba(236, 232, 221, 0.34) 100%);
+  --footer-bg: #faf8f3;
+  --footer-border: rgba(115, 70, 60, 0.1);
 }
 
 /* ============================================
@@ -253,7 +253,7 @@ a {
 .btn-primary:hover {
   background: var(--accent-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(1, 114, 150, 0.3);
+  box-shadow: 0 4px 20px rgba(191, 181, 128, 0.3);
 }
 
 .btn-secondary {
@@ -320,7 +320,7 @@ a {
 
 .input-field:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(1, 114, 150, 0.12);
+  box-shadow: 0 0 0 3px rgba(191, 181, 128, 0.12);
 }
 
 .input-field::placeholder {
@@ -392,9 +392,9 @@ select.input-field option {
   border: 1px solid rgba(239, 68, 68, 0.2);
 }
 .badge-showroom {
-  background: rgba(1, 114, 150, 0.1);
-  color: #017296;
-  border: 1px solid rgba(1, 114, 150, 0.2);
+  background: rgba(191, 181, 128, 0.1);
+  color: #BFB580;
+  border: 1px solid rgba(191, 181, 128, 0.2);
 }
 .badge-plot {
   background: rgba(20, 184, 166, 0.1);
@@ -407,7 +407,7 @@ select.input-field option {
 [data-theme="light"] .badge-coworking { color: #7c3aed; }
 [data-theme="light"] .badge-retail { color: #16a34a; }
 [data-theme="light"] .badge-warehouse { color: #dc2626; }
-[data-theme="light"] .badge-showroom { color: #025f80; }
+[data-theme="light"] .badge-showroom { color: #73463C; }
 [data-theme="light"] .badge-plot { color: #0f766e; }
 
 /* ============================================
@@ -502,7 +502,7 @@ select.input-field option {
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, var(--accent), #77b6cf);
+  background: linear-gradient(135deg, var(--accent), #d4c99a);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -538,7 +538,7 @@ select.input-field option {
 .platform-scene,
 .interior-scene {
   position: relative;
-  background: linear-gradient(180deg, #08111f 0%, #10192c 54%, #060b14 100%);
+  background: linear-gradient(180deg, #011C26 0%, #072731 54%, #010F16 100%);
   overflow: hidden;
 }
 
@@ -597,7 +597,7 @@ select.input-field option {
 .transform-scene {
   position: relative;
   height: 300vh;
-  background: linear-gradient(180deg, #060b14 0%, #08111f 45%, #10192c 100%);
+  background: linear-gradient(180deg, #010F16 0%, #011C26 45%, #072731 100%);
   overflow: hidden;
 }
 
@@ -816,7 +816,7 @@ select.input-field option {
   font-size: 0.7rem;
   font-weight: 600;
   color: var(--text-secondary);
-  background: rgba(15, 23, 42, 0.78);
+  background: rgba(1, 28, 38, 0.78);
   padding: 0.15rem 0.5rem;
   border-radius: 4px;
   white-space: nowrap;
@@ -876,7 +876,7 @@ select.input-field option {
 .dataviz-scene {
   position: relative;
   height: 150vh;
-  background: linear-gradient(180deg, #08111f 0%, #0f1b2e 48%, #060b14 100%);
+  background: linear-gradient(180deg, #011C26 0%, #072731 48%, #010F16 100%);
   overflow: hidden;
 }
 
@@ -1104,7 +1104,7 @@ select.input-field option {
 .cta-scene {
   position: relative;
   height: 100vh;
-  background: linear-gradient(180deg, #050b14 0%, #08111f 45%, #0b1626 100%);
+  background: linear-gradient(180deg, #010F16 0%, #011C26 45%, #072731 100%);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -1119,7 +1119,7 @@ select.input-field option {
 .cta-sky {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, #09111f 0%, #111c31 28%, #172945 56%, #0f1b2e 80%, #050b14 100%);
+  background: linear-gradient(180deg, #011C26 0%, #072731 28%, #0D333D 56%, #072731 80%, #010F16 100%);
 }
 
 .cta-buildings {
@@ -1133,7 +1133,7 @@ select.input-field option {
 .building-silhouette {
   position: absolute;
   bottom: 0;
-  background: #0d1727;
+  background: #072731;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
 }

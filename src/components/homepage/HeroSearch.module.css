@@ -145,7 +145,7 @@
   width: 32px;
   height: 32px;
   border-radius: 6px;
-  background: #017296;
+  background: var(--accent);
   color: #fff;
   border: none;
   display: flex;
@@ -189,7 +189,7 @@
 }
 
 .chip:hover {
-  border-color: rgba(1, 114, 150, 0.4);
+  border-color: rgba(191, 181, 128, 0.4);
   color: var(--accent);
   background: rgba(255, 255, 255, 0.95);
 }

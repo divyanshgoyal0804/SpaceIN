@@ -7,19 +7,21 @@ import ChatInput from './ChatInput';
 
 export default function ChatPanel() {
   const { messages } = useChatStore();
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const container = messagesRef.current;
+    if (container) {
+      container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+    }
   }, [messages]);
 
   return (
     <>
-      <div className={styles.messagesArea}>
+      <div ref={messagesRef} className={styles.messagesArea}>
         {messages.map((msg, i) => (
           <ChatMessage key={msg.id || i} message={msg} />
         ))}
-        <div ref={bottomRef} />
       </div>
 
       <div className={styles.desktopInputContainer} style={{ padding: '0 16px 16px' }}>

@@ -8,16 +8,22 @@ import MobileHistoryDrawer from './MobileHistoryDrawer';
 
 export default function MobileChatLayout() {
   const { messages, startNewSession, isStreaming } = useChatStore();
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const container = messagesRef.current;
+    if (container) {
+      container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+    }
   }, [messages, isStreaming]);
 
   useEffect(() => {
     const handleResize = () => {
-      bottomRef.current?.scrollIntoView({ behavior: 'instant' as ScrollBehavior });
+      const container = messagesRef.current;
+      if (container) {
+        container.scrollTo({ top: container.scrollHeight, behavior: 'instant' as ScrollBehavior });
+      }
     };
     window.visualViewport?.addEventListener('resize', handleResize);
     return () => window.visualViewport?.removeEventListener('resize', handleResize);
@@ -47,7 +53,7 @@ export default function MobileChatLayout() {
         </button>
       </div>
 
-      <div className={styles.mobileMessagesArea}>
+      <div ref={messagesRef} className={styles.mobileMessagesArea}>
         {messages.length === 0 ? (
           <div className={styles.mobileEmptyState}>
             <svg className={styles.mobileEmptyIcon} xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -92,7 +98,6 @@ export default function MobileChatLayout() {
             <ChatMessage key={msg.id || i} message={msg} isMobile={true} />
           ))
         )}
-        <div ref={bottomRef} />
       </div>
 
       <MobileChatInput onOpenHistory={() => setDrawerOpen(true)} />

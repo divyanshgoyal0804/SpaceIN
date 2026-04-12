@@ -7,36 +7,36 @@ datasource db {
 }
 
 model Property {
-  id            String         @id @default(cuid())
-  title         String
-  slug          String         @unique
-  description   String         @db.Text
-  type          PropertyType
-  listingType   ListingType
-  price         Float?
-  rentPerMonth  Float?
-  carpetArea    Float
-  superArea     Float?
-  floor         Int?
-  totalFloors   Int?
-  location      String
-  city          String         @default("Noida")
-  latitude      Float?
-  longitude     Float?
-  amenities     String[]
-  furnished     FurnishedType
-  possession    String?
-  facing        String?
-  parking       Int?
-  washrooms     Int?
-  mainImageUrl  String
-  videoUrl      String?
-  images        PropertyImage[]
-  isFeatured    Boolean        @default(false)
-  isExclusive   Boolean        @default(false)
-  isActive      Boolean        @default(true)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id           String          @id @default(cuid())
+  title        String
+  slug         String          @unique
+  description  String
+  type         PropertyType
+  listingType  ListingType
+  price        Float?
+  rentPerMonth Float?
+  carpetArea   Float
+  superArea    Float?
+  floor        Int?
+  totalFloors  Int?
+  location     String
+  city         String          @default("Noida")
+  latitude     Float?
+  longitude    Float?
+  amenities    String[]
+  furnished    FurnishedType
+  possession   String?
+  facing       String?
+  parking      Int?
+  washrooms    Int?
+  mainImageUrl String
+  videoUrl     String?
+  isFeatured   Boolean         @default(false)
+  isExclusive  Boolean         @default(false)
+  isActive     Boolean         @default(true)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  images       PropertyImage[]
 }
 
 model PropertyImage {
@@ -44,8 +44,8 @@ model PropertyImage {
   url        String
   caption    String?
   order      Int      @default(0)
-  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 }
 
 model Blog {
@@ -53,7 +53,7 @@ model Blog {
   title       String
   slug        String    @unique
   excerpt     String
-  content     String    @db.Text
+  content     String
   coverImage  String?
   tags        String[]
   author      String    @default("SpaceIn Team")
@@ -86,7 +86,7 @@ model Testimonial {
   name        String
   role        String?
   company     String?
-  quote       String   @db.Text
+  quote       String
   avatarUrl   String?
   isPublished Boolean  @default(false)
   createdAt   DateTime @default(now())
