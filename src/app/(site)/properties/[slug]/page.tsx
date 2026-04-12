@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { MapPin, Maximize2, Building2, Car, Bath, Compass, Calendar, CheckCircle2 } from 'lucide-react';
 import { formatPrice, propertyTypeLabels, furnishedTypeLabels, listingTypeLabels } from '@/lib/utils';
 import PropertyCard from '@/components/properties/PropertyCard';
+import PropertyGallery from '@/components/properties/PropertyGallery';
 import { prisma } from '@/lib/prisma';
 import type { Metadata } from 'next';
 import { resolvePropertyImageUrl } from '@/lib/image-url';
@@ -132,33 +133,7 @@ export default async function PropertyDetailPage({
   return (
     <div className="detail-page">
       {/* Image Gallery */}
-      <div className="gallery">
-        <div className="gallery-main">
-          <Image
-            src={mainImageUrl}
-            alt={property.title}
-            width={800}
-            height={500}
-            style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-            priority
-          />
-        </div>
-        {allImages.length > 1 && (
-          <div className="gallery-thumbs">
-            {allImages.slice(1, 5).map((img, i) => (
-              <div key={i} className="gallery-thumb">
-                <Image
-                  src={img.url}
-                  alt={img.caption || `Image ${i + 1}`}
-                  width={200}
-                  height={150}
-                  style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <PropertyGallery images={allImages} />
 
       <div className="detail-layout">
         {/* Left: Details */}
@@ -319,35 +294,8 @@ export default async function PropertyDetailPage({
 
       <style>{`
         .detail-page {
-          padding-top: 64px;
+          padding-top: 72px;
           min-height: 100vh;
-        }
-
-        .gallery {
-          max-width: 1280px;
-          margin: 0 auto;
-          padding: 1rem 1.5rem;
-          display: grid;
-          grid-template-columns: 2fr 1fr;
-          gap: 0.5rem;
-        }
-
-        .gallery-main {
-          border-radius: 12px;
-          overflow: hidden;
-          aspect-ratio: 16/10;
-        }
-
-        .gallery-thumbs {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 0.5rem;
-        }
-
-        .gallery-thumb {
-          border-radius: 8px;
-          overflow: hidden;
-          aspect-ratio: 4/3;
         }
 
         .detail-layout {
@@ -507,14 +455,6 @@ export default async function PropertyDetailPage({
         }
 
         @media (max-width: 768px) {
-          .gallery {
-            grid-template-columns: 1fr;
-          }
-
-          .gallery-thumbs {
-            grid-template-columns: repeat(4, 1fr);
-          }
-
           .detail-layout {
             flex-direction: column;
           }
