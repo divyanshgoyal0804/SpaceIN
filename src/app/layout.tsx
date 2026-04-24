@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { Toaster } from "react-hot-toast";
 
@@ -43,8 +44,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="dark" className="dark" suppressHydrationWarning>
-      <head>
-        <script
+      <head />
+      <body className={`${inter.variable} font-sans`}>
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
@@ -61,8 +65,6 @@ export default function RootLayout({
             `,
           }}
         />
-      </head>
-      <body className={`${inter.variable} font-sans`}>
         <ThemeProvider>
           {children}
           <Toaster

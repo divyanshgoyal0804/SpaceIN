@@ -6,25 +6,27 @@ export async function POST(request: NextRequest) {
   try {
     const { messages } = await request.json();
 
-    // Fetch all active properties for context
+    // Fetch a representative set of active properties for AI context (capped at 50)
     const properties = await prisma.property.findMany({
       where: { isActive: true },
       select: {
         id: true,
         title: true,
-        slug: true,
         type: true,
         listingType: true,
-        price: true,
         rentPerMonth: true,
+        price: true,
         carpetArea: true,
         location: true,
         furnished: true,
         amenities: true,
-        mainImageUrl: true,
-        videoUrl: true,
-        description: true,
       },
+      orderBy: [
+        { isFeatured: 'desc' },
+        { isExclusive: 'desc' },
+        { createdAt: 'desc' },
+      ],
+      take: 50,
     });
 
     const apiKey = process.env.OPENROUTER_API_KEY;

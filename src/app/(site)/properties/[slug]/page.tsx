@@ -4,6 +4,7 @@ import { MapPin, Maximize2, Building2, Car, Bath, Compass, Calendar, CheckCircle
 import { formatPrice, propertyTypeLabels, furnishedTypeLabels, listingTypeLabels } from '@/lib/utils';
 import PropertyCard from '@/components/properties/PropertyCard';
 import PropertyGallery from '@/components/properties/PropertyGallery';
+import InquiryForm from '@/components/properties/InquiryForm';
 import { prisma } from '@/lib/prisma';
 import type { Metadata } from 'next';
 import { resolvePropertyImageUrl } from '@/lib/image-url';
@@ -142,7 +143,7 @@ export default async function PropertyDetailPage({
             <span className={`badge badge-${property.type.toLowerCase()}`}>
               {propertyTypeLabels[property.type]}
             </span>
-            <span className="badge" style={{ background: 'rgba(1,114,150,0.1)', color: 'var(--accent)' }}>
+            <span className="badge" style={{ background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)' }}>
               {listingTypeLabels[property.listingType]}
             </span>
           </div>
@@ -469,57 +470,6 @@ export default async function PropertyDetailPage({
 
           .similar-grid {
             grid-template-columns: repeat(2, 1fr);
-          }
-        }
-      `}</style>
-    </div>
-  );
-}
-
-// Client component for the inquiry form
-function InquiryForm({ propertyId, propertyTitle }: { propertyId: string; propertyTitle: string }) {
-  return (
-    <div className="inquiry-sidebar">
-      <div className="inquiry-card glass-card">
-        <h3 style={{ marginBottom: '0.25rem' }}>Interested in this property?</h3>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
-          {propertyTitle}
-        </p>
-        <form
-          action={`/api/inquiries`}
-          method="POST"
-          style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
-        >
-          <input type="hidden" name="propertyId" value={propertyId} />
-          <input type="text" name="name" placeholder="Your Name" className="input-field" required />
-          <input type="email" name="email" placeholder="Email Address" className="input-field" required />
-          <input type="tel" name="phone" placeholder="Phone Number" className="input-field" required />
-          <textarea
-            name="message"
-            placeholder="Your message..."
-            className="input-field"
-            rows={3}
-            style={{ resize: 'vertical' }}
-          />
-          <button type="submit" className="btn-primary" style={{ width: '100%' }}>
-            Send Inquiry
-          </button>
-        </form>
-      </div>
-
-      <style>{`
-        .inquiry-sidebar {
-          width: 360px;
-          flex-shrink: 0;
-          position: sticky;
-          top: 80px;
-          height: fit-content;
-        }
-
-        @media (max-width: 768px) {
-          .inquiry-sidebar {
-            width: 100%;
-            position: static;
           }
         }
       `}</style>

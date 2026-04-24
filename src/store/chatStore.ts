@@ -165,7 +165,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
                 if (propMatch) {
                   try {
                     const parsedProps = JSON.parse(propMatch[1]);
-                    console.log(propMatch[1]);
                     if (parsedProps && Array.isArray(parsedProps.ids)) {
                       propertyIds = parsedProps.ids;
                     }

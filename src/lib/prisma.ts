@@ -4,11 +4,48 @@ import { PrismaPg } from '@prisma/adapter-pg';
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
+  pgPool: Pool | undefined;
 };
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-const adapter = new PrismaPg(pool);
+function createPool(): Pool {
+  const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    max: 3,
+    min: 0,
+    idleTimeoutMillis: 20_000,
+    connectionTimeoutMillis: 10_000,
+    allowExitOnIdle: true,
+  });
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient({ adapter });
+  pool.on('error', (err) => {
+    console.error('[PG Pool] background error — invalidating pool:', err.message);
+    // Force-clear the cached client+pool so next request creates a fresh one
+    if (globalForPrisma.pgPool === pool) {
+      globalForPrisma.prisma = undefined;
+      globalForPrisma.pgPool = undefined;
+    }
+    pool.end().catch(() => {});
+  });
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+  return pool;
+}
+
+function createPrismaClient(): PrismaClient {
+  const pool = createPool();
+  globalForPrisma.pgPool = pool;
+  const adapter = new PrismaPg(pool);
+  return new PrismaClient({ adapter });
+}
+
+function getPrisma(): PrismaClient {
+  if (!globalForPrisma.prisma) {
+    globalForPrisma.prisma = createPrismaClient();
+  }
+  return globalForPrisma.prisma;
+}
+
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_target, prop: string | symbol) {
+    return Reflect.get(getPrisma(), prop);
+  },
+});

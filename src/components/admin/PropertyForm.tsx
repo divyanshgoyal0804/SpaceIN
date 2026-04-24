@@ -243,7 +243,7 @@ export default function PropertyFormComponent({
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               {['SALE', 'RENT', 'BOTH'].map(lt => (
                 <button key={lt} type="button" className={`filter-toggle ${form.listingType === lt ? 'filter-toggle--active' : ''}`}
-                  onClick={() => handleChange('listingType', lt)} style={{ flex: 1, padding: '0.5rem', border: '1px solid var(--border)', borderRadius: '8px', background: form.listingType === lt ? 'rgba(1,114,150,0.1)' : 'transparent', color: form.listingType === lt ? 'var(--accent)' : 'var(--text-secondary)', cursor: 'pointer', fontFamily: 'inherit', fontSize: '0.85rem' }}>
+                  onClick={() => handleChange('listingType', lt)} style={{ flex: 1, padding: '0.5rem', border: '1px solid var(--border)', borderRadius: '8px', background: form.listingType === lt ? 'rgba(var(--accent-rgb),0.1)' : 'transparent', color: form.listingType === lt ? 'var(--accent)' : 'var(--text-secondary)', cursor: 'pointer', fontFamily: 'inherit', fontSize: '0.85rem' }}>
                   {lt}
                 </button>
               ))}
@@ -302,7 +302,7 @@ export default function PropertyFormComponent({
             <label>Furnished Status *</label>
             <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
               {['FURNISHED', 'SEMI_FURNISHED', 'BARE_SHELL'].map(f => (
-                <button key={f} type="button" style={{ padding: '0.4rem 0.8rem', border: '1px solid var(--border)', borderRadius: '8px', background: form.furnished === f ? 'rgba(1,114,150,0.1)' : 'transparent', color: form.furnished === f ? 'var(--accent)' : 'var(--text-secondary)', cursor: 'pointer', fontFamily: 'inherit', fontSize: '0.8rem' }}
+                <button key={f} type="button" style={{ padding: '0.4rem 0.8rem', border: '1px solid var(--border)', borderRadius: '8px', background: form.furnished === f ? 'rgba(var(--accent-rgb),0.1)' : 'transparent', color: form.furnished === f ? 'var(--accent)' : 'var(--text-secondary)', cursor: 'pointer', fontFamily: 'inherit', fontSize: '0.8rem' }}
                   onClick={() => handleChange('furnished', f)}>
                   {f.replace('_', ' ')}
                 </button>
@@ -314,7 +314,7 @@ export default function PropertyFormComponent({
             <label>Amenities</label>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
               {allAmenities.map(a => (
-                <button key={a} type="button" style={{ padding: '0.35rem 0.7rem', fontSize: '0.78rem', border: '1px solid var(--border)', borderRadius: '20px', background: form.amenities.includes(a) ? 'rgba(1,114,150,0.1)' : 'transparent', color: form.amenities.includes(a) ? 'var(--accent)' : 'var(--text-secondary)', cursor: 'pointer', fontFamily: 'inherit' }}
+                <button key={a} type="button" style={{ padding: '0.35rem 0.7rem', fontSize: '0.78rem', border: '1px solid var(--border)', borderRadius: '20px', background: form.amenities.includes(a) ? 'rgba(var(--accent-rgb),0.1)' : 'transparent', color: form.amenities.includes(a) ? 'var(--accent)' : 'var(--text-secondary)', cursor: 'pointer', fontFamily: 'inherit' }}
                   onClick={() => toggleAmenity(a)}>
                   {a}
                 </button>

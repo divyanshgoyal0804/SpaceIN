@@ -121,17 +121,17 @@ export default async function BlogPostPage({
       </article>
 
       <style>{`
-        .blog-post-page { padding-top: 64px; min-height: 100vh; }
+        .blog-post-page { padding-top: 72px; min-height: 100vh; }
         .post-cover { width: 100%; max-height: 400px; overflow: hidden; }
         .post-article { max-width: 720px; padding-top: 2rem; padding-bottom: 5rem; }
         .post-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
         .post-tag {
           font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
           padding: 0.25rem 0.6rem; border-radius: 4px; text-decoration: none;
-          background: rgba(1,114,150,0.1); color: var(--accent);
+          background: rgba(var(--accent-rgb),0.1); color: var(--accent);
           transition: background 0.2s ease;
         }
-        .post-tag:hover { background: rgba(1,114,150,0.2); }
+        .post-tag:hover { background: rgba(var(--accent-rgb),0.2); }
         .post-title { font-size: 2.5rem; margin-bottom: 1rem; line-height: 1.2; }
         .post-meta {
           display: flex; gap: 1.5rem; flex-wrap: wrap;

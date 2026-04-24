@@ -14,7 +14,7 @@ export async function fetchOpenRouter(messages: { role: string; content: string 
     headers: {
       'Authorization': `Bearer ${apiKey}`,
       'HTTP-Referer': appUrl,
-      'X-Title': 'Property AI App',
+      'X-Title': 'Sharkspace',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({

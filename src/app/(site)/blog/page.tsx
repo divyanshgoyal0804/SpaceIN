@@ -98,7 +98,7 @@ export default async function BlogPage({
       </div>
 
       <style>{`
-        .blog-page { padding-top: 64px; min-height: 100vh; }
+        .blog-page { padding-top: 72px; min-height: 100vh; }
         .blog-hero { text-align: center; padding: 5rem 2rem 3rem; }
         .blog-hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
 
@@ -116,7 +116,7 @@ export default async function BlogPage({
         .blog-card__tag {
           font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
           padding: 0.2rem 0.5rem; border-radius: 4px;
-          background: rgba(1,114,150,0.1); color: var(--accent);
+          background: rgba(var(--accent-rgb),0.1); color: var(--accent);
         }
         .blog-card__title { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem; }
         .blog-card__excerpt { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0.75rem;

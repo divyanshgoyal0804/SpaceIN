@@ -88,7 +88,7 @@ export default function AdminBlogsPage() {
                   <td>
                     <div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap' }}>
                       {blog.tags.slice(0, 3).map(tag => (
-                        <span key={tag} style={{ fontSize: '0.7rem', padding: '0.1rem 0.4rem', borderRadius: '4px', background: 'rgba(1,114,150,0.1)', color: 'var(--accent)' }}>{tag}</span>
+                        <span key={tag} style={{ fontSize: '0.7rem', padding: '0.1rem 0.4rem', borderRadius: '4px', background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)' }}>{tag}</span>
                       ))}
                     </div>
                   </td>

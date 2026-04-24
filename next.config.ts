@@ -13,6 +13,10 @@ const remotePatterns: NonNullable<NextConfig["images"]>["remotePatterns"] = [
     protocol: 'https',
     hostname: 'ideal-surprise-production.up.railway.app',
   },
+  {
+    protocol: 'https',
+    hostname: 'picsum.photos',
+  },
 ];
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL;
