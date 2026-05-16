@@ -1,6 +1,6 @@
 .section {
   padding: 6rem 1rem;
-  background-color: var(--bg-primary);
+  background-color: var(--bg-secondary);
   border-top: 1px solid var(--border);
 }
 
@@ -39,27 +39,26 @@
 
 .title {
   font-family: var(--font-playfair), 'Playfair Display', Georgia, serif;
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   line-height: 1.1;
   font-weight: 400;
   color: var(--text-primary);
-  max-width: 24ch;
+  max-width: 20ch;
 }
 
 .titleAccent {
   font-style: italic;
   color: var(--accent);
-  font-weight: 400;
-  padding-left: 0.5rem;
 }
 
 .description {
   color: var(--text-secondary);
   font-size: 1.1rem;
   line-height: 1.6;
-  max-width: 500px;
+  max-width: 450px;
 }
 
+/* Feature Grid — border-based editorial style */
 .grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -88,53 +87,31 @@
   height: 100%;
   position: relative;
   transition: background-color 0.3s ease;
-  cursor: pointer;
-  text-decoration: none;
 }
 
 .card:hover {
   background-color: var(--glass-bg);
 }
 
-.cardHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 3rem;
-}
-
 .iconWrapper {
   color: var(--text-primary);
-}
-
-.arrowIcon {
-  color: var(--text-muted);
-  transition: transform 0.3s ease, color 0.3s ease;
-}
-
-.card:hover .arrowIcon {
-  color: var(--accent);
-  transform: translate(2px, -2px);
-}
-
-.cardMeta {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-  font-weight: 600;
-  margin-bottom: 0.75rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.2);
+  display: inline-flex;
+  width: fit-content;
 }
 
 .cardTitle {
-  font-size: 1.4rem;
+  font-family: var(--font-playfair), 'Playfair Display', Georgia, serif;
+  font-size: 1.35rem;
   font-weight: 500;
   color: var(--text-primary);
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .cardDesc {
   color: var(--text-muted);
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-size: 0.92rem;
+  line-height: 1.6;
 }

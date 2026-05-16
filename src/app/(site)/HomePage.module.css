@@ -6,12 +6,13 @@
   background: var(--bg-primary);
 }
 
+/* ─── Hero Section ─── */
 .hero {
-  min-height: 80vh;
+  min-height: 88vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(5rem, 8vw, 9rem) 1rem clamp(4rem, 6vw, 6rem);
+  padding: clamp(6rem, 10vw, 12rem) 1.5rem clamp(5rem, 8vw, 8rem);
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -27,39 +28,10 @@
 .heroBackgroundImage {
   object-fit: cover;
   object-position: center;
-  filter: saturate(1.02) brightness(0.86) contrast(1.02);
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 78% 18%, rgba(var(--accent-rgb), 0.12) 0%, transparent 42%),
-    radial-gradient(circle at 18% 82%, rgba(59, 130, 246, 0.08) 0%, transparent 34%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-:global([data-theme="light"]) .hero::before {
-  opacity: 0.55;
-}
-
-:global([data-theme="light"]) .heroBackgroundImage {
-  filter: saturate(0.96) brightness(1.04) contrast(0.97);
-}
-
-.hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--home-page-overlay);
-  pointer-events: none;
-  z-index: 2;
 }
 
 .heroContainer {
-  max-width: 800px;
+  max-width: 860px;
   width: 100%;
   margin: 0 auto;
   text-align: center;
@@ -68,35 +40,48 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(1rem, 2vw, 1.5rem);
-  animation: heroFadeIn 0.8s ease forwards;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  animation: heroFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .heroEyebrow {
-  display: inline-block;
-  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.25em;
   color: var(--accent);
   margin-bottom: 0;
-  padding: 0.4rem 1rem;
-  border: 1px solid rgba(var(--accent-rgb), 0.25);
-  border-radius: 9999px;
-  background: rgba(var(--accent-rgb), 0.06);
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
 }
+
 
 .heroHeadline {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.15em;
-  font-size: clamp(2.5rem, 5.5vw, 4rem);
-  font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-  color: var(--text-primary);
-  margin-bottom: 0;
+  gap: 0.1em;
+  font-family: var(--font-playfair), 'Playfair Display', Georgia, serif;
+  font-size: clamp(2.8rem, 6vw, 4.8rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin-top: -0.8em;
+  margin-bottom: 2.5rem;
+  text-shadow:
+    0 2px 20px rgba(0, 0, 0, 0.6),
+    0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+:global([data-theme="light"]) .heroHeadline {
+  color: #ffffff;
 }
 
 .heroHeadlineLine {
@@ -104,56 +89,93 @@
 }
 
 .heroAccent {
-  color: var(--accent);
+  color: #ffffff;
+  font-style: italic;
 }
 
 .heroSub {
-  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-size: clamp(1rem, 2vw, 1.15rem);
   color: var(--text-secondary);
-  max-width: 560px;
+  max-width: 520px;
   margin: 0;
   line-height: 1.7;
+  font-weight: 400;
 }
 
 .heroCta {
   display: flex;
-  gap: 1rem;
+  gap: 1.25rem;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 0;
+  margin-top: 0.5rem;
 }
 
 .heroBtn {
-  padding: 0.85rem 2rem;
-  font-size: 1rem;
+  padding: 0.9rem 2.25rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  background-color: var(--accent-hover) !important;
+  color: #ffffff !important;
+  border-color: var(--accent-hover) !important;
 }
 
+.heroBtn:hover {
+  background-color: #8C4E3A !important; /* Slightly darker shade of #A66249 for hover */
+  border-color: #8C4E3A !important;
+}
+
+/* ─── Exclusive Properties ─── */
 .features {
   padding: 6rem 1.5rem;
-  background: var(--home-section-surface);
-  border-top: 1px solid var(--home-section-border);
-  border-bottom: 1px solid var(--home-section-border);
-  backdrop-filter: blur(12px) saturate(120%);
-  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border);
 }
 
 .featuresContainer {
-  max-width: 1080px;
+  max-width: 1200px;
   margin: 0 auto;
-  text-align: center;
 }
 
+.featuresHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+
+.featuresEyebrow {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+
 .featuresTitle {
-  font-size: 2rem;
-  font-weight: 700;
+  font-family: var(--font-playfair), 'Playfair Display', Georgia, serif;
+  font-size: 2.8rem;
+  font-weight: 400;
+  line-height: 1.1;
   color: var(--text-primary);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0;
+  max-width: 20ch;
+}
+
+.featuresTitleAccent {
+  font-style: italic;
+  color: var(--accent);
 }
 
 .featuresSubtitle {
   color: var(--text-secondary);
-  font-size: 1.05rem;
-  margin-bottom: 3.5rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 450px;
 }
 
 .featuresGrid {
@@ -170,33 +192,45 @@
   margin: 1.5rem auto 0;
 }
 
+/* ─── Why Sharkspace Feature Cards ─── */
 .featureCard {
   text-align: left;
-  padding: 2rem;
+  padding: 2.5rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  transition: background-color 0.3s ease;
+  border-radius: 0;
+}
+
+.featureCard:hover {
+  background-color: var(--glass-bg);
 }
 
 .featureCardIcon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
-  background: rgba(var(--accent-rgb), 0.1);
-  color: var(--accent);
-  margin-bottom: 1.25rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--accent);
+  padding-bottom: 0.75rem;
 }
 
 .featureCardTitle {
-  font-size: 1.15rem;
-  font-weight: 600;
+  font-family: var(--font-playfair), 'Playfair Display', Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 500;
   color: var(--text-primary);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .featureCardDesc {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
+  font-size: 0.92rem;
+  color: var(--text-muted);
   line-height: 1.6;
 }
 
@@ -213,47 +247,81 @@
   opacity: 0.7;
 }
 
-
-
+/* ─── CTA Banner ─── */
 .ctaBanner {
-  padding: 5rem 1.5rem;
-  background: var(--home-section-surface-alt);
-  backdrop-filter: blur(12px) saturate(120%);
-  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  padding: 7rem 1.5rem;
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border);
+  position: relative;
+}
+
+.ctaBanner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 200px;
+  background: radial-gradient(
+    ellipse at center top,
+    rgba(var(--accent-rgb), 0.06) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
 }
 
 :global([data-theme="light"]) .ctaBanner {
-  background: rgba(255, 255, 255, 0.88);
-  border-top: 1px solid rgba(255, 255, 255, 0.9);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border);
 }
 
 :global([data-theme="light"]) .ctaBannerContainer {
-  background: rgba(255, 255, 255, 0.24);
-  border: 1px solid rgba(226, 232, 240, 0.72);
-  border-radius: 28px;
-  padding: 2.75rem 2rem;
-  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
 }
 
 .ctaBannerContainer {
   max-width: 700px;
   margin: 0 auto;
   text-align: center;
+  position: relative;
 }
 
+.ctaBannerEyebrow {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+
 .ctaBannerTitle {
-  font-size: 2rem;
-  font-weight: 700;
+  font-family: var(--font-playfair), 'Playfair Display', Georgia, serif;
+  font-size: 2.8rem;
+  font-weight: 400;
+  line-height: 1.1;
   color: var(--text-primary);
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .ctaBannerSub {
   color: var(--text-secondary);
   font-size: 1.05rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   line-height: 1.7;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* ── Testimonials Section ── */
@@ -333,7 +401,7 @@
 
 .ctaBannerActions {
   display: flex;
-  gap: 1rem;
+  gap: 1.25rem;
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -341,7 +409,7 @@
 @keyframes heroFadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(28px);
   }
   to {
     opacity: 1;
@@ -349,14 +417,22 @@
   }
 }
 
+@media (min-width: 768px) {
+  .featuresHeader {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+}
+
 @media (max-width: 768px) {
   .hero {
-    min-height: 70vh;
-    padding: 4.5rem 1rem 3.5rem;
+    min-height: 75vh;
+    padding: 5rem 1rem 4rem;
   }
 
   .heroContainer {
-    gap: 0.95rem;
+    gap: 1rem;
   }
 
   .features {
@@ -365,13 +441,13 @@
 
   .featuresGrid {
     grid-template-columns: 1fr;
-    gap: 1.25rem;
+    gap: 0;
   }
 
   .offeringsRow {
     grid-template-columns: 1fr;
     max-width: 100%;
-    margin-top: 1.25rem;
+    margin-top: 0;
   }
 
   .testimonialsGrid {
@@ -379,7 +455,15 @@
   }
 
   .ctaBanner {
-    padding: 3.5rem 1rem;
+    padding: 4.5rem 1rem;
+  }
+
+  .ctaBannerTitle {
+    font-size: 2rem;
+  }
+
+  .featuresTitle {
+    font-size: 2rem;
   }
 }
 
@@ -388,4 +472,3 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
-

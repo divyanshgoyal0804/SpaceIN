@@ -74,21 +74,19 @@ export default async function HomePage() {
           />
         </div>
         <div className={styles.heroContainer}>
-          <p className={styles.heroEyebrow}>Premium Commercials for leasing</p>
+
           <h1 className={styles.heroHeadline}>
             <span className={styles.heroHeadlineLine}>
-              Noida's smartest way to find <span className={styles.heroAccent}>Office Space</span>
+              The smartest way to find
             </span>
-            <span className={styles.heroHeadlineLine}></span>
-            <span className={styles.heroHeadlineLine}></span>
+            <span className={styles.heroHeadlineLine}>
+              <span className={styles.heroAccent}>Office Space</span>
+            </span>
           </h1>
 
           <HeroSearch />
           <div className={styles.heroCta}>
-            <Link href="/properties" className={`btn-primary ${styles.heroBtn}`}>
-              Explore Spaces
-            </Link>
-            <Link href="/contact" className={`btn-secondary ${styles.heroBtn}`}>
+            <Link href="/contact" className={`btn-primary ${styles.heroBtn}`}>
               Contact Us
             </Link>
           </div>
@@ -102,10 +100,18 @@ export default async function HomePage() {
       {exclusiveProperties.length > 0 && (
         <section className={styles.features}>
           <div className={styles.featuresContainer}>
-            <h2 className={styles.featuresTitle}>Exclusive Properties</h2>
-            <p className={styles.featuresSubtitle}>
-              Handpicked listings available exclusively on Sharkspace.
-            </p>
+            <div className={styles.featuresHeader}>
+              <div>
+                <div className={styles.featuresEyebrow}>02 INVENTORY</div>
+                <h2 className={styles.featuresTitle}>
+                  <span className={styles.featuresTitleAccent}>Exclusive</span> properties,<br />
+                  handpicked for you.
+                </h2>
+              </div>
+              <p className={styles.featuresSubtitle}>
+                Handpicked listings available exclusively on Sharkspace — verified, premium, and ready.
+              </p>
+            </div>
             <div className={styles.featuresGrid}>
               {exclusiveProperties.map((property) => (
                 <PropertyCard key={property.id} property={property} />
@@ -130,8 +136,10 @@ export default async function HomePage() {
       {/* CTA Banner */}
       <section className={styles.ctaBanner}>
         <div className={styles.ctaBannerContainer}>
+          <div className={styles.ctaBannerEyebrow}>GET STARTED</div>
           <h2 className={styles.ctaBannerTitle}>
-            Ready to find your perfect space?
+            Ready to find your<br />
+            perfect space?
           </h2>
           <p className={styles.ctaBannerSub}>
             Browse our curated listings or chat with our AI assistant for

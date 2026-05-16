@@ -1,5 +1,5 @@
 import { Building2, ShieldCheck, MapPin, Wallet, Settings, Wrench } from 'lucide-react';
-import styles from '@/app/(site)/HomePage.module.css';
+import styles from './WhySharkspace.module.css';
 
 const features = [
   {
@@ -36,20 +36,29 @@ const features = [
 
 export default function WhySharkspace() {
   return (
-    <section className={styles.features}>
-      <div className={styles.featuresContainer}>
-        <h2 className={styles.featuresTitle}>Why Sharkspace?</h2>
-        <p className={styles.featuresSubtitle}>
-          Because finding the right office shouldn't feel like a full-time job.
-        </p>
-        <div className={styles.featuresGrid}>
+    <section className={styles.section}>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <div>
+            <div className={styles.eyebrow}>05 WHY SHARKSPACE</div>
+            <h2 className={styles.title}>
+              Because finding space<br />
+              shouldn&rsquo;t feel like a <span className={styles.titleAccent}>full-time job.</span>
+            </h2>
+          </div>
+          <p className={styles.description}>
+            Every listing verified, every deal transparent — we handle the complexity so you focus on growth.
+          </p>
+        </div>
+
+        <div className={styles.grid}>
           {features.map((feature) => (
-            <div key={feature.title} className={`${styles.featureCard} glass-card`}>
-              <div className={styles.featureCardIcon}>
-                <feature.icon size={28} strokeWidth={1.5} />
+            <div key={feature.title} className={styles.card}>
+              <div className={styles.iconWrapper}>
+                <feature.icon size={26} strokeWidth={1.5} />
               </div>
-              <h3 className={styles.featureCardTitle}>{feature.title}</h3>
-              <p className={styles.featureCardDesc}>{feature.description}</p>
+              <h3 className={styles.cardTitle}>{feature.title}</h3>
+              <p className={styles.cardDesc}>{feature.description}</p>
             </div>
           ))}
         </div>

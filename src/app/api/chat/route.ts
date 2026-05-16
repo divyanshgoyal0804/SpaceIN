@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getAppUrl } from '@/lib/app-url';
+import { anthropic, DEFAULT_MODEL } from '@/lib/anthropic';
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,10 +29,9 @@ export async function POST(request: NextRequest) {
       take: 50,
     });
 
-    const apiKey = process.env.OPENROUTER_API_KEY;
-    if (!apiKey) {
+    if (!process.env.ANTHROPIC_API_KEY) {
       return new Response(
-        JSON.stringify({ error: 'OPENROUTER_API_KEY is not configured' }),
+        JSON.stringify({ error: 'ANTHROPIC_API_KEY is not configured' }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -52,113 +51,77 @@ Instead, briefly summarize what you found and invite follow-up questions.
 AVAILABLE PROPERTIES DATABASE:
 ${JSON.stringify(properties, null, 2)}`;
 
-    const model = process.env.OPENROUTER_MODEL || 'openrouter/auto';
-    const appUrl = getAppUrl();
-
-    const openRouterResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': appUrl,
-        'X-Title': 'Sharkspace',
-      },
-      body: JSON.stringify({
-        model,
-        max_tokens: 1024,
-        stream: true,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          ...messages.map((m: { role: string; content: string }) => ({
-            role: m.role,
-            content: m.content,
-          })),
-        ],
-      }),
-    });
-
-    if (!openRouterResponse.ok || !openRouterResponse.body) {
-      const details = await openRouterResponse.text();
-      console.error('OpenRouter chat error:', details);
-
-      const encoder = new TextEncoder();
-      const fallbackText =
-        'AI responses are temporarily unavailable due to provider limits. Please retry in a minute.';
-      const readable = new ReadableStream({
-        start(controller) {
-          controller.enqueue(
-            encoder.encode(`data: ${JSON.stringify({ text: fallbackText })}\n\n`)
-          );
-          controller.enqueue(encoder.encode('data: [DONE]\n\n'));
-          controller.close();
-        },
-      });
-
-      return new Response(
-        readable,
-        {
-          status: 200,
-          headers: {
-            'Content-Type': 'text/event-stream',
-            'Cache-Control': 'no-cache',
-            Connection: 'keep-alive',
-          },
-        }
-      );
-    }
+    // Map incoming messages to Anthropic format (must alternate user/assistant)
+    const formattedMessages = messages.map((m: { role: string; content: string }) => ({
+      role: m.role as 'user' | 'assistant',
+      content: m.content,
+    }));
 
     const encoder = new TextEncoder();
-    const decoder = new TextDecoder();
+
     const readable = new ReadableStream({
       async start(controller) {
+        let closed = false;
+
+        function closeStream() {
+          if (closed) return;
+          closed = true;
+          try {
+            controller.enqueue(encoder.encode('data: [DONE]\n\n'));
+            controller.close();
+          } catch {
+            // Controller may already be in an error state
+          }
+        }
+
         try {
-          const reader = openRouterResponse.body!.getReader();
-          let buffer = '';
+          const stream = anthropic.messages.stream({
+            model: DEFAULT_MODEL,
+            max_tokens: 1024,
+            system: systemPrompt,
+            messages: formattedMessages,
+          });
 
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
+          stream.on('text', (text) => {
+            if (!closed) {
+              controller.enqueue(
+                encoder.encode(`data: ${JSON.stringify({ text })}\n\n`)
+              );
+            }
+          });
 
-            buffer += decoder.decode(value, { stream: true });
-            const lines = buffer.split('\n');
-            buffer = lines.pop() || '';
+          stream.on('error', (error) => {
+            console.error('Anthropic stream error:', error);
+            if (!closed) {
+              controller.enqueue(
+                encoder.encode(
+                  `data: ${JSON.stringify({ text: 'AI responses are temporarily unavailable. Please retry in a moment.' })}\n\n`
+                )
+              );
+            }
+            closeStream();
+          });
 
-            for (const line of lines) {
-              if (!line.startsWith('data: ')) continue;
+          stream.on('end', () => {
+            closeStream();
+          });
 
-              const payload = line.slice(6).trim();
-              if (!payload) continue;
-
-              if (payload === '[DONE]') {
-                controller.enqueue(encoder.encode('data: [DONE]\n\n'));
-                controller.close();
-                return;
-              }
-
-              try {
-                const parsed = JSON.parse(payload);
-                const textChunk = parsed?.choices?.[0]?.delta?.content;
-                if (typeof textChunk === 'string' && textChunk.length > 0) {
-                  controller.enqueue(
-                    encoder.encode(`data: ${JSON.stringify({ text: textChunk })}\n\n`)
-                  );
-                }
-              } catch {
-                // Ignore non-JSON keepalive chunks from SSE stream.
-              }
+          // Wait for the stream to finish (this keeps the ReadableStream open)
+          await stream.finalMessage();
+        } catch (error) {
+          console.error('Stream setup error:', error);
+          if (!closed) {
+            try {
+              controller.enqueue(
+                encoder.encode(
+                  `data: ${JSON.stringify({ text: 'AI responses are temporarily unavailable due to provider limits. Please retry in a minute.' })}\n\n`
+                )
+              );
+            } catch {
+              // ignore if controller is already closed
             }
           }
-
-          controller.enqueue(encoder.encode('data: [DONE]\n\n'));
-          controller.close();
-        } catch (error) {
-          console.error('Stream error:', error);
-          controller.enqueue(
-            encoder.encode(
-              `data: ${JSON.stringify({ error: 'Stream error occurred' })}\n\n`
-            )
-          );
-          controller.close();
+          closeStream();
         }
       },
     });

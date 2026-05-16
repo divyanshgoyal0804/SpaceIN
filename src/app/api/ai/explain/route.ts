@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchOpenRouter } from '@/lib/openrouter';
+import { fetchAnthropic } from '@/lib/anthropic';
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,31 +27,12 @@ ${JSON.stringify(topProps, null, 2)}
 
 Keep response concise and helpful. Speak directly to the user addressing why these are good options.`;
 
-    const openRouterResponse = await fetchOpenRouter([
-      { role: 'user', content: systemPrompt }
-    ]);
+    const response = await fetchAnthropic(
+      systemPrompt,
+      [{ role: 'user', content: 'Please explain why these properties are a good match.' }]
+    );
 
-    // Our helper wraps json request but for this we just want the text back. 
-    // Wait, the fetch helper uses response_format: 'json_object', but we want raw text here.
-    // Ideally we shouldn't force JSON if we just want a paragraph.
-    // I can parse out a JSON explanation or just use the whole string if it's text.
-    // Since we forced json_object in fetchOpenRouter, the model might wrap the explanation in a JSON key like {"explanation": "..."}.
-    let explanationText = openRouterResponse;
-    try {
-      const parsed = JSON.parse(openRouterResponse);
-      if (parsed.explanation) {
-        explanationText = parsed.explanation;
-      } else if (parsed.content) {
-        explanationText = parsed.content;
-      } else {
-        // Fallback to stringified json if it returned random keys
-        explanationText = Object.values(parsed)[0] || openRouterResponse;
-      }
-    } catch (e) {
-      // It just returned text, not JSON
-    }
-
-    return NextResponse.json({ explanation: explanationText });
+    return NextResponse.json({ explanation: response });
 
   } catch (error: any) {
     console.error('AI Explanation Error:', error);

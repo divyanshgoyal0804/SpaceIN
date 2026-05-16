@@ -5,6 +5,8 @@ import { mkdir, writeFile } from 'fs/promises';
 import { createHash } from 'crypto';
 import path from 'path';
 import { getUploadPublicUrl, getUploadStorageDir } from '@/lib/upload-storage';
+import { optimizeImage } from '@/lib/image-optimizer';
+import { prisma } from '@/lib/prisma';
 
 function sanitizeFilename(name: string): string {
   return name.replace(/[^a-zA-Z0-9._-]/g, '_');
@@ -63,39 +65,71 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    const uploadDir = getUploadStorageDir();
-    await mkdir(uploadDir, { recursive: true });
-
     const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const extension = path.extname(file.name) || '';
-    const baseName = sanitizeFilename(path.basename(file.name, extension));
-    const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${baseName}${extension}`;
+    const originalBuffer = Buffer.from(bytes);
+
+    // 1. Generate Hash for Deduplication
+    const hash = createHash('sha256').update(originalBuffer).digest('hex');
+
+    // 2. Check if file already exists in DB
+    const existingMedia = await prisma.media.findUnique({
+      where: { hash }
+    });
+
+    if (existingMedia) {
+      return NextResponse.json({
+        url: existingMedia.url,
+        filename: existingMedia.filename,
+        size: existingMedia.sizeBytes,
+        mimeType: existingMedia.mimeType,
+        width: existingMedia.width,
+        height: existingMedia.height,
+        message: 'Duplicate prevented',
+      });
+    }
+
+    let finalBuffer = originalBuffer;
+    let finalExtension = path.extname(file.name) || '';
+    let finalMimeType = file.type || 'application/octet-stream';
+    let finalSize = file.size;
+    let finalWidth: number | null = null;
+    let finalHeight: number | null = null;
+
+    const isImage = file.type.startsWith('image/') && !file.type.includes('svg');
+
+    // 3. Optimize if it's an image
+    if (isImage) {
+      try {
+        const optimized = await optimizeImage(originalBuffer);
+        finalBuffer = Buffer.from(optimized.buffer);
+        finalExtension = `.${optimized.format}`; // usually .webp
+        finalMimeType = `image/${optimized.format}`;
+        finalSize = optimized.size;
+        finalWidth = optimized.width;
+        finalHeight = optimized.height;
+      } catch (optError) {
+        console.error('Image optimization failed, falling back to original:', optError);
+        // Fallback to original buffer if sharp fails for some reason (e.g. corrupt image)
+      }
+    }
+
+    const baseName = sanitizeFilename(path.basename(file.name, path.extname(file.name)));
+    const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${baseName}${finalExtension}`;
+
+    let finalUrl = '';
+    let storageType = 'local';
+    let cloudPublicId = uniqueName;
 
     const cloudinaryConfig = getCloudinaryConfig();
 
     if (cloudinaryConfig) {
       try {
         const timestamp = Math.floor(Date.now() / 1000);
-
-        // Determine resource type from MIME for proper Cloudinary handling
-        const isVideo = file.type.startsWith('video/');
-        const resourceType = isVideo ? 'video' : 'image';
-
-        const signature = getCloudinarySignature(
-          timestamp,
-          cloudinaryConfig.apiSecret,
-          cloudinaryConfig.folder
-        );
+        const resourceType = file.type.startsWith('video/') ? 'video' : 'image';
+        const signature = getCloudinarySignature(timestamp, cloudinaryConfig.apiSecret, cloudinaryConfig.folder);
 
         const cloudinaryForm = new FormData();
-        cloudinaryForm.append(
-          'file',
-          new Blob([buffer], {
-            type: file.type || 'application/octet-stream',
-          }),
-          uniqueName
-        );
+        cloudinaryForm.append('file', new Blob([finalBuffer], { type: finalMimeType }), uniqueName);
         cloudinaryForm.append('api_key', cloudinaryConfig.apiKey);
         cloudinaryForm.append('timestamp', String(timestamp));
         cloudinaryForm.append('signature', signature);
@@ -103,52 +137,56 @@ export async function POST(request: NextRequest) {
           cloudinaryForm.append('folder', cloudinaryConfig.folder);
         }
 
-        // Use the specific resource type endpoint for reliable uploads
         const uploadEndpoint = `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/${resourceType}/upload`;
-
-        const cloudinaryResponse = await fetch(
-          uploadEndpoint,
-          {
-            method: 'POST',
-            body: cloudinaryForm,
-          }
-        );
-
+        const cloudinaryResponse = await fetch(uploadEndpoint, { method: 'POST', body: cloudinaryForm });
         const cloudinaryPayload = await cloudinaryResponse.json();
 
         if (!cloudinaryResponse.ok) {
           throw new Error(`Cloudinary upload failed: ${JSON.stringify(cloudinaryPayload)}`);
         }
 
-        const cloudUrl = cloudinaryPayload?.secure_url || cloudinaryPayload?.url;
-
-        if (!cloudUrl) {
-          throw new Error('Cloudinary did not return a public URL');
-        }
-
-        return NextResponse.json({
-          url: cloudUrl,
-          filename: cloudinaryPayload?.public_id || uniqueName,
-          size: file.size,
-          mimeType: file.type,
-          storage: 'cloudinary',
-        });
+        finalUrl = cloudinaryPayload?.secure_url || cloudinaryPayload?.url;
+        cloudPublicId = cloudinaryPayload?.public_id || uniqueName;
+        
+        if (!finalUrl) throw new Error('Cloudinary did not return a public URL');
+        
+        storageType = 'cloudinary';
       } catch (cloudinaryError) {
         console.error('Cloudinary upload failed, falling back to local storage:', cloudinaryError);
       }
     }
 
-    const filePath = path.join(uploadDir, uniqueName);
+    // Fallback to Local Storage if Cloudinary fails or is not configured
+    if (!finalUrl) {
+      const uploadDir = getUploadStorageDir();
+      await mkdir(uploadDir, { recursive: true });
+      const filePath = path.join(uploadDir, uniqueName);
+      await writeFile(filePath, finalBuffer);
+      finalUrl = getUploadPublicUrl(uniqueName);
+    }
 
-    await writeFile(filePath, buffer);
-
-    const publicUrl = getUploadPublicUrl(uniqueName);
+    // 4. Save Media record to DB
+    await prisma.media.create({
+      data: {
+        filename: cloudPublicId,
+        originalName: file.name,
+        mimeType: finalMimeType,
+        sizeBytes: finalSize,
+        hash,
+        url: finalUrl,
+        width: finalWidth,
+        height: finalHeight,
+      }
+    });
 
     return NextResponse.json({
-      url: publicUrl,
-      filename: uniqueName,
-      size: file.size,
-      mimeType: file.type,
+      url: finalUrl,
+      filename: cloudPublicId,
+      size: finalSize,
+      mimeType: finalMimeType,
+      storage: storageType,
+      width: finalWidth,
+      height: finalHeight,
     });
   } catch (error) {
     console.error('Error uploading file:', error);
