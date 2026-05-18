@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './Footer.module.css';
 
 const quickLinks = [
@@ -24,16 +25,7 @@ export default function Footer() {
           {/* Brand Column */}
           <div className={styles.footerBrand}>
             <div className={styles.footerLogo}>
-              <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
-                <rect width="32" height="32" rx="8" fill="var(--accent)" />
-                <path
-                  d="M8 22V12L16 7L24 12V22L16 27L8 22Z"
-                  stroke="#271902"
-                  strokeWidth="2"
-                  fill="none"
-                />
-                <path d="M16 7V27" stroke="#271902" strokeWidth="1.5" />
-              </svg>
+              <Image src="/images/logo.webp" alt="Sharkspace Logo" width={28} height={28} style={{ objectFit: 'contain' }} />
               <span className={styles.footerBrandName}>Sharkspace</span>
             </div>
             <p className={styles.footerTagline}>

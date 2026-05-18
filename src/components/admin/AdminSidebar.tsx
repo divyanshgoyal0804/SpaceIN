@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { LayoutDashboard, Building2, FileText, MessageSquare, LogOut, Quote } from 'lucide-react';
 import styles from './AdminSidebar.module.css';
 
@@ -16,10 +17,7 @@ export default function AdminSidebar() {
       <div className={styles.sidebarHoverZone} aria-hidden="true" />
       <aside className={styles.adminSidebar}>
         <div className={styles.sidebarLogo}>
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
-            <rect width="32" height="32" rx="8" fill="var(--accent)" />
-            <path d="M8 22V12L16 7L24 12V22L16 27L8 22Z" stroke="#000" strokeWidth="2" fill="none" />
-          </svg>
+          <Image src="/images/logo.webp" alt="Sharkspace Logo" width={28} height={28} style={{ objectFit: 'contain' }} />
           <span>Sharkspace</span>
         </div>
 

@@ -48,7 +48,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
   }, [resolvedImage]);
 
   return (
-    <Link href={`/chat?q=I+want+to+know+more+about+${encodeURIComponent(property.title)}`} className="property-card card">
+    <Link href={`/properties/${property.slug}`} className="property-card card">
       <div className="property-card__image-wrap">
         <Image
           src={imageSrc}
@@ -79,7 +79,13 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             <Maximize2 size={14} />
             <span>{property.carpetArea.toLocaleString('en-IN')} sq ft</span>
           </div>
-          <div className="property-card__price">{displayPrice}</div>
+          <button 
+            className="property-card__call" 
+            onClick={(e) => { e.preventDefault(); window.location.href = 'tel:+91880879701'; }}
+            aria-label="Call Sharkspace"
+          >
+            Call Us
+          </button>
         </div>
         <div className="property-card__cta">
           <span className="btn-primary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }}>
@@ -155,10 +161,21 @@ export default function PropertyCard({ property }: PropertyCardProps) {
           color: var(--text-secondary);
         }
 
-        .property-card__price {
-          font-size: 1rem;
-          font-weight: 700;
+        .property-card__call {
+          font-size: 0.85rem;
+          font-weight: 600;
           color: var(--accent);
+          background: rgba(var(--accent-rgb), 0.1);
+          border: 1px solid rgba(var(--accent-rgb), 0.2);
+          padding: 0.25rem 0.75rem;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .property-card__call:hover {
+          background: var(--accent);
+          color: #fff;
         }
 
         .property-card__cta {

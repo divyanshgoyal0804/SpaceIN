@@ -110,38 +110,38 @@
   --text-primary: #1a1410;
   --text-secondary: #5c5040;
   --text-muted: #9a9080;
-  --accent: #A66249;
-  --accent-rgb: 166, 98, 73;
-  --accent-hover: #73463C;
+  --accent: #3c7369;
+  --accent-rgb: 60, 115, 105;
+  --accent-hover: #2a524b;
   --accent-foreground: #ffffff;
-  --border: rgba(115, 70, 60, 0.12);
-  --border-hover: rgba(115, 70, 60, 0.22);
-  --glass-bg: rgba(115, 70, 60, 0.03);
-  --glass-border: rgba(115, 70, 60, 0.1);
-  --glass-hover: rgba(115, 70, 60, 0.07);
-  --shadow: rgba(115, 70, 60, 0.1);
+  --border: rgba(42, 82, 75, 0.12);
+  --border-hover: rgba(42, 82, 75, 0.22);
+  --glass-bg: rgba(42, 82, 75, 0.03);
+  --glass-border: rgba(42, 82, 75, 0.1);
+  --glass-hover: rgba(42, 82, 75, 0.07);
+  --shadow: rgba(42, 82, 75, 0.1);
   --overlay: rgba(250, 248, 243, 0.85);
   --input-bg: #ffffff;
-  --input-border: rgba(115, 70, 60, 0.18);
+  --input-border: rgba(42, 82, 75, 0.18);
   --input-text: #1a1410;
   --input-placeholder: #9a9080;
   --card-bg: #ffffff;
-  --card-border: rgba(115, 70, 60, 0.1);
-  --badge-bg: rgba(166, 98, 73, 0.1);
-  --badge-text: #A66249;
+  --card-border: rgba(42, 82, 75, 0.1);
+  --badge-bg: rgba(60, 115, 105, 0.1);
+  --badge-text: #3c7369;
   --success: #16a34a;
   --success-text: #16a34a;
   --error: #dc2626;
   --error-text: #dc2626;
   --warning: #BF8B5E;
-  --page-background: radial-gradient(circle at top left, rgba(166, 98, 73, 0.08), transparent 28%), radial-gradient(circle at top right, rgba(191, 139, 94, 0.06), transparent 26%), linear-gradient(180deg, #faf8f3 0%, #f5f2ea 52%, #efe9dd 100%);
+  --page-background: radial-gradient(circle at top left, rgba(60, 115, 105, 0.08), transparent 28%), radial-gradient(circle at top right, rgba(60, 115, 105, 0.06), transparent 26%), linear-gradient(180deg, #faf8f3 0%, #f5f2ea 52%, #efe9dd 100%);
   --home-section-surface: rgba(250, 248, 243, 0.56);
   --home-section-surface-alt: rgba(243, 240, 232, 0.64);
-  --home-section-border: rgba(115, 70, 60, 0.1);
+  --home-section-border: rgba(42, 82, 75, 0.1);
   --home-hero-background: linear-gradient(170deg, rgba(250, 248, 243, 0.86) 0%, rgba(243, 240, 232, 0.9) 54%, rgba(236, 232, 221, 0.95) 100%), url('/office-space-bg.svg') center/cover no-repeat;
-  --home-page-overlay: radial-gradient(circle at top left, rgba(166, 98, 73, 0.05), transparent 30%), radial-gradient(circle at top right, rgba(191, 139, 94, 0.04), transparent 28%), linear-gradient(180deg, rgba(250, 248, 243, 0.16) 0%, rgba(243, 240, 232, 0.24) 54%, rgba(236, 232, 221, 0.34) 100%);
+  --home-page-overlay: radial-gradient(circle at top left, rgba(60, 115, 105, 0.05), transparent 30%), radial-gradient(circle at top right, rgba(60, 115, 105, 0.04), transparent 28%), linear-gradient(180deg, rgba(250, 248, 243, 0.16) 0%, rgba(243, 240, 232, 0.24) 54%, rgba(236, 232, 221, 0.34) 100%);
   --footer-bg: #faf8f3;
-  --footer-border: rgba(115, 70, 60, 0.1);
+  --footer-border: rgba(42, 82, 75, 0.1);
 }
 
 /* ============================================
@@ -407,7 +407,7 @@ select.input-field option {
 [data-theme="light"] .badge-coworking { color: #7c3aed; }
 [data-theme="light"] .badge-retail { color: #16a34a; }
 [data-theme="light"] .badge-warehouse { color: #dc2626; }
-[data-theme="light"] .badge-showroom { color: #73463C; }
+[data-theme="light"] .badge-showroom { color: #2a524b; }
 [data-theme="light"] .badge-plot { color: #0f766e; }
 
 /* ============================================
