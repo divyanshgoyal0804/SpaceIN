@@ -1,10 +1,10 @@
 import styles from './HowItWorksAndWhyUs.module.css';
 
 const stats = [
-  { value: '12M+', label: 'SQFT TRANSACTED' },
-  { value: '450+', label: 'CLIENTS PLACED' },
+  { value: '200K+', label: 'SQFT TRANSACTED' },
+  { value: '150+', label: 'CLIENTS PLACED' },
   { value: '180+', label: 'ACTIVE LISTINGS' },
-  { value: '12', label: 'YEARS IN NOIDA' },
+  { value: '5', label: 'YEARS IN NOIDA' },
 ];
 
 const steps = [

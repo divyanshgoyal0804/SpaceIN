@@ -204,7 +204,11 @@ export default function ChatInterface() {
                           return (
                             <Link
                               key={id}
-                              href={`/properties/${prop.slug}`}
+                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handlePromptClick(`I want to schedule a visit for ${prop.title}`);
+                              }}
                               className="property-suggestion-card glass-card"
                             >
                               <div className="psc-image">

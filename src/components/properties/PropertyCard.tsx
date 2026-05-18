@@ -48,7 +48,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
   }, [resolvedImage]);
 
   return (
-    <Link href={`/properties/${property.slug}`} className="property-card card">
+    <Link href={`/chat?q=I+want+to+know+more+about+${encodeURIComponent(property.title)}`} className="property-card card">
       <div className="property-card__image-wrap">
         <Image
           src={imageSrc}

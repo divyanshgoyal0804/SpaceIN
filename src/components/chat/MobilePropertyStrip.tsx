@@ -21,7 +21,7 @@ export default function MobilePropertyStrip({ propertyIds }: { propertyIds: stri
   return (
     <div className={styles.mobilePropertyStrip}>
       {properties.map(p => (
-        <Link key={p.id} href={`/properties/${p.slug}`} className={styles.mobilePropertyCard}>
+        <Link key={p.id} href={`/chat?q=I+want+to+schedule+a+visit+for+${encodeURIComponent(p.title)}`} className={styles.mobilePropertyCard}>
           <div className={styles.mobilePropertyCardImageCont}>
             <Image 
               src={resolvePropertyImageUrl(p.mainImageUrl)} 

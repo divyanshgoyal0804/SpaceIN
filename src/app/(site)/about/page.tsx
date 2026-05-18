@@ -64,7 +64,7 @@ export default function AboutPage() {
         <div className="page-container" style={{ textAlign: 'center' }}>
           <h2>Ready to find your space?</h2>
           <p style={{ marginBottom: '2rem' }}>Browse our curated selection of commercial properties in Noida.</p>
-          <Link href="/properties" className="btn-primary" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>
+          <Link href="/chat" className="btn-primary" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>
             Explore Properties
           </Link>
         </div>

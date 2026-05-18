@@ -10,7 +10,6 @@ import styles from './HomePage.module.css';
 // New Modular Components
 import ServicesSection from '@/components/homepage/ServicesSection';
 import HowItWorksAndWhyUs from '@/components/homepage/HowItWorksAndWhyUs';
-import CoverageTestimonials from '@/components/homepage/CoverageTestimonials';
 import ContactFAQ from '@/components/homepage/ContactFAQ';
 import WhySharkspace from '@/components/homepage/WhySharkspace';
 
@@ -38,26 +37,6 @@ export default async function HomePage() {
       furnished: true,
     },
   });
-
-  // Fetch published testimonials
-  let testimonials: Array<{
-    id: string;
-    name: string;
-    role: string | null;
-    company: string | null;
-    quote: string;
-    avatarUrl: string | null;
-  }> = [];
-
-  try {
-    testimonials = await prisma.testimonial.findMany({
-      where: { isPublished: true },
-      orderBy: { createdAt: 'desc' },
-      take: 6,
-    });
-  } catch (error) {
-    console.error('Error fetching testimonials:', error);
-  }
 
   return (
     <div className={styles.home}>
@@ -121,16 +100,13 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 4 & 5. How It Works + Why Us Split Section */}
+      {/* How It Works + Why Us Split Section */}
       <HowItWorksAndWhyUs />
 
       {/* Why Sharkspace Grid */}
       <WhySharkspace />
 
-      {/* 6. Locations + Testimonials */}
-      <CoverageTestimonials testimonials={testimonials} />
-
-      {/* 7. Contact + FAQs */}
+      {/* Contact + FAQs */}
       <ContactFAQ />
 
       {/* CTA Banner */}
@@ -146,11 +122,8 @@ export default async function HomePage() {
             personalized recommendations.
           </p>
           <div className={styles.ctaBannerActions}>
-            <Link href="/properties" className="btn-primary">
-              Browse Properties
-            </Link>
-            <Link href="/chat" className="btn-secondary">
-              Chat with AI
+            <Link href="/chat" className="btn-primary">
+              Find Spaces with AI
             </Link>
           </div>
         </div>

@@ -99,7 +99,7 @@ export default function ContactFAQ() {
             <form onSubmit={handleSubmit} className={styles.form}>
               <div className={styles.inputGroup}>
                 <label htmlFor="name" className={styles.label}>Name</label>
-                <input type="text" id="name" name="name" className={styles.input} required placeholder="John Doe" />
+                <input type="text" id="name" name="name" className={styles.input} required placeholder="Jane Doe" />
               </div>
               
               <div className={styles.inputGroup}>

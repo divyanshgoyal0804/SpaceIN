@@ -10,7 +10,7 @@ interface Props {
 
 export default function PropertyResultCard({ property }: Props) {
   const imageUrl = resolvePropertyImageUrl(property.mainImageUrl);
-  const detailHref = `/properties/${property.slug || property.id}`;
+  const detailHref = `/chat?q=I+want+to+schedule+a+visit+for+${encodeURIComponent(property.title)}`;
   const area = property.carpetArea ? `${property.carpetArea} sq ft` : '';
   const price = property.rentPerMonth 
     ? `₹${property.rentPerMonth.toLocaleString('en-IN')}/month` 

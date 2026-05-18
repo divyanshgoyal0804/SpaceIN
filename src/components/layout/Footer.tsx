@@ -2,7 +2,6 @@ import Link from 'next/link';
 import styles from './Footer.module.css';
 
 const quickLinks = [
-  { href: '/properties', label: 'Properties' },
   { href: '/blog', label: 'Blog' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
@@ -10,11 +9,11 @@ const quickLinks = [
 ];
 
 const propertyTypes = [
-  { href: '/properties?type=OFFICE', label: 'Office Spaces' },
-  { href: '/properties?type=COWORKING', label: 'Coworking' },
-  { href: '/properties?type=RETAIL', label: 'Retail' },
-  { href: '/properties?type=WAREHOUSE', label: 'Warehouse' },
-  { href: '/properties?type=SHOWROOM', label: 'Showroom' },
+  { href: '/chat?q=Looking+for+office+spaces', label: 'Office Spaces' },
+  { href: '/chat?q=Looking+for+coworking+spaces', label: 'Coworking' },
+  { href: '/chat?q=Looking+for+retail+spaces', label: 'Retail' },
+  { href: '/chat?q=Looking+for+warehouse+spaces', label: 'Warehouse' },
+  { href: '/chat?q=Looking+for+showroom+spaces', label: 'Showroom' },
 ];
 
 export default function Footer() {
