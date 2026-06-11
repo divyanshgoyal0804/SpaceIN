@@ -9,7 +9,7 @@ import { prisma } from '@/lib/prisma';
 import type { Metadata } from 'next';
 import { resolvePropertyImageUrl } from '@/lib/image-url';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60; // ISR: revalidate every 60 seconds
 
 interface PropertyData {
   id: string;

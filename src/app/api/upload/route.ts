@@ -65,6 +65,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
+    // CRIT-3: Enforce file size limit (10MB)
+    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { error: 'File too large. Maximum size is 10MB.' },
+        { status: 413 }
+      );
+    }
+
+    // CRIT-4: Validate file type against whitelist
+    const ALLOWED_TYPES = [
+      'image/jpeg', 'image/png', 'image/webp', 'image/gif',
+      'video/mp4', 'video/webm',
+    ];
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      return NextResponse.json(
+        { error: `File type '${file.type}' is not allowed. Accepted: ${ALLOWED_TYPES.join(', ')}` },
+        { status: 400 }
+      );
+    }
+
     const bytes = await file.arrayBuffer();
     const originalBuffer = Buffer.from(bytes);
 

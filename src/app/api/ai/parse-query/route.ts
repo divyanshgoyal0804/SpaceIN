@@ -1,7 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { fetchAnthropic } from '@/lib/anthropic';
+import { createRateLimiter, getClientIp } from '@/lib/rate-limit';
+
+const limiter = createRateLimiter('ai-parse-query', { maxRequests: 30, windowMs: 60_000 });
 
 export async function POST(req: NextRequest) {
+  // CRIT-5: Rate limiting on AI endpoints
+  const ip = getClientIp(req);
+  const rateCheck = limiter.check(ip);
+  if (!rateCheck.success) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      { status: 429 }
+    );
+  }
+
   try {
     const { query } = await req.json();
 
@@ -51,7 +64,7 @@ Keys must be exact. Put null if not specified. intent is 'investment' or 'self_u
 
     return NextResponse.json({ filters: parsedFilters });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Parse Query Error:', error);
     // Fallback to default filters
     return NextResponse.json({ 

@@ -7,7 +7,7 @@ import { prisma } from '@/lib/prisma';
 import { getAppUrl } from '@/lib/app-url';
 import type { Metadata } from 'next';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60; // ISR: revalidate every 60 seconds
 
 interface BlogData {
   id: string;

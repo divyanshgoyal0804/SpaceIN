@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { execSync } from 'node:child_process';
+import { randomBytes } from 'node:crypto';
 import { prisma } from '../src/lib/prisma';
 import bcrypt from 'bcryptjs';
 
@@ -10,8 +11,14 @@ async function main() {
     stdio: 'inherit',
   });
 
-  // Create default admin
-  const hashedPassword = await bcrypt.hash('Admin@123', 12);
+  // Create default admin — use env var or generate a secure random password
+  let adminPassword = process.env.ADMIN_DEFAULT_PASSWORD;
+  if (!adminPassword) {
+    adminPassword = randomBytes(24).toString('base64url');
+    console.log(`⚠️  No ADMIN_DEFAULT_PASSWORD env var set. Generated password: ${adminPassword}`);
+    console.log(`⚠️  Save this password — it will not be shown again.`);
+  }
+  const hashedPassword = await bcrypt.hash(adminPassword, 12);
   const admin = await prisma.admin.upsert({
     where: { email: 'admin@spacein.in' },
     update: {},

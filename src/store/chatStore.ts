@@ -59,9 +59,14 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       if (stored) {
         try {
           const parsed = JSON.parse(stored);
-          set({ sessions: parsed });
+          // MED-5: Only load sessions that are valid
+          if (Array.isArray(parsed)) {
+            set({ sessions: parsed.slice(0, 20) });
+          }
         } catch (e) {
           console.error("Failed to parse sessions", e);
+          // Clear corrupted data
+          localStorage.removeItem(STORAGE_KEY);
         }
       }
     }
@@ -86,8 +91,33 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         createdAt: new Date(),
       };
       newSessions = [newSession, ...newSessions].slice(0, 20); // Keep max 20
+      // MED-5: Trim sessions to limit message history size and handle QuotaExceededError
+      const trimmedSessions = newSessions.map((s: ChatSession) => ({
+        ...s,
+        messages: s.messages.slice(-50), // Keep last 50 messages per session max
+      }));
       if (typeof window !== 'undefined') {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(newSessions));
+        try {
+          const serialized = JSON.stringify(trimmedSessions);
+          // If data exceeds ~4MB, drop oldest sessions
+          if (serialized.length > 4 * 1024 * 1024) {
+            const reduced = trimmedSessions.slice(0, 10);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(reduced));
+            newSessions = reduced;
+          } else {
+            localStorage.setItem(STORAGE_KEY, serialized);
+          }
+        } catch (e) {
+          console.error('Failed to save sessions to localStorage:', e);
+          // On QuotaExceededError, clear old sessions
+          try {
+            const minimal = trimmedSessions.slice(0, 5);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(minimal));
+            newSessions = minimal;
+          } catch {
+            localStorage.removeItem(STORAGE_KEY);
+          }
+        }
       }
     }
 

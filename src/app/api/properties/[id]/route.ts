@@ -54,8 +54,22 @@ export async function PATCH(
       body.isExclusive = body.isExclusive === 'true';
     }
 
-    // Handle images update separately
-    const { images, ...propertyData } = body;
+    // HIGH-6: Whitelist allowed fields to prevent mass assignment
+    const { images } = body;
+    const ALLOWED_KEYS = [
+      'title', 'slug', 'description', 'type', 'listingType',
+      'price', 'rentPerMonth', 'carpetArea', 'superArea',
+      'floor', 'totalFloors', 'location', 'city',
+      'latitude', 'longitude', 'amenities', 'furnished',
+      'possession', 'facing', 'parking', 'washrooms',
+      'mainImageUrl', 'videoUrl', 'isFeatured', 'isExclusive', 'isActive',
+    ];
+    const propertyData: Record<string, unknown> = {};
+    for (const key of ALLOWED_KEYS) {
+      if (body[key] !== undefined) {
+        propertyData[key] = body[key];
+      }
+    }
 
     let property;
     try {

@@ -38,6 +38,13 @@ model Property {
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
   images       PropertyImage[]
+  inquiries    Inquiry[]
+
+  // MED-6: Indexes for frequently queried fields
+  @@index([isActive, isFeatured])
+  @@index([isActive, type])
+  @@index([isActive, city])
+  @@index([isActive, listingType])
 }
 
 model PropertyImage {
@@ -62,6 +69,8 @@ model Blog {
   publishedAt DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  @@index([isPublished])
 }
 
 model Admin {
@@ -73,13 +82,16 @@ model Admin {
 }
 
 model Inquiry {
-  id         String   @id @default(cuid())
+  id         String    @id @default(cuid())
   name       String
   email      String
   phone      String
   message    String
   propertyId String?
-  createdAt  DateTime @default(now())
+  property   Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+  createdAt  DateTime  @default(now())
+
+  @@index([createdAt])
 }
 
 model Testimonial {

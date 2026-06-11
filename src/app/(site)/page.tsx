@@ -13,7 +13,7 @@ import HowItWorksAndWhyUs from '@/components/homepage/HowItWorksAndWhyUs';
 import ContactFAQ from '@/components/homepage/ContactFAQ';
 import WhySharkspace from '@/components/homepage/WhySharkspace';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60; // ISR: revalidate every 60 seconds
 
 export default async function HomePage() {
   const exclusiveProperties = await prisma.property.findMany({

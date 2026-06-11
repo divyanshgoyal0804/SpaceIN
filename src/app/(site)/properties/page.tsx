@@ -5,7 +5,7 @@ import { ActiveFilterChips } from '@/components/properties/PropertyFilters';
 import { prisma } from '@/lib/prisma';
 import type { Metadata } from 'next';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 30; // ISR: revalidate every 30 seconds (shorter for filtered views)
 
 export const metadata: Metadata = {
   title: 'Properties',

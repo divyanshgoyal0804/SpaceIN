@@ -1,7 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { fetchAnthropic } from '@/lib/anthropic';
+import { createRateLimiter, getClientIp } from '@/lib/rate-limit';
+
+const limiter = createRateLimiter('ai-explain', { maxRequests: 30, windowMs: 60_000 });
 
 export async function POST(req: NextRequest) {
+  // CRIT-5: Rate limiting on AI endpoints
+  const ip = getClientIp(req);
+  const rateCheck = limiter.check(ip);
+  if (!rateCheck.success) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      { status: 429 }
+    );
+  }
+
   try {
     const { intent, properties } = await req.json();
 
@@ -10,7 +23,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Limit to top 5 properties specifically
-    const topProps = properties.slice(0, 5).map((p: any) => ({
+    const topProps = properties.slice(0, 5).map((p: { title?: string; price?: number; rentPerMonth?: number; location?: string; amenities?: string[] }) => ({
       title: p.title,
       price: p.price,
       rent: p.rentPerMonth,
@@ -34,7 +47,7 @@ Keep response concise and helpful. Speak directly to the user addressing why the
 
     return NextResponse.json({ explanation: response });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('AI Explanation Error:', error);
     return NextResponse.json({ 
       explanation: "Here are some top-ranked properties based on your filters." 

@@ -1,33 +1,56 @@
 import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { anthropic, DEFAULT_MODEL } from '@/lib/anthropic';
+import { createRateLimiter, getClientIp } from '@/lib/rate-limit';
+
+const limiter = createRateLimiter('chat', { maxRequests: 20, windowMs: 60_000 });
+
+// HIGH-7: Cache property context to avoid fetching 50 properties on every request
+let cachedPropertyContext: string | null = null;
+let cacheTimestamp = 0;
+const CACHE_TTL_MS = 5 * 60_000; // 5 minutes
 
 export async function POST(request: NextRequest) {
+  // CRIT-5: Rate limiting
+  const ip = getClientIp(request);
+  const rateCheck = limiter.check(ip);
+  if (!rateCheck.success) {
+    return new Response(
+      JSON.stringify({ error: 'Too many requests. Please try again later.' }),
+      { status: 429, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+
   try {
     const { messages } = await request.json();
 
-    // Fetch a representative set of active properties for AI context (capped at 50)
-    const properties = await prisma.property.findMany({
-      where: { isActive: true },
-      select: {
-        id: true,
-        title: true,
-        type: true,
-        listingType: true,
-        rentPerMonth: true,
-        price: true,
-        carpetArea: true,
-        location: true,
-        furnished: true,
-        amenities: true,
-      },
-      orderBy: [
-        { isFeatured: 'desc' },
-        { isExclusive: 'desc' },
-        { createdAt: 'desc' },
-      ],
-      take: 50,
-    });
+    // HIGH-7: Use cached property context
+    const now = Date.now();
+    if (!cachedPropertyContext || now - cacheTimestamp > CACHE_TTL_MS) {
+      const properties = await prisma.property.findMany({
+        where: { isActive: true },
+        select: {
+          id: true,
+          title: true,
+          type: true,
+          listingType: true,
+          rentPerMonth: true,
+          price: true,
+          carpetArea: true,
+          location: true,
+          furnished: true,
+          amenities: true,
+        },
+        orderBy: [
+          { isFeatured: 'desc' },
+          { isExclusive: 'desc' },
+          { createdAt: 'desc' },
+        ],
+        take: 50,
+      });
+      cachedPropertyContext = JSON.stringify(properties, null, 2);
+      cacheTimestamp = now;
+    }
 
     if (!process.env.ANTHROPIC_API_KEY) {
       return new Response(
@@ -49,7 +72,7 @@ The user sees property cards separately, so don't describe each property in deta
 Instead, briefly summarize what you found and invite follow-up questions.
 
 AVAILABLE PROPERTIES DATABASE:
-${JSON.stringify(properties, null, 2)}`;
+${cachedPropertyContext}`;
 
     // Map incoming messages to Anthropic format (must alternate user/assistant)
     const formattedMessages = messages.map((m: { role: string; content: string }) => ({

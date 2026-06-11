@@ -64,9 +64,18 @@ export async function PATCH(
       body.publishedAt = new Date();
     }
 
+    // HIGH-3: Whitelist allowed fields to prevent mass assignment
+    const allowedFields: Record<string, unknown> = {};
+    const ALLOWED_KEYS = ['title', 'slug', 'excerpt', 'content', 'coverImage', 'tags', 'author', 'isPublished', 'publishedAt'];
+    for (const key of ALLOWED_KEYS) {
+      if (body[key] !== undefined) {
+        allowedFields[key] = body[key];
+      }
+    }
+
     const blog = await prisma.blog.update({
       where: { id },
-      data: body,
+      data: allowedFields,
     });
 
     return NextResponse.json(blog);
