@@ -188,13 +188,186 @@
 }
 
 .aiBubble {
-  padding: 12px 16px;
+  padding: 16px 20px;
   background: var(--bg-card);
   border: 1px solid var(--card-border);
   border-radius: 4px 18px 18px 18px;
   color: var(--text-primary);
-  font-size: 14px;
-  line-height: 1.7;
+  font-size: 14.5px;
+  line-height: 1.75;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* ── Premium Markdown Typography ── */
+.markdownContent {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: var(--text-primary);
+}
+
+.markdownContent > :first-child {
+  margin-top: 0;
+}
+
+.markdownContent > :last-child {
+  margin-bottom: 0;
+}
+
+/* Paragraphs — generous spacing for readability */
+.markdownContent p {
+  margin: 0 0 0.85em 0;
+  line-height: 1.75;
+}
+
+.markdownContent p:last-child {
+  margin-bottom: 0;
+}
+
+/* Bold — slightly heavier for contrast */
+.markdownContent strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Italic */
+.markdownContent em {
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+/* Lists — clean, well-spaced */
+.markdownContent ul,
+.markdownContent ol {
+  margin: 0.6em 0;
+  padding-left: 1.4em;
+}
+
+.markdownContent li {
+  margin: 0.3em 0;
+  line-height: 1.65;
+  padding-left: 0.2em;
+}
+
+.markdownContent li::marker {
+  color: var(--accent);
+}
+
+/* Nested lists */
+.markdownContent li > ul,
+.markdownContent li > ol {
+  margin: 0.2em 0;
+}
+
+/* Headings — subtle, not overpowering */
+.markdownContent h1 {
+  font-size: 1.15em;
+  font-weight: 600;
+  margin: 1em 0 0.5em;
+  color: var(--text-primary);
+}
+
+.markdownContent h2 {
+  font-size: 1.05em;
+  font-weight: 600;
+  margin: 0.9em 0 0.4em;
+  color: var(--text-primary);
+}
+
+.markdownContent h3 {
+  font-size: 1em;
+  font-weight: 600;
+  margin: 0.8em 0 0.35em;
+  color: var(--text-primary);
+}
+
+/* Blockquotes — consultant callout style */
+.markdownContent blockquote {
+  margin: 0.8em 0;
+  padding: 0.5em 0.9em;
+  border-left: 3px solid var(--accent);
+  background: rgba(191, 181, 128, 0.05);
+  border-radius: 0 8px 8px 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.markdownContent blockquote p {
+  margin: 0;
+}
+
+/* Horizontal rules — thin, elegant separator */
+.markdownContent hr {
+  border: none;
+  height: 1px;
+  background: var(--border);
+  margin: 1em 0;
+  opacity: 0.6;
+}
+
+/* Tables — clean, compact */
+.markdownContent table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.8em 0;
+  font-size: 0.9em;
+}
+
+.markdownContent th {
+  text-align: left;
+  padding: 0.5em 0.75em;
+  border-bottom: 2px solid var(--border);
+  font-weight: 600;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary);
+}
+
+.markdownContent td {
+  padding: 0.45em 0.75em;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.markdownContent tr:last-child td {
+  border-bottom: none;
+}
+
+/* Inline code */
+.markdownContent code {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.88em;
+  padding: 0.15em 0.4em;
+  background: rgba(191, 181, 128, 0.08);
+  border-radius: 4px;
+  color: var(--accent);
+}
+
+/* Links */
+.markdownContent a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.markdownContent a:hover {
+  border-bottom-color: var(--accent);
+}
+
+/* Streaming cursor */
+.streamCursor {
+  display: inline;
+  animation: cursorBlink 0.7s infinite;
+  color: var(--accent);
+  font-size: 0.85em;
+  margin-left: 2px;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 /* Typing indicator */
@@ -216,6 +389,7 @@
   0%, 60%, 100% { transform: translateY(0); }
   30% { transform: translateY(-6px); }
 }
+
 
 /* -- RESULTS PANEL HEADER -- */
 .resultsHeader {

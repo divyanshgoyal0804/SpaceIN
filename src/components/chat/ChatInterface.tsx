@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, FormEvent } from 'react';
 import { Send, Bot, User, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import ReactMarkdown from 'react-markdown';
 import { resolvePropertyImageUrl } from '@/lib/image-url';
 
 interface ChatMessage {
@@ -189,8 +190,12 @@ export default function ChatInterface() {
                     {msg.role === 'assistant' ? <Bot size={20} /> : <User size={20} />}
                   </div>
                   <div className="chat-msg__content">
-                    <div className="chat-msg__text" style={{ whiteSpace: 'pre-wrap' }}>
-                      {cleanContent}
+                    <div className="chat-msg__text">
+                      {msg.role === 'assistant' ? (
+                        <div className="markdown-content">
+                          <ReactMarkdown>{cleanContent}</ReactMarkdown>
+                        </div>
+                      ) : cleanContent}
                       {isStreaming && i === messages.length - 1 && msg.role === 'assistant' && (
                         <span className="typing-cursor">▊</span>
                       )}
@@ -385,8 +390,101 @@ export default function ChatInterface() {
 
         .chat-msg__text {
           font-size: 0.95rem;
-          line-height: 1.7;
+          line-height: 1.75;
           color: var(--text-primary);
+        }
+
+        .markdown-content {
+          font-size: 0.95rem;
+          line-height: 1.75;
+        }
+
+        .markdown-content > :first-child { margin-top: 0; }
+        .markdown-content > :last-child { margin-bottom: 0; }
+
+        .markdown-content p {
+          margin: 0 0 0.85em 0;
+          line-height: 1.75;
+        }
+        .markdown-content p:last-child { margin-bottom: 0; }
+
+        .markdown-content strong {
+          font-weight: 600;
+          color: var(--text-primary);
+        }
+
+        .markdown-content em {
+          font-style: italic;
+          color: var(--text-secondary, #6b7280);
+        }
+
+        .markdown-content ul, .markdown-content ol {
+          margin: 0.6em 0;
+          padding-left: 1.4em;
+        }
+
+        .markdown-content li {
+          margin: 0.3em 0;
+          line-height: 1.65;
+          padding-left: 0.2em;
+        }
+
+        .markdown-content li::marker {
+          color: var(--accent);
+        }
+
+        .markdown-content h1 { font-size: 1.15em; font-weight: 600; margin: 1em 0 0.5em; }
+        .markdown-content h2 { font-size: 1.05em; font-weight: 600; margin: 0.9em 0 0.4em; }
+        .markdown-content h3 { font-size: 1em; font-weight: 600; margin: 0.8em 0 0.35em; }
+
+        .markdown-content blockquote {
+          margin: 0.8em 0;
+          padding: 0.5em 0.9em;
+          border-left: 3px solid var(--accent);
+          background: rgba(var(--accent-rgb, 191, 181, 128), 0.05);
+          border-radius: 0 8px 8px 0;
+          color: var(--text-secondary, #6b7280);
+          font-style: italic;
+        }
+        .markdown-content blockquote p { margin: 0; }
+
+        .markdown-content hr {
+          border: none;
+          height: 1px;
+          background: var(--border, #e5e7eb);
+          margin: 1em 0;
+          opacity: 0.6;
+        }
+
+        .markdown-content table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 0.8em 0;
+          font-size: 0.9em;
+        }
+        .markdown-content th {
+          text-align: left;
+          padding: 0.5em 0.75em;
+          border-bottom: 2px solid var(--border, #e5e7eb);
+          font-weight: 600;
+          font-size: 0.85em;
+          text-transform: uppercase;
+          letter-spacing: 0.03em;
+          color: var(--text-secondary, #6b7280);
+        }
+        .markdown-content td {
+          padding: 0.45em 0.75em;
+          border-bottom: 1px solid var(--border, #e5e7eb);
+        }
+        .markdown-content tr:last-child td { border-bottom: none; }
+
+        .markdown-content code {
+          font-family: 'SF Mono', 'Fira Code', monospace;
+          font-size: 0.88em;
+          padding: 0.15em 0.4em;
+          background: rgba(var(--accent-rgb, 191, 181, 128), 0.08);
+          border-radius: 4px;
+          color: var(--accent);
         }
 
         .typing-cursor {

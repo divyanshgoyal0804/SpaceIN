@@ -37,24 +37,52 @@ interface ChatStore {
   isStreaming: boolean;
   currentResultProperties: Property[];
   sessions: ChatSession[];
+  anonymousId: string;
 
   sendMessage: (content: string) => Promise<void>;
   startNewSession: () => void;
   loadSession: (sessionId: string) => void;
   setCurrentResultProperties: (props: Property[]) => void;
   initSessions: () => void;
+  trackEvent: (type: string, propertyId?: string, action?: string) => void;
 }
 
 const STORAGE_KEY = 'sharkspace_chat_sessions';
+const ANON_ID_KEY = 'sharkspace_anonymous_id';
+
+/**
+ * Get or create a persistent anonymous user ID.
+ * Stored in localStorage so it survives page refreshes.
+ */
+function getAnonymousId(): string {
+  if (typeof window === 'undefined') return 'ssr';
+
+  try {
+    let id = localStorage.getItem(ANON_ID_KEY);
+    if (!id) {
+      // Generate a random ID: timestamp + random hex
+      id = `anon_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 10)}`;
+      localStorage.setItem(ANON_ID_KEY, id);
+    }
+    return id;
+  } catch {
+    return `anon_${Date.now().toString(36)}`;
+  }
+}
 
 export const useChatStore = create<ChatStore>((set, get) => ({
   messages: [],
   isStreaming: false,
   currentResultProperties: [],
   sessions: [],
+  anonymousId: 'ssr', // Will be set on init
 
   initSessions: () => {
     if (typeof window !== 'undefined') {
+      // Initialize anonymous ID
+      const anonymousId = getAnonymousId();
+      set({ anonymousId });
+
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         try {
@@ -72,13 +100,36 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }
   },
 
+  /**
+   * Track a behavioral event (click, contact, session start/end).
+   * Fire-and-forget — never blocks the UI.
+   */
+  trackEvent: (type: string, propertyId?: string, action?: string) => {
+    const { anonymousId } = get();
+    if (anonymousId === 'ssr') return;
+
+    fetch('/api/chat/events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: anonymousId,
+        type,
+        propertyId,
+        action,
+      }),
+    }).catch((e) => console.error('Event tracking failed:', e));
+  },
+
   setCurrentResultProperties: (props: Property[]) => {
     set({ currentResultProperties: props });
   },
 
   startNewSession: () => {
-    const { messages, sessions } = get();
+    const { messages, sessions, trackEvent } = get();
     let newSessions = [...sessions];
+
+    // Track session end
+    trackEvent('SESSION_END');
 
     // Save current session if it has messages
     if (messages.length > 0) {
@@ -126,6 +177,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       currentResultProperties: [],
       sessions: newSessions
     });
+
+    // Track new session start
+    trackEvent('SESSION_START');
   },
 
   loadSession: (sessionId: string) => {
@@ -147,10 +201,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     set({ messages: newMessages, isStreaming: true });
 
     try {
+      const { anonymousId } = get();
+
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages }),
+        body: JSON.stringify({
+          messages: newMessages,
+          anonymousId, // Send anonymous ID for user profile lookup
+        }),
       });
 
       if (!response.body) throw new Error('No readable stream');
@@ -241,7 +300,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     } catch (error) {
       console.error('Chat error:', error);
     } finally {
-      // check if we need to auto save session
       set({ isStreaming: false });
     }
   },

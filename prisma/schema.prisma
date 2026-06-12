@@ -138,3 +138,51 @@ model Media {
   height       Int?
   createdAt    DateTime @default(now())
 }
+
+// ─── Intelligent Chatbot Memory System ─────────────────────────────
+
+model ChatUser {
+  id                 String        @id @default(cuid())
+  anonymousId        String        @unique
+  preferredCity      String?
+  budgetMin          Float?
+  budgetMax          Float?
+  preferredTypes     String[]      // PropertyType enum values
+  preferredLocations String[]      // sectors/areas
+  preferredAmenities String[]
+  preferredFurnished String?       // FurnishedType enum value
+  conversationCount  Int           @default(0)
+  lastActiveAt       DateTime      @default(now())
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  events             ChatEvent[]
+  sessions           ChatSession[]
+}
+
+model ChatEvent {
+  id         String   @id @default(cuid())
+  userId     String
+  user       ChatUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId  String?
+  type       String   // QUERY, INTENT_EXTRACTED, RECOMMENDATION, CLICK, CONTACT, SESSION_START, SESSION_END
+  payload    Json     // structured event data
+  propertyId String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId, type])
+  @@index([propertyId])
+  @@index([createdAt])
+}
+
+model ChatSession {
+  id         String   @id @default(cuid())
+  userId     String
+  user       ChatUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  summary    String?  // LLM-generated summary after session ends
+  intentData Json?    // last extracted intent
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId])
+}
+
